@@ -1,6 +1,4 @@
 
-Welcome to Agustin's testing framework!
-
 To add a directory to the testing framework, cd into this directory, and use `./addNew.sh <path-to-directory>`.
 Then, use `./run_test.sh` to test all .bats files in the subdirectories of /source/. 
 
