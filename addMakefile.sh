@@ -8,7 +8,7 @@ fi
 cd source
 
 if [ ! -d $1 ]; then
-	echo "Directory does not exist in /source/"
+	echo "/$1/ does not exist in /source/"
 	exit 2
 fi
 

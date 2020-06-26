@@ -25,31 +25,13 @@ for d in */ ; do
     fi
 
 	# testing to see if generic test is needed
-	allbats=$(find *.bats)
+	allbats=$(find *.bats > /dev/null 2>&1)
 	if [ $? -ne 0 ]; 
 	then
-		echo 
-		echo "No .bats test found in $d. Writing generic make test..."
-		echo "Enter preemptive environmental commands to be included in .bats test, e.g. \`module load gcc\`."
-		echo "Enter \`ctrl + D\` to conclude your input."
-		echo
-		echo "---------------------------------------- BEGIN INPUT ----------------------------------------"
-		echo "# Environmental commands:" >> test.bats	
-		while read comm
-		do
-			echo "$comm" >> test.bats
-		done
-
-		echo "----------------------------------------- END INPUT -----------------------------------------"
-		echo
-		echo >> test.bats
-		echo "# Generic Makefile test" >> test.bats
-		echo "@test \"$d make\" {" >> test.bats
-		echo "  make" >> test.bats
-		echo "}" >> test.bats
-		bats test.bats
+		echo "No .bats test found in $d. You can run ./addTest.sh <directory> to help."
     else 
 		bats $allbats
 	fi
     cd ..
 done
+echo
