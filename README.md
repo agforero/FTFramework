@@ -8,3 +8,5 @@ Other commands include:
 - `./addMakefile.sh <directory>`: open a lightweight Makefile generator.
 - `./cleanup.sh <directory>`: helps delete and/or backup your .bats files.
 - `./addTest.sh <directory>`: creates a `.bats` test for a directory's `Makefile`, and prompts for necessary environmental commands.
+
+Originally written for Argonne National Laboratory.
