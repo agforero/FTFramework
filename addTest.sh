@@ -9,6 +9,7 @@ if [ ! -d $1 ]; then
     exit 2
 fi
 
+cd $1
 echo "Enter preemptive environmental commands to be included in .bats test, e.g. \`module load gcc\`."
 echo -e "Enter \`ctrl + D\` to conclude your input.\n"
 echo "---------------------------------------- BEGIN INPUT ----------------------------------------"

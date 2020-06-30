@@ -13,7 +13,7 @@ def main():
 		flags = "\nFLAGS = " + sys.argv[3]
 		ext = sys.argv[4]
 	else:
-		flags = ""
+		flags = "\nFLAGS = "
 		ext = sys.argv[3]
 
 	f.write(
