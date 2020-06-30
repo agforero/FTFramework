@@ -19,7 +19,7 @@ def main():
     disp = ""
     l_files = check(glob.glob("*"+sys.argv[1]))
     for file in l_files:
-        disp = disp + file[:-1*len(sys.argv[1])] + " "
+        disp = disp + file[:0-len(sys.argv[1])] + " "
     print(disp)
 
 if __name__ == "__main__":
