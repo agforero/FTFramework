@@ -9,9 +9,7 @@ Other commands include:
 <<<<<<< HEAD
 - `./addMakefile.sh <directory>`: open a lightweight Makefile generator.
 - `./addEnv.sh <directory>`: adds `env.txt` a subdirectory, allowing BATS to use necessary environmental commands before testing, e.g. `module load`.
-=======
 - `./addMakefile.sh <directory>`: creates a generic Makefile.
->>>>>>> e538810b9538c1dc7eaa7d41295bb3204d2842e0
 - `./cleanup.sh <directory>`: helps delete and/or backup your .bats files.
 - `./addTest.sh <directory>`: creates a `.bats` test for a directory's `Makefile`. `run_test.sh` uses this file automatically.
 
