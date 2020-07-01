@@ -2,36 +2,29 @@
 
 cd source
 for d in */ ; do
-    cd $d 
-    echo
-    echo "$(pwd):"
+	cd $d 
+	echo
+	echo "$(pwd):"
+	cp ../../findRelevant.py .
 
 	# checking for need of metamake
-    if [ ! -f ./Makefile ]; then
+	if [ ! -f ./Makefile ]; then
 		cp ../../metamake.py .	
 
-		echo "Makefile does not exist. Enter your desired..."
-		echo "Name of program (_____.exe): "
-		read fname
-		echo "FC (Fortran compiler): "
-		read fcomp
-		echo "FFLAGS (compiler flags, e.g. -fopenmp): "
-		read fflags
-		echo "Extension (e.g.: .F90): "
-		read ver
+		echo "Makefile does not exist. Creating generic Makefile."
 
-		./metamake.py $fname $fcomp $fflags $ver
+		./metamake.py
 		rm metamake.py
-    fi
+	fi
 
 	# testing to see if generic test is needed
-	allbats=$(find *.bats > /dev/null 2>&1)
-	if [ $? -ne 0 ]; 
-	then
-		echo "No .bats test found in $d. You can run ./addTest.sh <directory> to help."
-    else 
-		bats $allbats
+	../../addTest.sh $d $@ # refreshes and runs test.bats
+	bats test.bats
+	restOfBats=$(./findRelevant.py -e .bats test.bats) # attempts to find other .bats files
+	if [ $? -eq 0 ]; then
+		bats $restOfBats
 	fi
-    cd ..
+
+	cd ..
 done
 echo

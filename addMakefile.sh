@@ -24,17 +24,7 @@ if [ -f "Makefile" ]; then
 	fi
 fi
 
-cp ../../metamake.py .  
-
-echo "Enter your desired..."
-echo "Name of program (_____.exe): "
-read fname
-echo "FC (Fortran compiler): "
-read fcomp
-echo "FFLAGS (compiler flags, e.g. -fopenmp): "
-read fflags
-echo "Extension (e.g.: .F90): "
-read ver
-
-./metamake.py $fname $fcomp $fflags $ver
+cp ../../metamake.py . 
+cp ../../findRelevant.py .
+./metamake.py 
 rm metamake.py

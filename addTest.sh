@@ -1,28 +1,18 @@
-if [ $# -ne 1 ]; then
-    echo "Usage: ./addTest.sh <directory>"
-    exit 1
-fi
-
-cd source
-if [ ! -d $1 ]; then
-    echo "/$1/ does not exist in /source/"
-    exit 2
-fi
-
-cd $1
-echo "Enter preemptive environmental commands to be included in .bats test, e.g. \`module load gcc\`."
-echo -e "Enter \`ctrl + D\` to conclude your input.\n"
-echo "---------------------------------------- BEGIN INPUT ----------------------------------------"
-echo "# Environmental commands:" >> test.bats	
-while read comm
-do
-    echo "$comm" >> test.bats
-done
-
-echo -e "----------------------------------------- END INPUT -----------------------------------------\n"
-echo >> test.bats
+#cd $1
+rm -f test.bats # reset it 
 echo "# Generic Makefile test" >> test.bats
-echo "@test \"$d make\" {" >> test.bats
+echo "@test \"generic Makefile test for $1\" {" >> test.bats
+echo "  unset FC" >> test.bats
+echo "  unset FFLAGS" >> test.bats
+
+if [ $# -ne 1 ]; then # if arguments include more than just the directory
+    echo "  export FC=$2" >> test.bats # make the new compiler the value for FC
+    echo "  export FFLAGS=${@:3}" >> test.bats
+else # if there was only the directory as an argument
+    echo "  export FC=gfortran" >> test.bats
+    echo "  export FFLAGS=" >> test.bats
+fi
+
+echo "  make clean" >> test.bats
 echo "  make" >> test.bats
 echo "}" >> test.bats
-echo "test.bats generated in $(pwd)."

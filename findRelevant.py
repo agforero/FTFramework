@@ -22,11 +22,11 @@ def main():
 
     if len(sys.argv) == 1: # if they used no arguments
         printUsage()
-        return 1
+        sys.exit(1)
 
     elif sys.argv[1][0] != '-': # they didn't use a flag
         printUsage()
-        return 2
+        sys.exit(2)
 
     elif sys.argv[1] == "-help" or sys.argv[1] == "-h":
         printUsage()
@@ -36,10 +36,11 @@ def main():
         print("\t-x returns filenames with \'.exe\' appended, and ")
         print("\t-e returns filenames with extensions kept.")
         print("\t<extension> designates the extension to search for, and\n\t(exclusions) are files to be excluded from output.")
-        return 0
+        sys.exit(0)
 
     disp = ""
     l_files = check(glob.glob("*"+sys.argv[2]))
+
     for file in l_files:
         if sys.argv[1] == "-f": # just the filename
             disp = disp + file[:0-len(sys.argv[2])] + " "
@@ -55,9 +56,11 @@ def main():
 
         else: # invalid argument
             printUsage()
-            return 1
+            sys.exit(1)
 
     print(disp)
+    if disp == "":
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
