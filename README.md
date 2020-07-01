@@ -6,6 +6,7 @@ Then, use `./run_test.sh` to test all .bats files in the subdirectories of /sour
 
 Other commands include:
 - `./addMakefile.sh <directory>`: open a lightweight Makefile generator.
+- `./addEnv.sh <directory>`: adds `env.txt` a subdirectory, allowing BATS to use necessary environmental commands before testing, e.g. `module load`.
 - `./cleanup.sh <directory>`: helps delete and/or backup your .bats files.
 - `./addTest.sh <directory>`: creates a `.bats` test for a directory's `Makefile`, and prompts for necessary environmental commands.
 

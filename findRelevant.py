@@ -20,7 +20,7 @@ def check(ls): # checks if any file in l_files is supposed to be excluded
 def main():
     os.chdir("./")
 
-    if len(sys.argv) == 1: # if they used no arguments
+    if len(sys.argv) < 3: # if they used the wrong amount of arguments
         printUsage()
         sys.exit(1)
 
