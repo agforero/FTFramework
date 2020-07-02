@@ -95,7 +95,7 @@ def main():
 	m.write(f"\nall: {allHelper(l_fc)}\n\n")
 	for fc in l_fc:
 		m.write(fc.outputInfo()+"\n")
-	m.write(f"clean:\n\trm -f{allHelper(l_fc)}")
+	m.write(f"clean:\n\trm -f *.exe *.o *.mod")
 	m.close()
 
 	return 0
