@@ -12,6 +12,7 @@ if [ ! -d $1 ]; then
 	exit 2
 fi
 # check to see if there are even .bats files to interact with
+# this logically shouldn't happen if they've run ./run_test at least once
 cd $1
 if [ ! -f *.bats ]; then
 	echo "No .bats file(s) found."
