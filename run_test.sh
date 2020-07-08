@@ -13,13 +13,19 @@ for d in */ ; do
 		./metamake.py
 		rm metamake.py
 	fi
-	# testing to see if generic test is needed
-	../../addTest.sh $d $@ # refreshes and runs test.bats
-	bats test.bats
-	restOfBats=$(./findRelevant.py -e .bats test.bats) # attempts to find other .bats files
+	# running generic test
+	# refreshes and runs test.bats
+	if [ ! -f tests.bats ]; then
+		cp ../../addTests.py .
+		./addTests.py
+		rm addTests.py
+	fi
+	bats tests.bats
+	restOfBats=$(./findRelevant.py -e .bats tests.bats) # attempts to find other .bats files
 	if [ $? -eq 0 ]; then
 		bats $restOfBats
 	fi
+	rm findRelevant.py
 	cd ..
 done
 echo

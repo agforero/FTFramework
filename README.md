@@ -10,6 +10,5 @@ Other commands include:
 - `./addEnv.sh <directory>`: adds `env.txt` a subdirectory, allowing BATS to use necessary environmental commands before testing, e.g. `module load`.
 - `./addMakefile.sh <directory>`: creates a generic Makefile.
 - `./cleanup.sh <directory>`: helps delete and/or backup your .bats files.
-- `./addTest.sh <directory>`: creates a `.bats` test for a directory's `Makefile`. `run_test.sh` uses this file automatically.
 
 Originally written for Argonne National Laboratory.
