@@ -14,8 +14,8 @@ else
     echo -e "\n============================ BEGIN INPUT ============================"
     while read comm 
     do
-        echo "$comm" >> env.txt
+        echo "$comm" >> comm.env
     done
     echo -e "============================  END INPUT  ============================\n"
-    echo "Generation complete. env.txt saved in $(pwd)".
+    echo "Generation complete. comm.env saved in $(pwd)".
 fi

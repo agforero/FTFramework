@@ -15,11 +15,9 @@ for d in */ ; do
 	fi
 	# running generic test
 	# refreshes and runs test.bats
-	if [ ! -f tests.bats ]; then
-		cp ../../addTests.py .
-		./addTests.py
-		rm addTests.py
-	fi
+	cp ../../addTests.py .
+	./addTests.py
+	rm addTests.py
 	bats tests.bats
 	restOfBats=$(./findRelevant.py -e .bats tests.bats) # attempts to find other .bats files
 	if [ $? -eq 0 ]; then
