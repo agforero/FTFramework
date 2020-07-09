@@ -55,10 +55,10 @@ class FFile:
 
     def outputInfo(self): # it's like a beaten up pickup truck, held together by duct tape and glue...but it works.
         if self.isProgram: ret = justTheName(self.name) + ".exe: " + self.name # <filename>.exe: <filename>.f90
-        else: ret = justTheName(self.name) + ".o: " + self.name # <filename>.o: <filename>.f90
+        else: ret = justTheName(self.name) + ".o: " + self.name # <filename>.o: <filename>.f90...
     
-        for key in self.dependencies.keys(): # add needed .o files if necessary
-            if self.dependencies[key] != '' and self.dependencies[key] != justTheName(self.name) + ".f90": # shouldn't reference <itself>.o
+        for key in self.dependencies.keys(): # ...add needed .o files if necessary
+            if self.dependencies[key] != '' and self.dependencies[key] != self.name: # shouldn't reference <itself>.o here
                 ret += " " + justTheName(self.dependencies[key]) + ".o"
     
         ret += "\n\t$(FC) $(FFLAGS) -c " + self.name # $(FC) $(FFLAGS) -c <filename>.f90
