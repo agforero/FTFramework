@@ -59,7 +59,6 @@ def main(): # god I love Python
         e = open(env[0], 'r')
         for line in e:
             t.write(line + "\n")
-        t.write("\n")
 
     for e in targets.keys():
         t.write("@test make " + targets[e] + " {\n")
