@@ -97,6 +97,7 @@ def main():
         for line in f:
             inMod = 0
             inInt = 0
+            # add inSub for things like amiller
             try: 
                 # the file relies on another file
                 if line.split()[0].lower() == "use":

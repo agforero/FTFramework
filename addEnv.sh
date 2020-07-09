@@ -9,6 +9,7 @@ elif [ $# -ne 1 ]; then
     exit 2
 else
     cd $1
+    rm -f comm.env
     echo "Enter preemptive environmental commands to be included in env.txt (and, by extension, test.bats)."
     echo "Type ctrl + D when done."
     echo -e "\n============================ BEGIN INPUT ============================"
