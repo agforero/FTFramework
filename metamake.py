@@ -76,7 +76,7 @@ class FFile:
         just = justTheName(self.name)
         if self.isProgram:
             return dedent(f"""\
-            {just}.exe: {just}.o {self.oString()}
+            {just}.exe: {just}.o{self.oString()}
             \t$(FC) $(FFLAGS) {just}.o{self.oString()} -o {just}.exe
             
             {just}.o: {self.name}{self.oString()}
