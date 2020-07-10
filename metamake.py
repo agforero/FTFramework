@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os, glob
+from textwrap import dedent
 
 def find(l_fc, f): # dumb function to make up for the fact that I didn't make l_fc a dictionary
     for i in range(len(l_fc)):
@@ -53,24 +54,39 @@ class FFile:
                 l_fc[find(l_fc, self.dependencies[key])].explore(l_fc, r_ls)
         r_ls.ls.append(self.name)
 
-    def outputInfo(self): # it's like a beaten up pickup truck, held together by duct tape and glue...but it works.
-        if self.isProgram: ret = justTheName(self.name) + ".exe: " + self.name # <filename>.exe: <filename>.f90
-        else: ret = justTheName(self.name) + ".o: " + self.name # <filename>.o: <filename>.f90...
-    
-        for key in self.dependencies.keys(): # ...add needed .o files if necessary
-            if self.dependencies[key] != '' and self.dependencies[key] != self.name: # shouldn't reference <itself>.o here
-                ret += " " + justTheName(self.dependencies[key]) + ".o"
-    
-        ret += "\n\t$(FC) $(FFLAGS) -c " + self.name # $(FC) $(FFLAGS) -c <filename>.f90
-        if self.isProgram: # $(FC) $(FFLAGS) <filename>.o (depedencies).o -o <filename>.exe
-            ret += "\n\t$(FC) $(FFLAGS) " + justTheName(self.name) + ".o"
-            for key in self.dependencies.keys():
-                if self.dependencies[key] != '' and self.dependencies[key] != justTheName(self.name) + ".f90": 
-                    ret += " " + justTheName(self.dependencies[key]) + ".o"
-            ret += " -o " + justTheName(self.name) + ".exe"
-
-        ret += "\n"
+    def oString(self): # all the depdendencies with .o at the end
+        ret = ""
+        for v in self.dependencies.values():
+            if v != '' and v != self.name: # doesn't reference itself or something empty
+                ret += ' ' + justTheName(v) + ".o"
         return ret
+
+    # if executable:
+        # <filename>.exe: <filename>.o (dependencies).o
+        #       $(FC) $(FFLAGS) <filename>.o (dependencies).o -o <filename>.exe
+        # 
+        # <filename>.o: <filename>.f90 (dependencies).o
+        #       $(FC) $(FFLAGS) -c <filename>.f90
+
+    # otherwise:
+        # <filename>.o: <filename>.f90 (dependencies).o      << we tell the rules here that (deps) must exist first, so <filename> can reference the modules
+        #       $(FC) $(FFLAGS) -c <filename>.f90           << NO LINKING HERE. so no listing deps here
+
+    def outputInfo(self):
+        just = justTheName(self.name)
+        if self.isProgram:
+            return dedent(f"""\
+            {just}.exe: {just}.o {self.oString()}
+            \t$(FC) $(FFLAGS) {just}.o{self.oString()} -o {just}.exe
+            
+            {just}.o: {self.name}{self.oString()}
+            \t$(FC) $(FFLAGS) -c {self.name}
+            """)
+        else:
+            return dedent(f"""\
+            {just}.o: {self.name}{self.oString()}
+            \t$(FC) $(FFLAGS) -c {self.name}
+            """)
 
 def justTheName(st): # helps generate things like <filename>.exe
     if len(st) == 0: return ''
@@ -84,6 +100,11 @@ def allHelper(l_fc):
         else: ret += " " + justTheName(fc.name) + ".o"
     return ret
 
+def splitAndLower(line): # split and lower? I hardly even...
+    ls = line.split()
+    for i in range(len(ls)): ls[i] = ls[i].lower()
+    return ls
+
 def main():
     os.chdir("./") # necessary?
     l_f90 = glob.glob("*.f90") # so far this only works with .f90 files
@@ -94,10 +115,11 @@ def main():
     for file in l_f90: 
         cur = FFile(file)
         f = open(file, 'r')
+        inMod = 0 # silly bean, don't put these in the for loop
+        inInt = 0
+        inSub = 0
+        inFunc = 0
         for line in f:
-            inMod = 0
-            inInt = 0
-            # add inSub for things like amiller
             try: 
                 # the file relies on another file
                 if line.split()[0].lower() == "use":
@@ -111,17 +133,22 @@ def main():
                     if not inInt: inMod += 1
                     cur.importantLines.append(line.split())
                     if line.split()[1] not in allDependencies: allDependencies[line.split()[1]] = "" # we don't yet try to tag the dependencies
+                elif splitAndLower(line)[:2] == ["end", "module"]: inMod -= 1
 
-                elif line.split()[0].lower() == "end" and line.split()[1].lower() == "module":
-                    inMod -= 1
+                # interface
+                elif line.split()[0].lower() == "interface": inInt += 1
+                elif splitAndLower(line)[:2] == ["end", "interface"]: inInt -= 1
 
-                elif line.split()[0].lower() == "interface": # so that "modules" in interfaces don't count
-                    inInt += 1
+                # subroutine
+                elif line.split()[0].lower() == "subroutine": inSub += 1
+                elif splitAndLower(line)[:2] == ["end", "subroutine"]: inSub -= 1
 
-                elif line.split()[0].lower() == "end" and line.split()[1].lower() == "interface":
-                    inInt -= 1
+                # function
+                elif line.split()[0].lower() == "function": inFunc += 1
+                elif splitAndLower(line)[:2] == ["end", "function"]: inFunc -= 1
 
-                elif line.split()[0].lower() == "program" or not inMod:
+                # is the thing an executable?
+                elif line.split()[0].lower() == "program" and not (inMod or inSub or inFunc) and not line.isspace():
                     cur.isProgram = True
 
             except: continue # if the line is empty, or error
@@ -146,8 +173,9 @@ def main():
     # beautiful! it's working smoothly. now to translate the result into a Makefile...
     m = open("Makefile", 'w')
     m.write("FC ?= gfortran\n")
-    m.write("FFLAGS ?=\n")
-    m.write(f"\nall: {allHelper(l_fc)}\n\n")
+    m.write("FFLAGS ?=\n\n")
+    m.write(".PHONY: all clean\n")
+    m.write(f"all: {allHelper(l_fc)}\n\n")
     for fc in l_fc:
         m.write(fc.outputInfo()+"\n")
     m.write(f"clean:\n\trm -f *.exe *.o *.mod")

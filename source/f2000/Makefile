@@ -1,7 +1,7 @@
 FC ?= gfortran
 FFLAGS ?=
 
-.PHONY: all
+.PHONY: all clean
 all:  ctrper.o fndnth.o follow.exe givcor.exe indmed.o indnth.o inspar.o inssor.o median.o mrgref.o mrgrnk.o mulcnt.o rapknr.o refpar.o refsor.o rinpar.o rnkpar.o sort7.exe tstvalnth.exe uniinv.o unipar.o unirnk.o unista.o valmed.o valnth.o
 
 ctrper.o: ctrper.f90 mrgrnk.o
@@ -10,13 +10,17 @@ ctrper.o: ctrper.f90 mrgrnk.o
 fndnth.o: fndnth.f90
 	$(FC) $(FFLAGS) -c fndnth.f90
 
-follow.exe: follow.f90
-	$(FC) $(FFLAGS) -c follow.f90
+follow.exe: follow.o 
 	$(FC) $(FFLAGS) follow.o -o follow.exe
 
-givcor.exe: givcor.f90 ctrper.o refsor.o mrgrnk.o
-	$(FC) $(FFLAGS) -c givcor.f90
+follow.o: follow.f90
+	$(FC) $(FFLAGS) -c follow.f90
+
+givcor.exe: givcor.o  ctrper.o refsor.o mrgrnk.o
 	$(FC) $(FFLAGS) givcor.o ctrper.o refsor.o mrgrnk.o -o givcor.exe
+
+givcor.o: givcor.f90 ctrper.o refsor.o mrgrnk.o
+	$(FC) $(FFLAGS) -c givcor.f90
 
 indmed.o: indmed.f90
 	$(FC) $(FFLAGS) -c indmed.f90
@@ -57,13 +61,17 @@ rinpar.o: rinpar.f90
 rnkpar.o: rnkpar.f90
 	$(FC) $(FFLAGS) -c rnkpar.f90
 
-sort7.exe: sort7.f90
-	$(FC) $(FFLAGS) -c sort7.f90
+sort7.exe: sort7.o 
 	$(FC) $(FFLAGS) sort7.o -o sort7.exe
 
-tstvalnth.exe: tstvalnth.f90 valnth.o mrgrnk.o
-	$(FC) $(FFLAGS) -c tstvalnth.f90
+sort7.o: sort7.f90
+	$(FC) $(FFLAGS) -c sort7.f90
+
+tstvalnth.exe: tstvalnth.o  valnth.o mrgrnk.o
 	$(FC) $(FFLAGS) tstvalnth.o valnth.o mrgrnk.o -o tstvalnth.exe
+
+tstvalnth.o: tstvalnth.f90 valnth.o mrgrnk.o
+	$(FC) $(FFLAGS) -c tstvalnth.f90
 
 uniinv.o: uniinv.f90
 	$(FC) $(FFLAGS) -c uniinv.f90

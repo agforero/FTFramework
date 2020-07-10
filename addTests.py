@@ -6,6 +6,11 @@ def justTheName(st): # helps generate things like <filename>.exe
     elif st[0] == '.': return ''
     else: return st[0] + justTheName(st[1:])
 
+def splitAndLower(line): 
+    ls = line.split()
+    for i in range(len(ls)): ls[i] = ls[i].lower()
+    return ls
+
 def main(): # god I love Python
     targets = {}
     os.chdir("./") # necessary?
@@ -15,21 +20,35 @@ def main(): # god I love Python
         program = False # or it has lines independent of a module or interface declaration
         inMod = 0
         inInt = 0
+        inSub = 0
+        inFunc = 0
         for line in c:
             try:
+                # the file is relied on by another file
                 if line.split()[0].lower() == "module":
                     if not inInt: inMod += 1
-                elif line.split()[0].lower() == "end" and line.split()[1] == "module":
-                    inMod -= 1
-                elif line.split()[0].lower() == "interface": 
-                    inInt += 1
-                elif line.split()[0].lower() == "end" and line.split()[1] == "interface":
-                    inInt -= 1
-                elif line.split()[0].lower() == "program" or not inMod: # we have a main
+                elif splitAndLower(line)[:2] == ["end", "module"]: inMod -= 1
+
+                # interface
+                elif line.split()[0].lower() == "interface": inInt += 1
+                elif splitAndLower(line)[:2] == ["end", "interface"]: inInt -= 1
+
+                # subroutine
+                elif line.split()[0].lower() == "subroutine": inSub += 1
+                elif splitAndLower(line)[:2] == ["end", "subroutine"]: inSub -= 1
+
+                # function
+                elif line.split()[0].lower() == "function": inFunc += 1
+                elif splitAndLower(line)[:2] == ["end", "function"]: inFunc -= 1
+
+                # is the thing an executable?
+                elif line.split()[0].lower() == "program" and not (inMod or inSub or inFunc) and not line.isspace():
                     program = True
             except: continue # the line is empty
         if program:
             targets[file] = justTheName(file)
+        else:
+            targets[file] = justTheName(file) + ".o"
         c.close()
 
     # then we determine if the Makefile calls us to make <filename>.exe, or just <filename>
