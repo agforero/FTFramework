@@ -10,13 +10,13 @@ ctrper.o: ctrper.f90 mrgrnk.o
 fndnth.o: fndnth.f90
 	$(FC) $(FFLAGS) -c fndnth.f90
 
-follow.exe: follow.o 
+follow.exe: follow.o
 	$(FC) $(FFLAGS) follow.o -o follow.exe
 
 follow.o: follow.f90
 	$(FC) $(FFLAGS) -c follow.f90
 
-givcor.exe: givcor.o  ctrper.o refsor.o mrgrnk.o
+givcor.exe: givcor.o ctrper.o refsor.o mrgrnk.o
 	$(FC) $(FFLAGS) givcor.o ctrper.o refsor.o mrgrnk.o -o givcor.exe
 
 givcor.o: givcor.f90 ctrper.o refsor.o mrgrnk.o
@@ -61,13 +61,13 @@ rinpar.o: rinpar.f90
 rnkpar.o: rnkpar.f90
 	$(FC) $(FFLAGS) -c rnkpar.f90
 
-sort7.exe: sort7.o 
+sort7.exe: sort7.o
 	$(FC) $(FFLAGS) sort7.o -o sort7.exe
 
 sort7.o: sort7.f90
 	$(FC) $(FFLAGS) -c sort7.f90
 
-tstvalnth.exe: tstvalnth.o  valnth.o mrgrnk.o
+tstvalnth.exe: tstvalnth.o valnth.o mrgrnk.o
 	$(FC) $(FFLAGS) tstvalnth.o valnth.o mrgrnk.o -o tstvalnth.exe
 
 tstvalnth.o: tstvalnth.f90 valnth.o mrgrnk.o

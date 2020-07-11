@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys, os, glob
+from textwrap import dedent
 
 def justTheName(st): # helps generate things like <filename>.exe
     if len(st) == 0: return ''
@@ -78,12 +79,15 @@ def main(): # god I love Python
         e = open(env[0], 'r')
         for line in e:
             t.write(line + "\n")
+        t.write("\n")
 
-    for e in targets.keys():
-        t.write("@test make " + targets[e] + " {\n")
-        t.write("\trm -f " + justTheName(targets[e]) + ".o " + justTheName(targets[e]) + ".exe " + justTheName(targets[e]) + ".mod\n")
-        t.write("\tmake " + targets[e] + "\n")
-        t.write("}\n\n")
+    for v in targets.values():
+        t.write(dedent(f"""\
+        @test make {v} {{
+        \trm -f {justTheName(v)}.o {justTheName(v)}.exe {justTheName(v)}.mod
+        \tmake {v}
+        }}
+        """))
     t.close()
 
 if __name__ == "__main__":
