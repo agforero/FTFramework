@@ -1,4 +1,4 @@
-A framework to help test Fortran compilers against `gfortran`.
+A framework to help test bleeding-edge Fortran compilers.
 This framework uses [BATS](https://github.com/bats-core/bats-core).
 
 To add a directory to the testing framework, `cd` into this directory, and use `./addNew.sh <path-to-directory>`.
