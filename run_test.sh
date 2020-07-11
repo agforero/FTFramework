@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# if they specify a compiler in the arg
+if [ $# -eq 1 ]; then
+	export FC="$1"
+fi
+
 cd source
 for d in */ ; do
 	cd $d 
