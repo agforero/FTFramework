@@ -10,7 +10,6 @@ for d in */ ; do
 	cd $d 
 	echo
 	echo "$(pwd):"
-	cp ../../findRelevant.py .
 	# checking for need of metamake
 	if [ ! -f ./Makefile ]; then
 		cp ../../metamake.py .	
@@ -26,11 +25,14 @@ for d in */ ; do
 		rm addTests.py
 	fi
 	bats tests.bats
+	cp ../../findRelevant.py .
 	restOfBats=$(./findRelevant.py -e .bats tests.bats) # attempts to find other .bats files
 	if [ $? -eq 0 ]; then
+		rm -f findRelevant.py
 		bats $restOfBats
+	else
+		rm -f findRelevant.py
 	fi
-	rm findRelevant.py
 	cd ..
 done
 echo
