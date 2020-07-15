@@ -81,13 +81,22 @@ def main(): # god I love Python
             t.write(line + "\n")
         t.write("\n")
 
+    first = True
     for v in targets.values():
-        t.write(dedent(f"""\
-        @test make {v} {{
-        \trm -f {justTheName(v)}.o {justTheName(v)}.exe {justTheName(v)}.mod
-        \tmake {v}
-        }}
-        """))
+        if first:
+            t.write(dedent(f"""\
+            @test make {v} {{
+            \tmake clean # make clean once in first test
+            \tmake {v}
+            }}
+            """))
+            first = False
+        else:
+            t.write(dedent(f"""\
+            @test make {v} {{
+            \tmake {v}
+            }}
+            """))
     t.close()
 
 if __name__ == "__main__":
