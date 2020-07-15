@@ -57,45 +57,79 @@ def getDifferences(f1e, f2e): # this should take in only the first lines...in a 
             finalRet[key] = ret[key]
     return finalRet
 
-def evenOut(st, mx): # help make all the strings uniform size
-    return st + (' ' * (mx - len(st)))
+def evenOut(st, mx, cha=' '): # help make all the strings uniform size
+    if len(st) > mx-1: return st[:mx-3] + "..."
+    else: return st + " " + (cha * (mx - len(st) - 1))
 
-def evenOutRight(st, mx):
+def evenOutRight(st, mx): # nice in theory, looks a bit messy in application
     return (' ' * (mx - len(st))) + st
 
 def center(st, mx):
     return ('-' * (mx - int(len(st)/2))) + ' ' + st + ' ' + ('-' * (mx - int(len(st)/2)))
+
+def matchFirstLine(dc, first): # returns index location of Error object that matches given first line
+    for key in dc.keys():
+        for i in range(len(dc[key])):
+            if dc[key][i].getFirstLine() == first:
+                return i
+    return -1 # no such first line was found
 
 def displaySummary(f1e, f2e, mx):
     print(f"\n{' ' * (mx-len(sys.argv[1]))}{sys.argv[1]} | {sys.argv[2]}")
     print(f"{'-' * mx} | {'-' * mx}")
     for key in f1e.keys():
         if (len(f1e[key]), len(f2e[key])) == (0, 0): continue
-        print(f"{' ' * mx} |\n{center(key[:-1], mx)}")
-        #print(f"{evenOutRight(key[:-1], mx)} | {evenOut(key[:-1], mx)}")
-        if len(f1e[key]) >= len(f2e[key]):
-            i2 = 0
-            for i in range(len(f2e[key])):
-                print(f"{evenOut(f1e[key][i][:-1], mx)} | {evenOut(f2e[key][i][:-1], mx)}")
-                i2 += 1
-            for i in range(len(f1e[key]) - len(f2e[key])):
-                print(f"{evenOut(f1e[key][i2][:-1], mx)} |")
-                i2 += 1
-        else:
-            i2 = 0
-            for i in range(len(f1e[key])):
-                print(f"{evenOut(f1e[key][i][:-1], mx)} | {evenOut(f2e[key][i][:-1], mx)}")
-                i2 += 1
-            for i in range(len(f2e[key]) - len(f1e[key])):
-                print(f"{' ' * mx} | {evenOut(f2e[key][i2][:-1], mx)}")
-                i2 += 1
+        cont = False # determine if the directory actually needs to be displayed or not
+        for e in f1e[key]: # for error in current directory of f1e
+            if matchFirstLine(f2e, e.getFirstLine()) == -1:
+                cont = True
+        for e in f2e[key]: # for error in current directory of f2e
+            if matchFirstLine(f1e, e.getFirstLine()) == -1:
+                cont = True
+        if cont:
+            print(f"{' ' * mx} |\n{center(key[:-1], mx)}")
+            for e in f1e[key]: # for error in current directory of f1e
+                if matchFirstLine(f2e, e.getFirstLine()) == -1:
+                    print(f"{evenOut(e.getFirstLine()[:-1], mx)} |")
+            for e in f2e[key]: # for error in current directory of f2e
+                if matchFirstLine(f1e, e.getFirstLine()) == -1:
+                    print(f"{' ' * mx} | {evenOut(e.getFirstLine()[:-1], mx)}")
+            print(f"{' ' * mx} |")
 
-        print(f"{' ' * mx} |")
+def displayVerboseSummary(f1e, f2e, mx):
+    print(f"\n{' ' * (mx-len(sys.argv[1]))}{sys.argv[1]} | {sys.argv[2]}")
+    print(f"{'-' * mx} | {'-' * mx}")
+    for key in f1e.keys():
+        if (len(f1e[key]), len(f2e[key])) == (0, 0): continue
+        cont = False
+        for e in f1e[key]: # for error in current directory of f1e
+            if matchFirstLine(f2e, e.getFirstLine()) == -1:
+                cont = True
+        for e in f2e[key]: # for error in current directory of f2e
+            if matchFirstLine(f1e, e.getFirstLine()) == -1:
+                cont = True
+        if cont:
+            print(f"{' ' * mx} |\n{center(key[:-1], mx)}")
+            for e in f1e[key]: # for error in current directory of f1e
+                if matchFirstLine(f2e, e.getFirstLine()) == -1:
+                    print(f"{'-' * mx} |")
+                    print(f"{evenOut(e.getFirstLine()[:-1] + ':', mx)} |")
+                    print(f"{' ' * mx} |")
+                    for line in e.body.split("\n")[1:]:
+                        print(f"{evenOut(line, mx)} |")
+            for e in f2e[key]: # for error in current directory of f2e
+                if matchFirstLine(f1e, e.getFirstLine()) == -1:
+                    print(f"{' ' * mx} | {'-' * mx}")
+                    print(f"{' ' * mx} | {evenOut(e.getFirstLine()[:-1] + ':', mx)}")
+                    print(f"{' ' * mx} |")
+                    for line in e.body.split("\n")[1:]:
+                        print(f"{' ' * mx} | {evenOut(line, mx)}")
+            print(f"{' ' * mx} |")
 
 def main():
     # check if args are ok
-    if len(sys.argv) != 3:
-        print("Usage: ./compare.py <log1> <log2>")
+    if len(sys.argv) == 1 or len(sys.argv) > 4 or (len(sys.argv) == 4 and sys.argv[3] != "-v"):
+        print("Usage: ./compare.py <log1> <log2> (-v)")
         sys.exit(1)
 
     f1 = open(sys.argv[1], 'r')
@@ -112,13 +146,13 @@ def main():
             
             elif ((line[0], line[-2]) == ('/', ':')) or ((line[0], line[-1]) == ('/', ':')):
                 inError = False
-                maxRelLen = max(len(line), maxRelLen)
+                maxRelLen = min(60, max(len(line), maxRelLen))
                 currentDir = line
                 f1Errors[currentDir] = []
             
             elif splitAndLower(line)[:2] == ["not", "ok"]:
                 inError = True
-                maxRelLen = max(len(line), maxRelLen)
+                maxRelLen = min(60, max(len(line), maxRelLen))
                 f1Errors[currentDir].append(Error(line, currentDir))
 
             elif inError and line.split()[0] != "ok":
@@ -132,13 +166,13 @@ def main():
 
             elif ((line[0], line[-2]) == ('/', ':')) or ((line[0], line[-1]) == ('/', ':')):
                 inError = False
-                maxRelLen = max(len(line), maxRelLen)
+                maxRelLen = min(60, max(len(line), maxRelLen))
                 currentDir = line
                 f2Errors[currentDir] = []
 
             elif splitAndLower(line)[:2] == ["not", "ok"]:
                 inError = True
-                maxRelLen = max(len(line), maxRelLen)
+                maxRelLen = min(60, max(len(line), maxRelLen))
                 f2Errors[currentDir].append(Error(line, currentDir))
 
             elif inError and line.split()[0] != "ok":
@@ -148,9 +182,15 @@ def main():
     f1.close()
     f2.close()
 
-    if getDifferences(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors)) != {}:
-        displaySummary(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors), maxRelLen)
-    else: print("No differences found. Nice compiler!")
+    if len(sys.argv) == 3:
+        if getDifferences(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors)) != {}:
+            displaySummary(f1Errors, f2Errors, maxRelLen)
+        else: print("No differences found. Nice compiler!")
+    elif len(sys.argv) == 4:
+        if getDifferences(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors)) != {}:
+            displayVerboseSummary(f1Errors, f2Errors, maxRelLen)
+        else: print("No differences found. Nice compiler!")
+
     sys.exit(0)
 
 if __name__ == "__main__":
