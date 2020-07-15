@@ -58,16 +58,21 @@ def getDifferences(f1e, f2e): # this should take in only the first lines...in a 
     return finalRet
 
 def evenOut(st, mx): # help make all the strings uniform size
-    for i in range(mx - len(st)):
-        st += ' '
-    return st
+    return st + (' ' * (mx - len(st)))
+
+def evenOutRight(st, mx):
+    return (' ' * (mx - len(st))) + st
+
+def center(st, mx):
+    return ('-' * (mx - int(len(st)/2))) + ' ' + st + ' ' + ('-' * (mx - int(len(st)/2)))
 
 def displaySummary(f1e, f2e, mx):
     print(f"\n{' ' * (mx-len(sys.argv[1]))}{sys.argv[1]} | {sys.argv[2]}")
     print(f"{'-' * mx} | {'-' * mx}")
     for key in f1e.keys():
         if (len(f1e[key]), len(f2e[key])) == (0, 0): continue
-        print(f"{evenOut(key[:-1], mx)} | {evenOut(key[:-1], mx)}")
+        print(f"{' ' * mx} |\n{center(key[:-1], mx)}")
+        #print(f"{evenOutRight(key[:-1], mx)} | {evenOut(key[:-1], mx)}")
         if len(f1e[key]) >= len(f2e[key]):
             i2 = 0
             for i in range(len(f2e[key])):
@@ -118,7 +123,6 @@ def main():
 
             elif inError and line.split()[0] != "ok":
                 f1Errors[currentDir][-1].addLine(line)
-        
         except: continue
 
     for line in f2:
@@ -139,7 +143,6 @@ def main():
 
             elif inError and line.split()[0] != "ok":
                 f2Errors[currentDir][-1].addLine(line)
-
         except: continue
     
     f1.close()
@@ -148,7 +151,6 @@ def main():
     if getDifferences(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors)) != {}:
         displaySummary(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors), maxRelLen)
     else: print("No differences found. Nice compiler!")
-
     sys.exit(0)
 
 if __name__ == "__main__":

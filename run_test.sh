@@ -3,7 +3,18 @@
 # if they specify a compiler in the arg
 if [ $# -eq 1 ]; then
 	export FC="$1"
+	comp=$1
+else
+	comp=$(echo FC)
 fi
+
+# redirecting to logs/<compiler>.log
+mkdir -p logs
+set -o errexit
+readonly LOG_FILE="./logs/$comp.log"
+touch comp.log
+exec 1>$LOG_FILE
+exec 2>&1
 
 cd source
 for d in */ ; do
@@ -12,8 +23,7 @@ for d in */ ; do
 	echo "$(pwd):"
 	# checking for need of metamake
 	if [ ! -f ./Makefile ]; then
-		cp ../../metamake.py .	
-		echo "Makefile does not exist. Creating generic Makefile."
+		cp ../../metamake.py .
 		./metamake.py
 		rm metamake.py
 	fi
