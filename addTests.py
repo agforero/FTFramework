@@ -12,22 +12,19 @@ def splitAndLower(line):
     for i in range(len(ls)): ls[i] = ls[i].lower()
     return ls
 
+def ignoreCommas(term):
+    if term[-1] == ',': return term[:-1]
+    else: return term    
+
 class FFile: # possibly a target, but only if it DOESN'T feed into anything else.
-    def __init__(self, name, source, l_dMods = [], l_use = []): # ultimately, if self.rel is empty, we should compile it.
+    def __init__(self, name, source):
         self.targetName = name
         self.src = source
-        self.definedMods = l_dMods # a list of mod names defined in this file. I should make anything with a main, but only make objects that aren't needed anywhere
-        self.usedMods = l_use # a list of mods this FFile uses
+        self.definedMods = [] # a list of mod names defined in this file. I should make anything with a main, but only make objects that aren't needed anywhere
+        self.usedMods = [] # a list of mods this FFile uses
         self.program = False # initialize as False, since we don't know yet
         self.range = [0, 0] # aka, between x and y, this FFile holds those positions in the allUsedMods array
-
-def getAllUsedModsExcept(l_fc, idx): # easier way to create a list of every mod within every FFile in l_fc
-    ret = []
-    for i in range(len(l_fc)): # for every FFile excluding the one found in idx,
-        if i != idx:
-            for mod in l_fc[i].usedMods:
-                ret.append(mod)
-    return ret
+        self.usedCount = 0 # a count of how many times one of its modules is used elsewhere. good for testing
 
 def main(): # god I love Python
     targets = {}
@@ -40,17 +37,14 @@ def main(): # god I love Python
         program = False # or it has lines independent of a module or interface or whatever
         firstUse = True
         l_fc.append(FFile(justTheName(file), file)) # we can rectify the targetName later depending on if its executable or object
-        inMod = 0
-        inInt = 0
-        inSub = 0
-        inFunc = 0
+        inMod, inInt, inSub, inFunc = 0, 0, 0, 0
         for line in c:
             try:
                 # the file is relied on by another file
                 if line.split()[0].lower() == "module":
                     if not inInt: inMod += 1
                     if inMod == 1: 
-                        l_fc[-1].definedMods.append(line.split()[1]) # add mod name to most recent FFile.definedMods[]
+                        if line.split()[1].lower() != "procedure": l_fc[-1].definedMods.append(line.split()[1]) # add mod name to most recent FFile.definedMods[]
 
                 elif splitAndLower(line)[:2] == ["end", "module"]: inMod -= 1
 
@@ -61,8 +55,8 @@ def main(): # god I love Python
                         l_fc[-1].range[1] = len(allUsedMods) # x and y of the range are set to the index AFTER the last element in allUsedMods
                         firstUse = False
                     for term in line.split()[1:]:
-                        allUsedMods.append(term)
-                        l_fc[-1].usedMods.append(term) 
+                        allUsedMods.append(ignoreCommas(term))
+                        l_fc[-1].usedMods.append(ignoreCommas(term)) 
                         l_fc[-1].range[1] += 1 
                         # ^^^ increase y by 1. for example, if there's only ever one USE call in file where allUsedMods was previously len 10,
                         # range[] = [10, 11]. allUsedMods[10] is the only index inhabited by file, so for the next file, 
@@ -91,15 +85,47 @@ def main(): # god I love Python
             l_fc[-1].targetName = justTheName(file) + ".o"
         c.close()
 
-    for fc in l_fc:
-        print(fc.range)
-
+    print(len(allUsedMods))
     # then, add .o files that are not relied on anywhere else.
     for fc in l_fc:
         if not fc.program:
-            for mod in fc.definedMods:
-                if mod not in allUsedMods[:fc.range[0]] + allUsedMods[fc.range[1]:]:
-                    targets[file] = justTheName(file) + ".o"
+            if fc.range != [0, 0]: # if it uses some modules of its own, don't analyze those.
+                print(f"{fc.range}\t{len(allUsedMods[:fc.range[0]])}\t{len(allUsedMods[fc.range[1]:])}")
+                for mod in fc.definedMods:
+                    if mod in allUsedMods[:fc.range[0]] or mod in allUsedMods[fc.range[1]:]:
+                        fc.usedCount += 1
+            else: # if it does, analyze everything else.
+                for mod in fc.definedMods:
+                    if mod in allUsedMods:
+                        fc.usedCount += 1
+            if fc.usedCount == 0:
+                targets[fc.src] = fc.targetName
+            """
+            if fc.range != [0,0]: 
+                print(f"\n\n{fc.targetName}:\nDEFINED MODS:\n{fc.definedMods}\nALL OTHERS:")
+                for i in range(len(allUsedMods)):
+                    if i >= fc.range[0] and i < fc.range[1]:
+                        print("\t", end=", ")
+                    else:
+                        print(allUsedMods[i], end=", ")
+            else:
+                print(f"\n{fc.targetName}:\nDEFINED MODS:\n{fc.definedMods}\nALL OTHERS:")
+                for i in range(len(allUsedMods)):
+                    print(allUsedMods[i], end=", ")
+            """
+
+    # let's double check our solution here
+    allBottomfeeders = {}
+    for fc in l_fc:
+        if fc.targetName[-2:] == ".o":
+            allBottomfeeders[fc.targetName] = 0
+    m = open("Makefile", 'r')
+    for line in m:
+        for term in line.split():
+            if term in allBottomfeeders.keys() or term[:-1] in allBottomfeeders.keys():
+                allBottomfeeders[justTheName(term) + ".o"] += 1
+    for bf in allBottomfeeders:
+        continue #print(f"{bf}\t\t{allBottomfeeders[bf]}")
 
     # executables should always be both COMPILED and LINKED, regardless of whether or not other files rely on them.
     # then we determine if the Makefile calls us to make <filename>.exe, or just <filename>
