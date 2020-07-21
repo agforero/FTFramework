@@ -156,8 +156,8 @@ def main(): # god I love Python
     for v in targets.values():
         if first:
             t.write(dedent(f"""\
-            @test make {v} {{
-            \tmake clean # make clean once in first test
+            @test make clean & make {v} {{
+            \tmake clean
             \tmake {v}
             }}
             """))
