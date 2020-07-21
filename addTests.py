@@ -16,6 +16,10 @@ def ignoreCommas(term):
     if term[-1] == ',': return term[:-1]
     else: return term    
 
+def allExcept(allUsedMods, fc):
+    if fc.range != [0, 0]: return allUsedMods[:fc.range[0]] + allUsedMods[fc.range[1]:]
+    else: return allUsedMods
+
 class FFile: # possibly a target, but only if it DOESN'T feed into anything else.
     def __init__(self, name, source):
         self.targetName = name
@@ -24,7 +28,6 @@ class FFile: # possibly a target, but only if it DOESN'T feed into anything else
         self.usedMods = [] # a list of mods this FFile uses
         self.program = False # initialize as False, since we don't know yet
         self.range = [0, 0] # aka, between x and y, this FFile holds those positions in the allUsedMods array
-        self.usedCount = 0 # a count of how many times one of its modules is used elsewhere. good for testing
 
 def main(): # god I love Python
     targets = {}
@@ -85,47 +88,39 @@ def main(): # god I love Python
             l_fc[-1].targetName = justTheName(file) + ".o"
         c.close()
 
-    print(len(allUsedMods))
     # then, add .o files that are not relied on anywhere else.
     for fc in l_fc:
         if not fc.program:
-            if fc.range != [0, 0]: # if it uses some modules of its own, don't analyze those.
-                print(f"{fc.range}\t{len(allUsedMods[:fc.range[0]])}\t{len(allUsedMods[fc.range[1]:])}")
-                for mod in fc.definedMods:
-                    if mod in allUsedMods[:fc.range[0]] or mod in allUsedMods[fc.range[1]:]:
-                        fc.usedCount += 1
-            else: # if it does, analyze everything else.
-                for mod in fc.definedMods:
-                    if mod in allUsedMods:
-                        fc.usedCount += 1
-            if fc.usedCount == 0:
-                targets[fc.src] = fc.targetName
-            """
-            if fc.range != [0,0]: 
-                print(f"\n\n{fc.targetName}:\nDEFINED MODS:\n{fc.definedMods}\nALL OTHERS:")
-                for i in range(len(allUsedMods)):
-                    if i >= fc.range[0] and i < fc.range[1]:
-                        print("\t", end=", ")
-                    else:
-                        print(allUsedMods[i], end=", ")
-            else:
-                print(f"\n{fc.targetName}:\nDEFINED MODS:\n{fc.definedMods}\nALL OTHERS:")
-                for i in range(len(allUsedMods)):
-                    print(allUsedMods[i], end=", ")
-            """
+            bottomfeeder = True # assume innocent of not being at bottom of tree until proven guilty
+            for mod in fc.definedMods:
+                if mod in allExcept(allUsedMods, fc):
+                    bottomfeeder = False # proven guilty.
+            if bottomfeeder: # if innocent,
+                targets[fc.targetName] = fc.targetName
 
+    """
     # let's double check our solution here
     allBottomfeeders = {}
-    for fc in l_fc:
-        if fc.targetName[-2:] == ".o":
-            allBottomfeeders[fc.targetName] = 0
     m = open("Makefile", 'r')
+    allWords = []
     for line in m:
         for term in line.split():
-            if term in allBottomfeeders.keys() or term[:-1] in allBottomfeeders.keys():
-                allBottomfeeders[justTheName(term) + ".o"] += 1
-    for bf in allBottomfeeders:
-        continue #print(f"{bf}\t\t{allBottomfeeders[bf]}")
+            allWords.append(term)
+
+    allOs = {}
+    for key in targets.keys():
+        if key[-2:] == ".o":
+            allOs[key] = 0   
+            for term in allWords:
+                if term == key or term[:-1] == key:
+                    allOs[key] += 1
+
+    for key in allOs: # these should all read 2.
+        if len(key) <= 7:
+            print(f"{key}\t\t{allOs[key]}")
+        else:
+            print(f"{key}\t{allOs[key]}")
+    """
 
     # executables should always be both COMPILED and LINKED, regardless of whether or not other files rely on them.
     # then we determine if the Makefile calls us to make <filename>.exe, or just <filename>
