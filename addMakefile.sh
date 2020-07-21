@@ -19,6 +19,5 @@ if [ -f "Makefile" ]; then
 	fi
 fi
 cp ../../metamake.py . 
-cp ../../findRelevant.py .
 ./metamake.py 
 rm metamake.py
