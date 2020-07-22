@@ -115,12 +115,10 @@ def main():
     for file in l_f90: 
         cur = FFile(file)
         f = open(file, 'r')
-        inMod = 0 # silly bean, don't put these in the for loop
-        inInt = 0
-        inSub = 0
-        inFunc = 0
+        inMod, inInt, inSub, inFunc = 0, 0, 0, 0 # silly bean, don't put these in the for loop
         for line in f:
             try: 
+                if line.split()[0][0] == '!': continue
                 # the file relies on another file
                 if line.split()[0].lower() == "use":
                     cur.independent = False 
@@ -140,15 +138,15 @@ def main():
                 elif splitAndLower(line)[:2] == ["end", "interface"]: inInt -= 1
 
                 # subroutine
-                elif line.split()[0].lower() == "subroutine": inSub += 1
+                elif line.split()[0] != "end" and "subroutine" in splitAndLower(line): inSub += 1
                 elif splitAndLower(line)[:2] == ["end", "subroutine"]: inSub -= 1
 
                 # function
-                elif line.split()[0].lower() == "function": inFunc += 1
+                elif line.split()[0] != "end" and "function" in splitAndLower(line): inFunc += 1
                 elif splitAndLower(line)[:2] == ["end", "function"]: inFunc -= 1
 
                 # is the thing an executable?
-                elif line.split()[0].lower() == "program" and not (inMod or inSub or inFunc) and not line.isspace():
+                elif line.split()[0].lower() == "program" or ((inMod, inInt, inSub, inFunc) == (0, 0, 0, 0) and not line.isspace()):
                     cur.isProgram = True
 
             except: continue # if the line is empty, or error

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys
+import sys, os
 
 class Error():
     def __init__(self, startLine, parent):
@@ -57,7 +57,7 @@ def getDifferences(f1e, f2e): # this should take in only the first lines...in a 
             finalRet[key] = ret[key]
     return finalRet
 
-def evenOut(st, mx, cha=' '): # help make all the strings uniform size
+def evenOut(st, mx, cha = ' '): # help make all the strings uniform size
     if len(st) > mx-1: return st[:mx-3] + "..."
     else: return st + " " + (cha * (mx - len(st) - 1))
 
@@ -73,6 +73,37 @@ def matchFirstLine(dc, first): # returns index location of Error object that mat
             if dc[key][i].getFirstLine() == first:
                 return i
     return -1 # no such first line was found
+
+def justTheName(st): # helps generate things like <filename>.exe
+    if len(st) == 0: return ''
+    elif st[0] == '.': return ''
+    else: return st[0] + justTheName(st[1:])
+
+def displayBasicData(f1e, f2e, mx):
+    for key in f1e.keys():
+        if (len(f1e[key]), len(f2e[key])) == (0, 0): continue
+        cont = False
+        for e in f1e[key]: # for error in current directory of f1e
+            if matchFirstLine(f2e, e.getFirstLine()) == -1:
+                cont = True
+        for e in f2e[key]: # for error in current directory of f2e
+            if matchFirstLine(f1e, e.getFirstLine()) == -1:
+                cont = True
+        if cont:
+            print(f"{('-' * (mx + 4))}")
+            print(f"DIR: {key[:-2]}")
+            print(f"COMPILER: {sys.argv[1]}")
+            for e in f1e[key]: # for error in current directory of f1e
+                if matchFirstLine(f2e, e.getFirstLine()) == -1:
+                    print(e.getFirstLine()[:-1])
+                    for line in e.body.split("\n")[1:]:
+                        print(line)
+            print(f"COMPILER: {sys.argv[2]}")
+            for e in f2e[key]: # for error in current directory of f2e
+                if matchFirstLine(f1e, e.getFirstLine()) == -1:
+                    print(e.getFirstLine()[:-1])
+                    for line in e.body.split("\n")[1:]:
+                        print(line)
 
 def displaySummary(f1e, f2e, mx):
     print(f"\n{' ' * (mx-len(sys.argv[1]))}{sys.argv[1]} | {sys.argv[2]}")
@@ -128,12 +159,15 @@ def displayVerboseSummary(f1e, f2e, mx):
 
 def main():
     # check if args are ok
-    if len(sys.argv) == 1 or len(sys.argv) > 4 or (len(sys.argv) == 4 and sys.argv[3] != "-v"):
-        print("Usage: ./compare.py <log1> <log2> (-v)")
+    if len(sys.argv) == 1 or len(sys.argv) > 4 or (len(sys.argv) == 4 and not (sys.argv[3] == "-v" or sys.argv[3] == "-g")):
+        print("Usage: ./compare.py <log1> <log2> (-g / -v)")
+        print("no flag outputs to data with no extra formatting,")
+        print("-g outputs to a compact table, and")
+        print("-v outputs to a verbose table.")
         sys.exit(1)
 
-    f1 = open(sys.argv[1], 'r')
-    f2 = open(sys.argv[2], 'r')
+    f1 = open(f"logs/{justTheName(sys.argv[1])}.log", 'r')
+    f2 = open(f"logs/{justTheName(sys.argv[2])}.log", 'r')
     maxRelLen = 0 # maximum relevant line length
     f1Errors = {}
     f2Errors = {}
@@ -184,12 +218,17 @@ def main():
 
     if len(sys.argv) == 3:
         if getDifferences(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors)) != {}:
-            displaySummary(f1Errors, f2Errors, maxRelLen)
+            displayBasicData(f1Errors, f2Errors, maxRelLen)
         else: print("No differences found. Nice compiler!")
     elif len(sys.argv) == 4:
-        if getDifferences(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors)) != {}:
-            displayVerboseSummary(f1Errors, f2Errors, maxRelLen)
-        else: print("No differences found. Nice compiler!")
+        if sys.argv[3] == "-g":
+            if getDifferences(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors)) != {}:
+                displaySummary(f1Errors, f2Errors, maxRelLen)
+            else: print("No differences found. Nice compiler!")
+        elif sys.argv[3] == "-v":
+            if getDifferences(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors)) != {}:
+                displayVerboseSummary(f1Errors, f2Errors, maxRelLen)
+            else: print("No differences found. Nice compiler!")
 
     sys.exit(0)
 

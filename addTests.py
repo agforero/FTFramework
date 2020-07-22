@@ -43,6 +43,7 @@ def main(): # god I love Python
         inMod, inInt, inSub, inFunc = 0, 0, 0, 0
         for line in c:
             try:
+                if line.split()[0][0] == '!': continue
                 # the file is relied on by another file
                 if line.split()[0].lower() == "module":
                     if not inInt: inMod += 1
@@ -70,15 +71,15 @@ def main(): # god I love Python
                 elif splitAndLower(line)[:2] == ["end", "interface"]: inInt -= 1
 
                 # subroutine
-                elif line.split()[0].lower() == "subroutine": inSub += 1
+                elif line.split()[0] != "end" and "subroutine" in splitAndLower(line): inSub += 1
                 elif splitAndLower(line)[:2] == ["end", "subroutine"]: inSub -= 1
 
                 # function
-                elif line.split()[0].lower() == "function": inFunc += 1
+                elif line.split()[0] != "end" and "function" in splitAndLower(line): inFunc += 1
                 elif splitAndLower(line)[:2] == ["end", "function"]: inFunc -= 1
 
                 # is the thing an executable?
-                elif line.split()[0].lower() == "program" and not (inMod or inSub or inFunc) and not line.isspace():
+                elif line.split()[0].lower() == "program" or ((inMod, inInt, inSub, inFunc) == (0, 0, 0, 0) and not line.isspace()):
                     program = True
                     l_fc[-1].program = True
             except: continue # the line is empty
@@ -152,22 +153,12 @@ def main(): # god I love Python
             t.write(line + "\n")
         t.write("\n")
 
-    first = True
     for v in targets.values():
-        if first:
-            t.write(dedent(f"""\
-            @test make clean & make {v} {{
-            \tmake clean
-            \tmake {v}
-            }}
-            """))
-            first = False
-        else:
-            t.write(dedent(f"""\
-            @test make {v} {{
-            \tmake {v}
-            }}
-            """))
+        t.write(dedent(f"""\
+        @test make {v} {{
+        \tmake {v}
+        }}
+        """))
     t.close()
 
 if __name__ == "__main__":
