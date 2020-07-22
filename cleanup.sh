@@ -22,36 +22,36 @@ fi
 # ...but we should really ask for confirmation
 echo 
 echo -e "\tEnter:"
-echo -e "- b to backup bats test(s) to backup to $$.backup before deleting,"
-echo -e "- d to delete without backup, and"
-echo -e "- c or anything else to cancel."
-echo
+echo -e "-\tb to backup bats test(s) to $$.backup before deleting,"
+echo -e "-\td to delete without backup, and"
+echo -e "-\tc or anything else to cancel.\n"
 echo "Your input:"
 read input
 if [ $input == "b" ]; then
-	echo "Deleting; backing up to $$.backup."
+	echo -e "\n\tDeleting; backing up to $$.backup."
 	for f in *.bats; do
 		cat "$f" >> "$$.backup"
 		rm "$f"
 	done
 elif [ $input == "d" ]; then
-	echo "Deleting without backup."
+	echo -e "\n\tDeleting without backup."
 	for f in *.bats; do
 		rm "$f"
 	done
 else 
-	echo "Done."
+	echo -e "\n\tCancelling."
 	exit 0
 fi
 if [ -f env.txt ]; then
 	echo -e "\nWould like to also remove env.txt?"
-	echo -e "- d to delete, and"
-	echo -e "- c or anything else to cancel."
+	echo -e "-\td to delete, and"
+	echo -e "-\tc or anything else to cancel.\n"
 	echo "Your input:"
 	read input
 	if [ $input == "d" ]; then
+		echo -e "\n\tDeleting."
 		rm env.txt
 	else
-		echo "Exiting."
+		echo -e "\n\tExiting."
 	fi
 fi
