@@ -82,23 +82,23 @@ def justTheName(st): # helps generate things like <filename>.exe
 def displayBasicData(f1e, f2e, mx):
     for key in f1e.keys():
         if (len(f1e[key]), len(f2e[key])) == (0, 0): continue
-        cont = False
+        cont1, cont2 = False, False
         for e in f1e[key]: # for error in current directory of f1e
             if matchFirstLine(f2e, e.getFirstLine()) == -1:
-                cont = True
+                cont1 = True
         for e in f2e[key]: # for error in current directory of f2e
             if matchFirstLine(f1e, e.getFirstLine()) == -1:
-                cont = True
-        if cont:
+                cont1 = True
+        if cont1 or cont2:
             print(f"{('-' * (mx + 4))}")
             print(f"DIR: {key[:-2]}")
-            print(f"COMPILER: {sys.argv[1]}")
+            if cont1: print(f"COMPILER: {sys.argv[1]}")
             for e in f1e[key]: # for error in current directory of f1e
                 if matchFirstLine(f2e, e.getFirstLine()) == -1:
                     print(e.getFirstLine()[:-1])
                     for line in e.body.split("\n")[1:]:
                         print(line)
-            print(f"COMPILER: {sys.argv[2]}")
+            if cont2: print(f"COMPILER: {sys.argv[2]}")
             for e in f2e[key]: # for error in current directory of f2e
                 if matchFirstLine(f1e, e.getFirstLine()) == -1:
                     print(e.getFirstLine()[:-1])
