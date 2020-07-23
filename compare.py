@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys, os
+import sys
 
 class Error():
     def __init__(self, startLine, parent):
