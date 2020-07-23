@@ -57,6 +57,10 @@ def getDifferences(f1e, f2e): # this should take in only the first lines...in a 
             finalRet[key] = ret[key]
     return finalRet
 
+def makeEven(mx):
+    if mx % 2 != 0: return mx + 1
+    else: return mx
+
 def evenOut(st, mx, cha = ' '): # help make all the strings uniform size
     if len(st) > mx-1: return st[:mx-3] + "..."
     else: return st + " " + (cha * (mx - len(st) - 1))
@@ -216,6 +220,7 @@ def main():
     f1.close()
     f2.close()
 
+    maxRelLen = makeEven(maxRelLen)
     if len(sys.argv) == 3:
         if getDifferences(reduceToFirstLines(f1Errors), reduceToFirstLines(f2Errors)) != {}:
             displayBasicData(f1Errors, f2Errors, maxRelLen)
