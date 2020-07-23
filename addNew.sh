@@ -6,7 +6,6 @@ if [ $# -ne 1 ]; then
 fi
 cp -r $1 source/
 cd source/$(basename $1)
-cp ../../findRelevant.py .
 if [ ! -f ./Makefile ]; then
     echo "Makefile does not exist. Creating generic Makefile."
     cp ../../metamake.py .

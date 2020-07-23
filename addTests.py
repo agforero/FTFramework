@@ -20,6 +20,14 @@ def allExcept(allUsedMods, fc):
     if fc.range != [0, 0]: return allUsedMods[:fc.range[0]] + allUsedMods[fc.range[1]:]
     else: return allUsedMods
 
+def findl_files():
+    os.chdir("./")
+    for ext in ("*.f90", "*.f", ".f95", ".f03", ".f08", ".for", ".f77", ".ftn"):
+        if len(glob.glob(ext)) != 0: return glob.glob(ext)
+        elif len(glob.glob(ext.upper())) != 0: return glob.glob(ext.upper())
+    print("No FORTRAN files found.")
+    sys.exit(1)
+
 class FFile: # possibly a target, but only if it DOESN'T feed into anything else.
     def __init__(self, name, source):
         self.targetName = name
@@ -33,61 +41,64 @@ def main(): # god I love Python
     targets = {}
     allUsedMods = []
     os.chdir("./") # necessary?
-    l_f90 = glob.glob("*.f90")
+    l_files = findl_files()
     l_fc = [] # list of FFile objects
-    for file in l_f90: # we need to find if the file has its own main
-        c = open(file, 'r') # either because it has a <program> call, 
-        program = False # or it has lines independent of a module or interface or whatever
-        firstUse = True
-        l_fc.append(FFile(justTheName(file), file)) # we can rectify the targetName later depending on if its executable or object
-        inMod, inInt, inSub, inFunc = 0, 0, 0, 0
-        for line in c:
-            try:
-                if line.split()[0][0] == '!': continue
-                # the file is relied on by another file
-                if line.split()[0].lower() == "module":
-                    if not inInt: inMod += 1
-                    if inMod == 1: 
-                        if line.split()[1].lower() != "procedure": l_fc[-1].definedMods.append(line.split()[1]) # add mod name to most recent FFile.definedMods[]
+    for file in l_files: # we need to find if the file has its own main
+        try: # because sometimes we get a weird UnicodeDecodeError with some of the files.
+            c = open(file, 'r') # either because it has a <program> call, 
+            program = False # or it has lines independent of a module or interface or whatever
+            firstUse = True
+            l_fc.append(FFile(justTheName(file), file)) # we can rectify the targetName later depending on if its executable or object
+            inMod, inInt, inSub, inFunc = 0, 0, 0, 0
+            for line in c:
+                try:
+                    if line.split()[0][0] == '!' or line.split()[0][0] == 'C': continue
+                    # the file is relied on by another file
+                    if line.split()[0].lower() == "module":
+                        if not inInt: inMod += 1
+                        if inMod == 1: 
+                            if line.split()[1].lower() != "procedure": l_fc[-1].definedMods.append(line.split()[1]) # add mod name to most recent FFile.definedMods[]
 
-                elif splitAndLower(line)[:2] == ["end", "module"]: inMod -= 1
+                    elif splitAndLower(line)[:2] == ["end", "module"]: inMod -= 1
 
-                # the file relies on another file
-                elif line.split()[0].lower() == "use":
-                    if firstUse:
-                        l_fc[-1].range[0] = len(allUsedMods)
-                        l_fc[-1].range[1] = len(allUsedMods) # x and y of the range are set to the index AFTER the last element in allUsedMods
-                        firstUse = False
-                    for term in line.split()[1:]:
-                        allUsedMods.append(ignoreCommas(term))
-                        l_fc[-1].usedMods.append(ignoreCommas(term)) 
-                        l_fc[-1].range[1] += 1 
-                        # ^^^ increase y by 1. for example, if there's only ever one USE call in file where allUsedMods was previously len 10,
-                        # range[] = [10, 11]. allUsedMods[10] is the only index inhabited by file, so for the next file, 
-                        # allUsedMods[l_fc[-2].range[1]], aka allUsedMods[11], will be vacant, and thus the next x val. professor Olaf would be proud!!
+                    # the file relies on another file
+                    elif line.split()[0].lower() == "use":
+                        if firstUse:
+                            l_fc[-1].range[0] = len(allUsedMods)
+                            l_fc[-1].range[1] = len(allUsedMods) # x and y of the range are set to the index AFTER the last element in allUsedMods
+                            firstUse = False
+                        for term in line.split()[1:]:
+                            allUsedMods.append(ignoreCommas(term))
+                            l_fc[-1].usedMods.append(ignoreCommas(term)) 
+                            l_fc[-1].range[1] += 1 
+                            # ^^^ increase y by 1. for example, if there's only ever one USE call in file where allUsedMods was previously len 10,
+                            # range[] = [10, 11]. allUsedMods[10] is the only index inhabited by file, so for the next file, 
+                            # allUsedMods[l_fc[-2].range[1]], aka allUsedMods[11], will be vacant, and thus the next x val. professor Olaf would be proud!!
 
-                # interface
-                elif line.split()[0].lower() == "interface": inInt += 1
-                elif splitAndLower(line)[:2] == ["end", "interface"]: inInt -= 1
+                    # interface
+                    elif line.split()[0].lower() == "interface": inInt += 1
+                    elif splitAndLower(line)[:2] == ["end", "interface"]: inInt -= 1
 
-                # subroutine
-                elif line.split()[0] != "end" and "subroutine" in splitAndLower(line): inSub += 1
-                elif splitAndLower(line)[:2] == ["end", "subroutine"]: inSub -= 1
+                    # subroutine
+                    elif line.split()[0] != "end" and "subroutine" in splitAndLower(line): inSub += 1
+                    elif splitAndLower(line)[:2] == ["end", "subroutine"]: inSub -= 1
 
-                # function
-                elif line.split()[0] != "end" and "function" in splitAndLower(line): inFunc += 1
-                elif splitAndLower(line)[:2] == ["end", "function"]: inFunc -= 1
+                    # function
+                    elif line.split()[0] != "end" and "function" in splitAndLower(line): inFunc += 1
+                    elif splitAndLower(line)[:2] == ["end", "function"]: inFunc -= 1
 
-                # is the thing an executable?
-                elif line.split()[0].lower() == "program" or ((inMod, inInt, inSub, inFunc) == (0, 0, 0, 0) and not line.isspace()):
-                    program = True
-                    l_fc[-1].program = True
-            except: continue # the line is empty
-        if program:
-            targets[file] = justTheName(file) # for now, only add executables to targets[]
-        else:
-            l_fc[-1].targetName = justTheName(file) + ".o"
-        c.close()
+                    # is the thing an executable?
+                    elif line.split()[0].lower() == "program" or ((inMod, inInt, inSub, inFunc) == (0, 0, 0, 0) and not line.isspace()):
+                        program = True
+                        l_fc[-1].program = True
+                except: continue # the line is empty
+            if program:
+                targets[file] = justTheName(file) # for now, only add executables to targets[]
+            else:
+                l_fc[-1].targetName = justTheName(file) + ".o"
+            c.close()
+        except UnicodeDecodeError: print(f"UnicodeDecodeError in {file}; not adding to tests.bats.")
+        except: print(f"{file} could not be read; not adding to tests.bats.")
 
     # then, add .o files that are not relied on anywhere else.
     for fc in l_fc:
@@ -98,30 +109,6 @@ def main(): # god I love Python
                     bottomfeeder = False # proven guilty.
             if bottomfeeder: # if innocent,
                 targets[fc.targetName] = fc.targetName
-
-    """
-    # let's double check our solution here
-    allBottomfeeders = {}
-    m = open("Makefile", 'r')
-    allWords = []
-    for line in m:
-        for term in line.split():
-            allWords.append(term)
-
-    allOs = {}
-    for key in targets.keys():
-        if key[-2:] == ".o":
-            allOs[key] = 0   
-            for term in allWords:
-                if term == key or term[:-1] == key:
-                    allOs[key] += 1
-
-    for key in allOs: # these should all read 2.
-        if len(key) <= 7:
-            print(f"{key}\t\t{allOs[key]}")
-        else:
-            print(f"{key}\t{allOs[key]}")
-    """
 
     # executables should always be both COMPILED and LINKED, regardless of whether or not other files rely on them.
     # then we determine if the Makefile calls us to make <filename>.exe, or just <filename>
