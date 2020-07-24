@@ -38,8 +38,8 @@ This framework uses [BATS](https://github.com/bats-core/bats-core).
 #### Scraping: ####
 Scrapers can be immensely helpful with gathering huge swathes of data at once. Within the 
 `/scraping/` directory, one can find `scraper.py`, a Python program that can help pull multiple 
-FORTRAN files from a single website at once. It will save these files to a directory named from 
-the website. To use, type:
+FORTRAN files from a single website. It will save these files to a directory named from the 
+website. To use, type:
 
 `./scraper.py <website url> <path to files> <extension>`
 - `<website url>`: the page on which links to each FORTRAN file are found.
@@ -77,7 +77,8 @@ not ok error 3 not encountered in compiler2              |
                                                          | not ok error 5 not encountered in compiler1             
                                                          | not ok error 6 not encountered in compiler1     
                                                          |
-
+```
+```
 $ ./compare.py gfortran bleeding-edge-compiler -v
 
                                                 gfortran | bleedingedgecompiler
@@ -118,5 +119,9 @@ $ ./compare.py gfortran bleeding-edge-compiler -v
                                                          | #     hyphens to organize then nicely while in         
                                                          | #     verbose mode.                       
                                                          |
+<<<<<<< HEAD
                                                          |                                                       
 ```
+=======
+```
+>>>>>>> f5f4ca2c5099298e1cff691f504ae13147e8242c
