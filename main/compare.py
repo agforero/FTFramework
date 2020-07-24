@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys
+import sys, os
 
 class Error():
     def __init__(self, startLine, parent):
@@ -170,6 +170,7 @@ def main():
         print("-v outputs to a verbose table.")
         sys.exit(1)
 
+    os.chdir("../")
     f1 = open(f"logs/{justTheName(sys.argv[1])}.log", 'r')
     f2 = open(f"logs/{justTheName(sys.argv[2])}.log", 'r')
     maxRelLen = 0 # maximum relevant line length

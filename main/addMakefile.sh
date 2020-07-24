@@ -4,7 +4,7 @@ if [ "$#" -ne 1 ]; then
 	echo "Usage: ./addMakefile.sh directory"
 	exit 1
 fi
-cd source
+cd ../source
 if [ ! -d $1 ]; then
 	echo "/$1/ does not exist in /source/"
 	exit 2
@@ -18,6 +18,6 @@ if [ -f "Makefile" ]; then
 		exit 0
 	fi
 fi
-cp ../../metamake.py . 
+cp ../../main/metamake.py . 
 ./metamake.py 
 rm metamake.py

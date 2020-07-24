@@ -1,23 +1,36 @@
 # Fortran Testing Framework #
 ### A framework to help test Fortran compilers. Written by Agustin Forero for Argonne National Laboratory. ###
 
+#### A typical test might look like: ####
+```
+$ ./run_test.sh bleedingedgecompiler
+$ ./compare.py gfortran bleedingedgecompiler
+```
+
 #### Summary: ####
-To add a directory to the testing framework, `cd` into this directory, and use `./addNew.sh <path-to-directory>`.
+This is a framework built to help test bleeding-edge FORTRAN compilers. By testing the compilation of a wide variety of FORTRAN programs, and cross-checking results with stable compilers like `gfortran`, one can find where a compiler might be going wrong. See the "Scraping" section for help with gathering these test files.
+
+To add a directory containing FORTRAN programs to use for testing compilation, `cd` into this directory, and use `./addNew.sh <path-to-directory>`.
 
 Then, use `./run_test.sh (compiler)` to compile all files found in the subdirectories of `/source/`. If no compiler is specified, it will use the current value of `$FC` (which is set to `f77` by default within the Makefile). 
 
-Each time `./run_test.sh` is executed, the results will be saved to `/logs/` as `<compiler>.log`, where you can view all compilation errors encountered during runtime. Additionally, `./compare.py <compiler1> <compiler2> (-g / -v)` outputs differences in errors between two given compilers, where:
+Each time `./run_test.sh` is executed, the results will be saved to `/logs/` as `<compiler>.log`, where you can view all compilation errors encountered during runtime. Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v)` from the base directory outputs differences in errors between two given compilers, where:
 
-- no flag outputs raw data without additional formatting,
+- no flag outputs differences without additional formatting,
 - `-g` outputs only the first line in each error to a two-column table, and
 - `-v` outputs errors in full to a two-column table.
 
+This framework uses [BATS](https://github.com/bats-core/bats-core).
+
 #### Other commands include: ####
 - `./addMakefile.sh <directory>`: creates a generic Makefile. Runs automatically during `./run_test.sh` if no Makefile is present.
-- `./addEnv.sh <directory>`: adds `comm.env` a subdirectory, allowing BATS to use necessary environmental commands before testing, e.g. `module load`.
+- `./addEnv.sh <directory>`: adds `comm.env` a subdirectory, allowing BATS to use necessary environmental commands before compiling, e.g. `module load`.
 - `./cleanup.sh <directory>`: helps delete and/or backup your .bats files. This is important for when you add or delete files from a source directory.
 
-#### Example output: ####
+#### Scraping: ####
+Within the `/scraping/` directory, one can find 
+
+#### Example outputs: ####
 
 ```
 $ ./compare.py compiler1 compiler2 -g
@@ -25,13 +38,56 @@ $ ./compare.py compiler1 compiler2 -g
                                                compiler1 | compiler2
 -------------------------------------------------------- | --------------------------------------------------------
                                                          |
----------------------------------------- /some/directory/on-your-machine: ----------------------------------------
-not ok some error 1 not encountered in other file        |
-not ok some error 2 not encountered in other file        |
-not ok some error 3 not encountered in other file        |
-                                                         | not ok some error 4 not encountered in other file       
-                                                         | not ok some error 5 not encountered in other file       
-                                                         | not ok some error 6 not encountered in other file    
+------------------------------- /fortran-testing-framework/source/sample-directory: -------------------------------
+not ok error 1 not encountered in compiler2              |
+not ok error 2 not encountered in compiler2              |
+not ok error 3 not encountered in compiler2              |
+                                                         | not ok error 4 not encountered in compiler1             
+                                                         | not ok error 5 not encountered in compiler1             
+                                                         | not ok error 6 not encountered in compiler1     
+                                                         |
 ```
+```
+$ ./compare.py gfortran bleeding-edge-compiler -v
 
-This framework uses [BATS](https://github.com/bats-core/bats-core).
+                                                gfortran | bleedingedgecompiler
+-------------------------------------------------------- | --------------------------------------------------------
+                                                         |
+------------------------------- /fortran-testing-framework/source/sample-directory: -------------------------------
+                                                         | --------------------------------------------------------
+                                                         | not ok make -j all in sample-directory:                 
+                                                         |
+                                                         | # (in test file tests.bats, line 5)                     
+                                                         | #   `make -j all' failed with status 1                  
+                                                         | #     file1.f90(1): here, the compiler might throw      
+                                                         | #     some kind of random error. maybe a file is        
+                                                         | #     missing, or a module isn't included, or an        
+                                                         | #     integer is misplaced. or, if cross-checking       
+                                                         | #     against a stable compiler like gfortran, you      
+                                                         | #     might have found an error with the compiler       
+                                                         | #     itself. if a line in the error message is too     
+                                                         | #     long, the verbose table will display it like th...
+                                                         |                                                         
+                                                         |
+                                                         |
+------------------------------ /fortran-testing-framework/source/sample-directory-2: ------------------------------
+                                                         | --------------------------------------------------------
+                                                         | not ok make -j all in sample-directory-2:               
+                                                         |
+                                                         | # (in test file tests.bats, line 5)                     
+                                                         | #   `make -j all' failed with status 2                  
+                                                         | #     with multiple errors across different   
+                                                         | #     directories, you can see how the table uses       
+                                                         | #     hyphens to neatly chop things up.                 
+                                                         |                                                         
+                                                         | --------------------------------------------------------
+                                                         | not ok error 2 in sample-directory-2:                   
+                                                         |
+                                                         | # (in test file tests.bats, line 5)                     
+                                                         | #   `make -j all' failed with status 3                  
+                                                         | #     in the event that there are multiple errors,      
+                                                         | #     the table will also use hyphens to organize       
+                                                         | #     then nicely while in verbose mode.                
+                                                         |                                                         
+                                                         |
+```

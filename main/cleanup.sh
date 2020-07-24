@@ -6,7 +6,7 @@ if [ $# -ne 1 ]; then
 	exit 1
 fi
 # check to see if the directory exists in /source/
-cd source
+cd ../source
 if [ ! -d $1 ]; then
 	echo "/$1/ does not exist in /source/"
 	exit 2
