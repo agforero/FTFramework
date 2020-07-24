@@ -119,9 +119,5 @@ $ ./compare.py gfortran bleeding-edge-compiler -v
                                                          | #     hyphens to organize then nicely while in         
                                                          | #     verbose mode.                       
                                                          |
-<<<<<<< HEAD
                                                          |                                                       
 ```
-=======
-```
->>>>>>> f5f4ca2c5099298e1cff691f504ae13147e8242c
