@@ -13,7 +13,7 @@ compilation of a wide variety of FORTRAN programs, and cross-checking results wi
 compilers like `gfortran`, one can find where a compiler might be going wrong.
 
 To add a directory containing FORTRAN programs to use for testing compilation, `cd` into 
-this directory, and use `./addNew.sh <path-to-directory>`.
+`/main/`, and use `./addNew.sh <path-to-directory>`.
 
 Then, use `./run_test.sh (compiler)` to compile all files found in the subdirectories of 
 `/source/`. If no compiler is specified, it will use the current value of `$FC` (which is 
@@ -38,8 +38,9 @@ This framework uses [BATS](https://github.com/bats-core/bats-core).
 #### Scraping: ####
 Scrapers can be immensely helpful with gathering huge swathes of data at once. Within the 
 `/scraping/` directory, one can find `scraper.py`, a Python program that can help pull multiple 
-FORTRAN files from a single website. It will save these files to a directory named from the 
-website. To use, type:
+FORTRAN files from a single website. It will then save these files to a directory named from the 
+website, at which point the user can use `./addNew.sh ../scraper/<directory>` in `/main/` to add 
+the files. To use, type:
 
 `./scraper.py <website url> <path to files> <extension>`
 - `<website url>`: the page on which links to each FORTRAN file are found.
@@ -53,7 +54,7 @@ Using the example of [Michel Olagnon's ORDERPACK 2.0](http://www.fortran-2000.co
 In this example, `http://www.fortran-2000.com/rank/` is used as the second argument because 
 every FORTRAN file on the page is located at `http://www.fortran-2000.com/rank/<FILE.f90>`.
 
-Though not all of these need a scraper, other websites one might pull files from include:
+Though not all of these need a scraper, other websites one might pull FORTRAN files from include:
 - http://jean-pierre.moreau.pagesperso-orange.fr/f_function2.html
 - http://www.fortran-2000.com/rank/index.html
 - https://jblevins.org/mirror/amiller/
