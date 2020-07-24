@@ -26,6 +26,7 @@ def websiteName(url):
         return url
 
     except IndexError: 
+        print(f"Broken link; saving files to pid: /{os.getpid()}/")
         return os.getpid() # yes it's a cop out but at least it's unique
 
 def main():
