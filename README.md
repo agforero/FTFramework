@@ -34,6 +34,7 @@ This framework uses [BATS](https://github.com/bats-core/bats-core).
 - `./addMakefile.sh <directory>`: creates a generic Makefile. Runs automatically during `./run_test.sh` if no Makefile is present.
 - `./addEnv.sh <directory>`: adds `comm.env` a subdirectory, allowing BATS to use necessary environmental commands before compiling, e.g. `module load`.
 - `./cleanup.sh <directory>`: helps delete and/or backup your .bats files. This is important for when you add or delete files from a source directory.
+- `./resetAll.sh`: deletes all instances of `tests.bats` across all directories -- that is, the BATS file generated during `./run_test.sh`.
 
 #### Scraping: ####
 Scrapers can be immensely helpful with gathering huge swathes of data at once. Within the 
@@ -57,10 +58,22 @@ every FORTRAN file on the page is located at `http://www.fortran-2000.com/rank/<
 Though not all of these need a scraper, other websites one might pull FORTRAN files from include:
 - http://jean-pierre.moreau.pagesperso-orange.fr/f_function2.html
 - http://www.fortran-2000.com/rank/index.html
-- https://jblevins.org/mirror/amiller/
 - https://naif.jpl.nasa.gov/naif/toolkit_FORTRAN.html
 - https://people.sc.fsu.edu/~jburkardt/f_src/stroud/stroud.html
 - https://github.com/agforero/nSTREAM
+
+#### Important notice: ####
+For the files being compiled, it's helpful that all files involved would already compile 
+perfectly with `make -j all`. If there's a problem with the code itself, both compilers 
+will encounter it, which should be alright; but sometimes, race conditions present within
+directories can cause sporadic errors that do not occur every runtime, thereby rendering
+the testing inconsistent and therefore invalid. 
+
+For example, if a directory has multiple declarations of the same module across different
+files, multiple instances of `make` might try to write to `<modulename>.mod` at once during
+`make -j all`, thereby allowing for a race condition. 
+
+In short, race conditions are bad.
 
 #### Example outputs: ####
 
