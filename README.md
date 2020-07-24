@@ -38,10 +38,10 @@ This framework uses [BATS](https://github.com/bats-core/bats-core).
 #### Scraping: ####
 Scrapers can be immensely helpful with gathering huge swathes of data at once. Within the 
 `/scraping/` directory, one can find `scraper.py`, a Python program that can help pull multiple 
-FORTRAN files from a single website at once. To use, type:
+FORTRAN files from a single website at once. It will save these files to a directory named from 
+the website. To use, type:
 
 `./scraper.py <website url> <path to files> <extension>`
-
 - `<website url>`: the page on which links to each FORTRAN file are found.
 - `<path to files>`: URL path preceding each file link. Example below.
 - `<extension>`: the desired extension to search for and download, e.g. `.f90`.
@@ -52,6 +52,14 @@ Using the example of [Michel Olagnon's ORDERPACK 2.0](http://www.fortran-2000.co
 
 In this example, `http://www.fortran-2000.com/rank/` is used as the second argument because 
 every FORTRAN file on the page is located at `http://www.fortran-2000.com/rank/<FILE.f90>`.
+
+Though not all of these need a scraper, other websites one might pull files from include:
+- http://jean-pierre.moreau.pagesperso-orange.fr/f_function2.html
+- http://www.fortran-2000.com/rank/index.html
+- https://jblevins.org/mirror/amiller/
+- https://naif.jpl.nasa.gov/naif/toolkit_FORTRAN.html
+- https://people.sc.fsu.edu/~jburkardt/f_src/stroud/stroud.html
+- https://github.com/agforero/nSTREAM
 
 #### Example outputs: ####
 
@@ -77,7 +85,7 @@ $ ./compare.py gfortran bleeding-edge-compiler -v
                                                          |
 ------------------------------- /fortran-testing-framework/source/sample-directory: -------------------------------
                                                          | --------------------------------------------------------
-                                                         | not ok make -j all in sample-directory:                 
+                                                         | not ok sample-directory: make -j all                 
                                                          |
                                                          | # (in test file tests.bats, line 5)                     
                                                          | #   `make -j all' failed with status 1                  
@@ -94,7 +102,7 @@ $ ./compare.py gfortran bleeding-edge-compiler -v
                                                          |
 ------------------------------ /fortran-testing-framework/source/sample-directory-2: ------------------------------
                                                          | --------------------------------------------------------
-                                                         | not ok make -j all in sample-directory-2:               
+                                                         | not ok sample-directory-2: make -j all               
                                                          |
                                                          | # (in test file tests.bats, line 5)                     
                                                          | #   `make -j all' failed with status 2                  
@@ -103,7 +111,7 @@ $ ./compare.py gfortran bleeding-edge-compiler -v
                                                          | #     hyphens to neatly chop things up.                 
                                                          |                                                         
                                                          | --------------------------------------------------------
-                                                         | not ok error 2 in sample-directory-2:                   
+                                                         | not ok error 2 in sample-directory-2                   
                                                          |
                                                          | # (in test file tests.bats, line 5)                     
                                                          | #   `make -j all' failed with status 3                  

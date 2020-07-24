@@ -17,7 +17,5 @@ if [ -f "Makefile" ]; then
 		echo "Exiting."
 		exit 0
 	fi
-fi
-cp ../../main/metamake.py . 
-./metamake.py 
-rm metamake.py
+fi 
+../../main/metamake.py 

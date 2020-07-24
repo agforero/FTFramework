@@ -17,7 +17,7 @@ def main():
         t.write("\n")
 
     t.write(dedent(f"""\
-    @test make -j all in {os.path.basename(os.getcwd())} {{
+    @test {os.path.basename(os.getcwd())}: make -j all {{
     \tmake clean
     \tmake -j all
     }}

@@ -16,9 +16,7 @@ foo() {
 		echo "$(pwd):"
 		# checking for need of metamake
 		if [ ! -f ./Makefile ]; then
-			cp ../../main/metamake.py .
-			./metamake.py
-			rm metamake.py
+			../../main/metamake.py
 		fi
 		if [ ! -f "tests.bats" ]; then
 			cp ../../main/addTests.py .
@@ -26,12 +24,10 @@ foo() {
 			rm addTests.py
 		fi
 		bats tests.bats
-		cp ../../main/findRelevant.py .
-		restOfBats=$(./findRelevant.py -e .bats tests.bats) # attempts to find other .bats files
+		restOfBats=$(../../main/findRelevant.py -e .bats tests.bats) # attempts to find other .bats files
 		if [ $? -eq 0 ]; then
 			bats $restOfBats
 		fi
-		rm -f findRelevant.py
 		cd ..
 	done
 	echo
