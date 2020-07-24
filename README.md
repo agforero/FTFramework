@@ -77,7 +77,8 @@ not ok error 3 not encountered in compiler2              |
                                                          | not ok error 5 not encountered in compiler1             
                                                          | not ok error 6 not encountered in compiler1     
                                                          |
-
+```
+```
 $ ./compare.py gfortran bleeding-edge-compiler -v
 
                                                 gfortran | bleedingedgecompiler
