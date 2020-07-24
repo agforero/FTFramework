@@ -8,13 +8,21 @@ $ ./compare.py gfortran bleedingedgecompiler
 ```
 
 #### Summary: ####
-This is a framework built to help test bleeding-edge FORTRAN compilers. By testing the compilation of a wide variety of FORTRAN programs, and cross-checking results with stable compilers like `gfortran`, one can find where a compiler might be going wrong. See the "Scraping" section for help with gathering these test files.
+This is a framework built to help test bleeding-edge FORTRAN compilers. By testing the 
+compilation of a wide variety of FORTRAN programs, and cross-checking results with stable 
+compilers like `gfortran`, one can find where a compiler might be going wrong.
 
-To add a directory containing FORTRAN programs to use for testing compilation, `cd` into this directory, and use `./addNew.sh <path-to-directory>`.
+To add a directory containing FORTRAN programs to use for testing compilation, `cd` into 
+this directory, and use `./addNew.sh <path-to-directory>`.
 
-Then, use `./run_test.sh (compiler)` to compile all files found in the subdirectories of `/source/`. If no compiler is specified, it will use the current value of `$FC` (which is set to `f77` by default within the Makefile). 
+Then, use `./run_test.sh (compiler)` to compile all files found in the subdirectories of 
+`/source/`. If no compiler is specified, it will use the current value of `$FC` (which is 
+set to `f77` by default within the Makefile). Each time `./run_test.sh` is executed, the 
+results will be saved to `/logs/` as `<compiler>.log`, where you can view all compilation 
+errors encountered during runtime. 
 
-Each time `./run_test.sh` is executed, the results will be saved to `/logs/` as `<compiler>.log`, where you can view all compilation errors encountered during runtime. Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v)` from the base directory outputs differences in errors between two given compilers, where:
+Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v)` from the base 
+directory outputs differences in errors between two given compilers, where:
 
 - no flag outputs differences without additional formatting,
 - `-g` outputs only the first line in each error to a two-column table, and
@@ -28,7 +36,22 @@ This framework uses [BATS](https://github.com/bats-core/bats-core).
 - `./cleanup.sh <directory>`: helps delete and/or backup your .bats files. This is important for when you add or delete files from a source directory.
 
 #### Scraping: ####
-Within the `/scraping/` directory, one can find 
+Scrapers can be immensely helpful with gathering huge swathes of data at once. Within the 
+`/scraping/` directory, one can find `scraper.py`, a Python program that can help pull multiple 
+FORTRAN files from a single website at once. To use, type:
+
+`./scraper.py <website url> <path to files> <extension>`
+
+- `<website url>`: the page on which links to each FORTRAN file are found.
+- `<path to files>`: URL path preceding each file link. Example below.
+- `<extension>`: the desired extension to search for and download, e.g. `.f90`.
+
+Using the example of [Michel Olagnon's ORDERPACK 2.0](http://www.fortran-2000.com/rank/index.html), one might execute:
+
+`./scraper.py http://www.fortran-2000.com/rank/index.html http://www.fortran-2000.com/rank/ .f90`
+
+In this example, `http://www.fortran-2000.com/rank/` is used as the second argument because 
+every FORTRAN file on the page is located at `http://www.fortran-2000.com/rank/<FILE.f90>`.
 
 #### Example outputs: ####
 
@@ -46,8 +69,7 @@ not ok error 3 not encountered in compiler2              |
                                                          | not ok error 5 not encountered in compiler1             
                                                          | not ok error 6 not encountered in compiler1     
                                                          |
-```
-```
+
 $ ./compare.py gfortran bleeding-edge-compiler -v
 
                                                 gfortran | bleedingedgecompiler
