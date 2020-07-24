@@ -89,13 +89,11 @@ $ ./compare.py gfortran bleeding-edge-compiler -v
                                                          |
                                                          | # (in test file tests.bats, line 5)                     
                                                          | #   `make -j all' failed with status 1                  
-                                                         | #     file1.f90(1): here, the compiler might throw      
-                                                         | #     some kind of random error. maybe a file is        
-                                                         | #     missing, or a module isn't included, or an        
-                                                         | #     integer is misplaced. or, if cross-checking       
-                                                         | #     against a stable compiler like gfortran, you      
-                                                         | #     might have found an error with the compiler       
-                                                         | #     itself. if a line in the error message is too     
+                                                         | #     file1.f90(1): Here, the compiler might throw      
+                                                         | #     some kind of random error. If cross-checking       
+                                                         | #     against a stable compiler like gfortran, it      
+                                                         | #     will display an error with the compiler       
+                                                         | #     itself. If a line in the error message is too     
                                                          | #     long, the verbose table will display it like th...
                                                          |                                                         
                                                          |
@@ -106,18 +104,19 @@ $ ./compare.py gfortran bleeding-edge-compiler -v
                                                          |
                                                          | # (in test file tests.bats, line 5)                     
                                                          | #   `make -j all' failed with status 2                  
-                                                         | #     with multiple errors across different   
-                                                         | #     directories, you can see how the table uses       
-                                                         | #     hyphens to neatly chop things up.                 
+                                                         | #     file2.f90(2): with multiple errors across   
+                                                         | #     different directories, you can see how the 
+                                                         | #     table uses hyphens to neatly chop things up.                 
                                                          |                                                         
                                                          | --------------------------------------------------------
                                                          | not ok error 2 in sample-directory-2                   
                                                          |
                                                          | # (in test file tests.bats, line 5)                     
                                                          | #   `make -j all' failed with status 3                  
-                                                         | #     in the event that there are multiple errors,      
-                                                         | #     the table will also use hyphens to organize       
-                                                         | #     then nicely while in verbose mode.                
-                                                         |                                                         
+                                                         | #     file3.f90(3): in the event that there are 
+                                                         | #     multiple errors, the table will also use   
+                                                         | #     hyphens to organize then nicely while in         
+                                                         | #     verbose mode.                       
                                                          |
+                                                         |                                                       
 ```
