@@ -63,70 +63,8 @@ Though not all of these need a scraper, other websites one might pull FORTRAN fi
 
 
 #### A warning against race conditions: ####
-For the files being compiled, it's helpful that all files involved would already compile perfectly with `make -j -k all`. If there's a problem with the code itself, both compilers will encounter it, which should be alright; but sometimes, race conditions present within directories can cause sporadic errors that do not occur every runtime, thereby rendering the testing inconsistent and therefore invalid. 
+For the files being compiled, it's helpful that all files involved would already `make` perfectly with the `-j` flag. If there's a problem with the code itself, both compilers will encounter it, which should be alright; but sometimes, race conditions present within directories can cause sporadic errors that do not occur every runtime, thereby rendering the testing inconsistent and therefore invalid. 
 
-For example, if a directory has multiple declarations of the same module across different files, multiple instances of `make` might try to write to `<modulename>.mod` at once during `make -j -k all`, thereby allowing for a race condition. 
+For example, if a directory has multiple declarations of the same module across different files, multiple instances of `make` might try to write to `<modulename>.mod` at once during `make`, thereby allowing for a race condition. 
 
 In short, [race conditions](https://www.youtube.com/watch?v=7aF0q7NfwfA) are bad.
-
-
-
-#### Example outputs: ####
-```
-$ ./compare.py compiler1 compiler2 -g
-
-                                               compiler1 | compiler2
--------------------------------------------------------- | --------------------------------------------------------
-                                                         |
-------------------------------- /fortran-testing-framework/source/sample-directory: -------------------------------
-not ok error 1 not encountered in compiler2              |
-not ok error 2 not encountered in compiler2              |
-not ok error 3 not encountered in compiler2              |
-                                                         | not ok error 4 not encountered in compiler1             
-                                                         | not ok error 5 not encountered in compiler1             
-                                                         | not ok error 6 not encountered in compiler1     
-                                                         |
-```
-```
-$ ./compare.py gfortran bleeding-edge-compiler -v
-
-                                                gfortran | bleedingedgecompiler
--------------------------------------------------------- | --------------------------------------------------------
-                                                         |
-------------------------------- /fortran-testing-framework/source/sample-directory: -------------------------------
-                                                         | --------------------------------------------------------
-                                                         | not ok sample-directory: make -j all                 
-                                                         |
-                                                         | # (in test file tests.bats, line 5)                     
-                                                         | #   `make -j all' failed with status 1                  
-                                                         | #     file1.f90(1): Here, the compiler might throw      
-                                                         | #     some kind of random error. If cross-checking       
-                                                         | #     against a stable compiler like gfortran, it      
-                                                         | #     will display an error with the compiler       
-                                                         | #     itself. If a line in the error message is too     
-                                                         | #     long, the verbose table will display it like th...
-                                                         |                                                         
-                                                         |
-                                                         |
------------------------------- /fortran-testing-framework/source/sample-directory-2: ------------------------------
-                                                         | --------------------------------------------------------
-                                                         | not ok sample-directory-2: make -j all               
-                                                         |
-                                                         | # (in test file tests.bats, line 5)                     
-                                                         | #   `make -j all' failed with status 2                  
-                                                         | #     file2.f90(2): with multiple errors across   
-                                                         | #     different directories, you can see how the 
-                                                         | #     table uses hyphens to neatly chop things up.                 
-                                                         |                                                         
-                                                         | --------------------------------------------------------
-                                                         | not ok error 2 in sample-directory-2                   
-                                                         |
-                                                         | # (in test file tests.bats, line 5)                     
-                                                         | #   `make -j all' failed with status 3                  
-                                                         | #     file3.f90(3): in the event that there are 
-                                                         | #     multiple errors, the table will also use   
-                                                         | #     hyphens to organize then nicely while in         
-                                                         | #     verbose mode.                       
-                                                         |
-                                                         |                                                       
-```
