@@ -10,18 +10,17 @@ fi
 
 foo() {
 	cd ../source
+	echo "COMPILER USED: $FC"
 	for d in */ ; do
 		cd $d 
 		echo
-		echo "$(pwd):"
+		echo "DIR: $(pwd)"
 		# checking for need of metamake
 		if [ ! -f ./Makefile ]; then
 			../../main/metamake.py
 		fi
-		if [ ! -f "tests.bats" ]; then
-			cp ../../main/addTests.py .
-			./addTests.py
-			rm addTests.py
+		if [ ! -f ./"tests.bats" ]; then
+			../../main/addTests.py
 		fi
 		bats tests.bats
 		restOfBats=$(../../main/findRelevant.py -e .bats tests.bats) # attempts to find other .bats files

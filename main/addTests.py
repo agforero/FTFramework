@@ -16,10 +16,14 @@ def main():
             t.write(line + "\n")
         t.write("\n")
 
+    flags = "-j -k -O"
+    if os.popen("make -v").read().split()[2][0] != '4': # if we can't use -O because too antiquated Make
+        flags = flags[:-3]
+
     t.write(dedent(f"""\
-    @test {os.path.basename(os.getcwd())}: make -j all {{
+    @test recompiling {os.path.basename(os.getcwd())} using $FC {{
     \tmake clean
-    \tmake -j -k all
+    \tmake {flags} all
     \techo 
     }}
     """))
