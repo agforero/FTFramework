@@ -102,7 +102,7 @@ def rawOutput(master):
 
 def main():
     version = os.popen("make -v").read().split("\n")[0]
-    if version.split()[2][0] != '4':
+    if int(version.split()[2][0]) < 4: # we might have a higher version some day!
         print(f"GNU Make 4.x required for compare.py; this shell is currently running {version}.")
         sys.exit(3)
 
