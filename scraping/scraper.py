@@ -51,13 +51,14 @@ def main():
     l_f90 = [link for link in filter(None,l_href) if link.endswith(sys.argv[3])]
 
     # Generate the full url
+    final_url = websiteName(sys.argv[1])
     try: 
-        final_url = websiteName(sys.argv[1])
         os.mkdir(final_url)
         os.chdir(final_url)
-    except: 
-        final_url = websiteName(sys.argv[1])
+    except:
         os.chdir(final_url)
+        
+    # Download everything and display
     l_url = [f"{sys.argv[2]}{name}" for name in l_f90]
     for name, url in zip(l_f90,l_url):
         name = fix(name)
