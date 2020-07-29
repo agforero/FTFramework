@@ -2,7 +2,7 @@
 
 # check to see they entered an argument
 if [ $# -ne 1 ]; then
-	echo "Usage: ./cleanup.sh <directory>"
+	echo "usage: ./cleanup.sh <directory>"
 	exit 1
 fi
 # check to see if the directory exists in /source/

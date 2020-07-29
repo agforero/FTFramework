@@ -2,7 +2,7 @@
 import glob, os, sys
 
 def printUsage():
-    print("Usage:\t./findRelevant.py -flag <extension> (exclusions)")
+    print("usage:\t./findRelevant.py -flag <extension> (exclusions)")
 
 def isIn(e, ls):
     for i in ls:

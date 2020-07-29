@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$#" -ne 1 ]; then
-	echo "Usage: ./addMakefile.sh directory"
+	echo "usage: ./addMakefile.sh directory"
 	exit 1
 fi
 cd ../source

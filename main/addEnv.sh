@@ -5,7 +5,7 @@ if [ ! -d $1 ]; then
     echo "Directory not found in /source/"
     exit 1
 elif [ $# -ne 1 ]; then
-    echo "Usage: ./addEnv.sh <directory>"
+    echo "usage: ./addEnv.sh <directory>"
     exit 2
 else
     cd $1
