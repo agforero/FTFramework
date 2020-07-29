@@ -108,7 +108,7 @@ def allHelper(l_fc):
         else: ret += " " + justTheName(fc.name) + ".o"
     return ret
 
-def splitAndLower(line): # split and lower? I hardly even...
+def splitAndLower(line):
     ls = line.split()
     for i in range(len(ls)): ls[i] = ls[i].lower()
     return ls
@@ -127,7 +127,9 @@ def main():
             inMod, inInt, inSub, inFunc = 0, 0, 0, 0 # silly bean, don't put these in the for loop
             for line in f:
                 try: 
-                    if line.split()[0][0] == '!' or line.split()[0][0] == 'C': continue
+                    if line.split()[0][0] == '!' or line.split()[0][0] == '*' or line.split().lower()[0][0] == 'c': 
+                        continue
+                        
                     # the file relies on another file
                     if line.split()[0].lower() == "use":
                         cur.independent = False 
@@ -135,16 +137,16 @@ def main():
                         cur.dependencies[line.split()[1]] = "" # we don't know yet where to find this module
                         if line.split()[1] not in allDependencies: allDependencies[line.split()[1]] = "" 
 
+                    # interface
+                    elif line.split()[0].lower() == "interface": inInt += 1
+                    elif splitAndLower(line)[:2] == ["end", "interface"]: inInt -= 1
+
                     # the file is relied on by another file
                     elif line.split()[0].lower() == "module":
                         if not inInt: inMod += 1
                         cur.importantLines.append(line.split())
                         if line.split()[1] not in allDependencies: allDependencies[line.split()[1]] = "" # we don't yet try to tag the dependencies
                     elif splitAndLower(line)[:2] == ["end", "module"]: inMod -= 1
-
-                    # interface
-                    elif line.split()[0].lower() == "interface": inInt += 1
-                    elif splitAndLower(line)[:2] == ["end", "interface"]: inInt -= 1
 
                     # subroutine
                     elif line.split()[0] != "end" and "subroutine" in splitAndLower(line): inSub += 1

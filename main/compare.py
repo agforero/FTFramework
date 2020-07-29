@@ -159,7 +159,7 @@ def conciseTable(master):
         while len(diffs[i][0]) > 0 and len(diffs[i][1]) > 0:
             print(tableBothSides(diffs[i][0][0], diffs[i][1][0], mx))
             try: diffs[i][0], diffs[i][1] = diffs[i][0][1:], diffs[i][1][1:]
-            except: break
+            except IndexError: break
         
         if len(diffs[i][0]) > 0:
             for e in diffs[i][0]:
@@ -198,7 +198,7 @@ def verboseTable(master):
         while len(bodies[0]) > 0 and len(bodies[1]) > 0:
             print(tableBothSidesLeft(bodies[0][0], bodies[1][0], mx))
             try: bodies[0], bodies[1] = bodies[0][1:], bodies[1][1:]
-            except: break
+            except IndexError: break
         
         if len(bodies[0]) > 0:
             for line in bodies[0]:
