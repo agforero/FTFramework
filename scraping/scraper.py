@@ -52,12 +52,12 @@ def main():
 
     # Generate the full url
     try: 
-        os.mkdir(websiteName(sys.argv[1]))
-        os.chdir(websiteName(sys.argv[1]))
         final_url = websiteName(sys.argv[1])
+        os.mkdir(final_url)
+        os.chdir(final_url)
     except: 
-        os.chdir(websiteName(sys.argv[1]))
         final_url = websiteName(sys.argv[1])
+        os.chdir(final_url)
     l_url = [f"{sys.argv[2]}{name}" for name in l_f90]
     for name, url in zip(l_f90,l_url):
         name = fix(name)
