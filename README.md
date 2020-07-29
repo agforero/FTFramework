@@ -21,11 +21,11 @@ To add a directory containing FORTRAN programs to use for testing compilation, `
 
 Then, use `./run_test.sh (compiler)` to compile all files found in the subdirectories of `/source/`. If no compiler is specified, it will use the current value of `$FC` (which is set to `f77` by default within the Makefile). Each time `./run_test.sh` is executed, the results will be saved to `/logs/` as `<compiler>.log`, where you can view all compilation errors encountered during runtime. 
 
-Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v)` from the base directory outputs differences in errors between two given compilers, where:
+Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v <col>)` from the base directory outputs differences in errors between two given compilers, where:
 
 - no flag outputs differences without additional formatting,
 - `-g` outputs only the first line in each error to a two-column table, and
-- `-v` outputs errors in full to a two-column table.
+- `-v` outputs errors in full to a two-column table with <col> columns, up to 128.
 
 This framework uses [BATS](https://github.com/bats-core/bats-core).
 
@@ -33,7 +33,7 @@ This framework uses [BATS](https://github.com/bats-core/bats-core).
 
 #### Other commands include: ####
 - `./addMakefile.sh <directory>`: creates a generic Makefile. Runs automatically during `./run_test.sh` if no Makefile is present.
-- `./addEnv.sh <directory>`: adds `comm.env` a subdirectory, allowing BATS to use necessary environmental commands before compiling, e.g. `module load`.
+- `./addEnv.sh <directory>`: adds `comm.env` to a subdirectory, allowing BATS to use necessary environmental commands before compiling, e.g. `module load`.
 - `./cleanup.sh <directory>`: helps delete and/or backup your .bats files. This is important for when you add or delete files from a source directory.
 - `./resetAll.sh`: deletes all instances of `tests.bats` across all directories -- that is, the BATS file generated during `./run_test.sh`.
 
