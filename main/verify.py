@@ -3,18 +3,14 @@
 import os, glob, sys
 from textwrap import dedent
 
-def findl_files(dr):
+def findl_files(dr, orig):
     os.chdir(dr)
-    for ext in ("*.f90", "*.f", ".f95", ".f03", ".f08", ".for", ".f77", ".ftn"):
-        if len(glob.glob(ext)) != 0: 
-            files = glob.glob(ext)
-            os.chdir("../")
-            return files
-        elif len(glob.glob(ext.upper())) != 0:
-            files = glob.glob(ext.upper())
-            os.chdir("../")
-            return files
-    return []
+    files = []
+    for ext in ("*.f90", "*.f", "*.f95", "*.f03", "*.f08", "*.for", "*.f77", "*.ftn"):
+        if len(glob.glob(ext)) != 0: files += glob.glob(ext)
+        elif len(glob.glob(ext.upper())) != 0: files += glob.glob(ext.upper())
+    os.chdir(orig)
+    return files
 
 def justTheName(st): # helps generate things like <filename>.exe
     if len(st) == 0: return ''
@@ -34,10 +30,11 @@ def folderName(path):
 
 def main():
     os.chdir("../")
+    origDir = f"{os.getcwd()}/source"
     fileList = {}
     first = True
-    for dr in os.walk(f"{os.getcwd()}/source"):
-        fileList[dr[0]] = findl_files(dr[0])
+    for dr in os.walk(origDir):
+        fileList[dr[0]] = findl_files(dr[0], origDir)
     for dr in fileList.keys():
         allMods = {}
         output = []

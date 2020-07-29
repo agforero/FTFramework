@@ -9,12 +9,11 @@ def find(l_fc, f): # dumb function to make up for the fact that I didn't make l_
     return -1 # should never get here unless error
 
 def findl_files():
-    os.chdir("./")
-    for ext in ("*.f90", "*.f", ".f95", ".f03", ".f08", ".for", ".f77", ".ftn"):
-        if len(glob.glob(ext)) != 0: return glob.glob(ext)
-        elif len(glob.glob(ext.upper())) != 0: return glob.glob(ext.upper())
-    print("No FORTRAN files found.")
-    sys.exit(1)
+    files = []
+    for ext in ("*.f90", "*.f", "*.f95", "*.f03", "*.f08", "*.for", "*.f77", "*.ftn"):
+        if len(glob.glob(ext)) != 0: files += glob.glob(ext)
+        elif len(glob.glob(ext.upper())) != 0: files += glob.glob(ext.upper())
+    return files
 
 class rDepList():
     def __init__(self):
