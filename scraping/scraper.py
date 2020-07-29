@@ -19,9 +19,17 @@ def websiteName(url):
             if url[i:i+4] == "www.":
                 url = url[i+4:]
                 break
-        for i in range(len(url)): # shaving off TLD and right
+        for i in range(len(url)): # shaving off first '/' and right
+            if url[i] == '/':
+                url = url[:i]
+                break
+        for i in range(len(url) - 1, 0, -1): # backtracking to shave off TLD and right
             if url[i] == '.':
                 url = url[:i]
+                break
+        for i in range(len(url) - 1, 0, -1): # removing rest of url from left
+            if url[i] == '.':
+                url = url[i+1:]
                 break
         return url
 
