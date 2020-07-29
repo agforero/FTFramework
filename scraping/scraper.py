@@ -54,14 +54,20 @@ def main():
     try: 
         os.mkdir(websiteName(sys.argv[1]))
         os.chdir(websiteName(sys.argv[1]))
-    except: os.chdir(websiteName(sys.argv[1]))
+        final_url = websiteName(sys.argv[1])
+    except: 
+        os.chdir(websiteName(sys.argv[1]))
+        final_url = websiteName(sys.argv[1])
     l_url = [f"{sys.argv[2]}{name}" for name in l_f90]
     for name, url in zip(l_f90,l_url):
         name = fix(name)
-        print (f'Downloading {name} ({url})')
+        print (f'downloading {name} ({url})')
         r = requests.get(url)
         with open(f"{name}",'wb') as f:
             f.write(r.content)
+
+    # Print new folder name
+    print(f"done; results saved in /{final_url}/")
 
 if __name__ == "__main__":
     main()
