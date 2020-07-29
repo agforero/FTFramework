@@ -87,11 +87,13 @@ def tableRight(st, mx):
     if len(st) > mx: st = st[:(mx - 3)] + "..."
     return f"{' ' * (mx)} | {st}"
 
-def tableCenter(st, mx): # expected length is 2 * mx + 3
+def tableCenter(st, mx, count1, count2): # expected length is 2 * mx + 3
     expected = (2 * mx) + 3
-    totalHyphens = expected - len(st) - 2
-    ret = f"{'-' * int(totalHyphens / 2)} {st} {'-' * int(totalHyphens / 2)}"
-    return f"{ret}{'-' * (expected - len(ret))}"
+    totalHyphens = expected - len(st) - 4 - len(count1) - len(count2)
+    ret = f"{count1} {'-' * int(totalHyphens / 2)} {st} {'-' * int(totalHyphens / 2)} {count2}"
+    if expected - len(ret) != 0:
+        ret = ret[:-(len(count2) + 1)] + '- ' + count2 
+    return ret
 
 def tableEmpty(mx, ch=' '):
     return f"{ch * mx} | {ch * mx}"
@@ -108,7 +110,7 @@ def tableBothSidesLeft(term1, term2, mx):
 
 # outputs [[], [], []], where 0 and 1 are list of keys that differ,
 # and [2][0] is max target string length
-def getDifferences(master, dr): 
+def getDifferences(master, dr):
     ret = [[],[], [0]]
     compilers = list(master.keys())
     for e in list(master[compilers[0]][dr].keys()):
@@ -154,7 +156,7 @@ def conciseTable(master):
     print(tableBothSides(compilers[0], compilers[1], mx))
     for dr in master[compilers[0]].keys():
         if len(diffs[i][0]) > 0 or len(diffs[i][1]) > 0: 
-            print(dedent(f"{tableCenter(folderName(dr), mx)}"))
+            print(f"{tableCenter(folderName(dr), mx, str(len(diffs[i][0])), str(len(diffs[i][1])))}")
         
         while len(diffs[i][0]) > 0 and len(diffs[i][1]) > 0:
             print(tableBothSides(diffs[i][0][0], diffs[i][1][0], mx))
@@ -193,7 +195,7 @@ def verboseTable(master):
                 bodies[j].append(f"{'-' * mx}")
         
         if len(bodies[0]) > 0 or len(bodies[1]) > 0: 
-            print(dedent(f"{tableCenter(folderName(dr), mx)}"))
+            print(f"{tableCenter(folderName(dr), mx, str(len(bodies[0])), str(len(bodies[1])))}")
         
         while len(bodies[0]) > 0 and len(bodies[1]) > 0:
             print(tableBothSidesLeft(bodies[0][0], bodies[1][0], mx))
