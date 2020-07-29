@@ -92,7 +92,7 @@ def tableCenter(st, mx, count1, count2): # expected length is 2 * mx + 3
     totalHyphens = expected - len(st) - 4 - len(count1) - len(count2)
     ret = f"{count1} {'-' * int(totalHyphens / 2)} {st} {'-' * int(totalHyphens / 2)} {count2}"
     if expected - len(ret) != 0:
-        ret = ret[:-(len(count2) + 1)] + '- ' + count2 
+        ret = f"{count1} {'-' * (int(totalHyphens / 2) + 1)} {st} {'-' * int(totalHyphens / 2)} {count2}"
     return ret
 
 def tableEmpty(mx, ch=' '):
@@ -195,7 +195,7 @@ def verboseTable(master):
                 bodies[j].append(f"{'-' * mx}")
         
         if len(bodies[0]) > 0 or len(bodies[1]) > 0: 
-            print(f"{tableCenter(folderName(dr), mx, str(len(bodies[0])), str(len(bodies[1])))}")
+            print(f"{tableCenter(folderName(dr), mx, str(len(diffs[i][0])), str(len(diffs[i][1])))}")
         
         while len(bodies[0]) > 0 and len(bodies[1]) > 0:
             print(tableBothSidesLeft(bodies[0][0], bodies[1][0], mx))
