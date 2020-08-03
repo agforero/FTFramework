@@ -1,0 +1,152 @@
+FC ?= gfortran
+FFLAGS ?=
+
+.PHONY: all clean
+all:  advarray.exe arrays.exe bitops.exe carray.exe case.exe character.exe common1.exe complex.exe cputime.exe doloop1.exe doloop2.exe files.exe formats.exe funcarg.exe goto.exe if.exe integer.exe keyword.exe logical.exe polyarray.exe polyfunc.exe read2.exe read.exe real.exe
+
+advarray.exe: advarray.o
+	$(FC) $(FFLAGS) advarray.o -o advarray.exe
+
+advarray.o: advarray.f90
+	$(FC) $(FFLAGS) -c advarray.f90
+
+arrays.exe: arrays.o
+	$(FC) $(FFLAGS) arrays.o -o arrays.exe
+
+arrays.o: arrays.f90
+	$(FC) $(FFLAGS) -c arrays.f90
+
+bitops.exe: bitops.o
+	$(FC) $(FFLAGS) bitops.o -o bitops.exe
+
+bitops.o: bitops.f90
+	$(FC) $(FFLAGS) -c bitops.f90
+
+carray.exe: carray.o
+	$(FC) $(FFLAGS) carray.o -o carray.exe
+
+carray.o: carray.f90
+	$(FC) $(FFLAGS) -c carray.f90
+
+case.exe: case.o
+	$(FC) $(FFLAGS) case.o -o case.exe
+
+case.o: case.f90
+	$(FC) $(FFLAGS) -c case.f90
+
+character.exe: character.o
+	$(FC) $(FFLAGS) character.o -o character.exe
+
+character.o: character.f90
+	$(FC) $(FFLAGS) -c character.f90
+
+common1.exe: common1.o
+	$(FC) $(FFLAGS) common1.o -o common1.exe
+
+common1.o: common1.f90
+	$(FC) $(FFLAGS) -c common1.f90
+
+complex.exe: complex.o
+	$(FC) $(FFLAGS) complex.o -o complex.exe
+
+complex.o: complex.f90
+	$(FC) $(FFLAGS) -c complex.f90
+
+cputime.exe: cputime.o
+	$(FC) $(FFLAGS) cputime.o -o cputime.exe
+
+cputime.o: cputime.f90
+	$(FC) $(FFLAGS) -c cputime.f90
+
+doloop1.exe: doloop1.o
+	$(FC) $(FFLAGS) doloop1.o -o doloop1.exe
+
+doloop1.o: doloop1.f90
+	$(FC) $(FFLAGS) -c doloop1.f90
+
+doloop2.exe: doloop2.o
+	$(FC) $(FFLAGS) doloop2.o -o doloop2.exe
+
+doloop2.o: doloop2.f90
+	$(FC) $(FFLAGS) -c doloop2.f90
+
+files.exe: files.o
+	$(FC) $(FFLAGS) files.o -o files.exe
+
+files.o: files.f90
+	$(FC) $(FFLAGS) -c files.f90
+
+formats.exe: formats.o
+	$(FC) $(FFLAGS) formats.o -o formats.exe
+
+formats.o: formats.f90
+	$(FC) $(FFLAGS) -c formats.f90
+
+funcarg.exe: funcarg.o
+	$(FC) $(FFLAGS) funcarg.o -o funcarg.exe
+
+funcarg.o: funcarg.f90
+	$(FC) $(FFLAGS) -c funcarg.f90
+
+goto.exe: goto.o
+	$(FC) $(FFLAGS) goto.o -o goto.exe
+
+goto.o: goto.f90
+	$(FC) $(FFLAGS) -c goto.f90
+
+if.exe: if.o
+	$(FC) $(FFLAGS) if.o -o if.exe
+
+if.o: if.f90
+	$(FC) $(FFLAGS) -c if.f90
+
+integer.exe: integer.o
+	$(FC) $(FFLAGS) integer.o -o integer.exe
+
+integer.o: integer.f90
+	$(FC) $(FFLAGS) -c integer.f90
+
+keyword.exe: keyword.o
+	$(FC) $(FFLAGS) keyword.o -o keyword.exe
+
+keyword.o: keyword.f90
+	$(FC) $(FFLAGS) -c keyword.f90
+
+logical.exe: logical.o
+	$(FC) $(FFLAGS) logical.o -o logical.exe
+
+logical.o: logical.f90
+	$(FC) $(FFLAGS) -c logical.f90
+
+polyarray.exe: polyarray.o
+	$(FC) $(FFLAGS) polyarray.o -o polyarray.exe
+
+polyarray.o: polyarray.f90
+	$(FC) $(FFLAGS) -c polyarray.f90
+
+polyfunc.exe: polyfunc.o
+	$(FC) $(FFLAGS) polyfunc.o -o polyfunc.exe
+
+polyfunc.o: polyfunc.f90
+	$(FC) $(FFLAGS) -c polyfunc.f90
+
+read2.exe: read2.o
+	$(FC) $(FFLAGS) read2.o -o read2.exe
+
+read2.o: read2.f90
+	$(FC) $(FFLAGS) -c read2.f90
+
+read.exe: read.o
+	$(FC) $(FFLAGS) read.o -o read.exe
+
+read.o: read.f90
+	$(FC) $(FFLAGS) -c read.f90
+
+real.exe: real.o
+	$(FC) $(FFLAGS) real.o -o real.exe
+
+real.o: real.f90
+	$(FC) $(FFLAGS) -c real.f90
+
+clean:
+	rm -f *.exe *.o *.mod

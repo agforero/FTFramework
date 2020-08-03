@@ -1,0 +1,5372 @@
+FC ?= gfortran
+FFLAGS ?=
+
+.PHONY: all clean
+all:  disply.o distim.o filtem.o getnam.o maknam.o objact.o objadd.o objcf1.o objcf2.o objchk.o objcmp.o objfnd.o objget.o objinl.o objmod.o objnth.o objnxt.o objrem.o objsbc.o objsbf.o objset.o objsiz.o objval.o prname.o rndem.o writit.o crcnst.o cronos.o dsplay.o ls.o lstmid.o speakr.o dispsm.o fixuni.o prinst.o repmcw.o timecn.o clcomm.o attcmp.o cortab.o dskb04.o dskd04.o dski04.o dspdsc.o dspgap.o grpseg.o prcinf.o sum02.o sum04.o chwcml.o ckcovr.o dpstrp.o dr2str.o et2str.o getqav.o ldklst.o rtdiff.o sc01s2d.o bgroup_1.o chunk.o clmgr.o expand.o fetcha.o fgroup_1.o fmtdp.o fmtint.o fmttim.o hlpmen.o hlptxt.o inspkn.o kerman.o list.o liter.o namxpn.o nspcht.o nspdel.o nspflg.o nspfnd.o nspfrp.o nsphi.o nsphlp.o nspint.o nspset.o nspshc.o nspsho.o nsptab.o nsptv.o nspvrb.o other.o param.o params.o prep.o preprc.o proc.o setchr.o size.o subtex.o tempb.o title.o tokens.o var.o wrtnpr.o wrtprs.o zzhlp000.o zzhlp001.o zzhlp002.o zzhlp003.o zzhlp004.o zzhlp005.o zzhlp006.o zzhlp007.o zzhlp008.o zzhlp009.o zzhlp010.o zzhlp011.o zzhlp012.o zzhlp013.o zzhlp014.o zzhlp015.o zzhlp016.o zzhlp017.o zzhlp018.o zzhlp019.o zzhlp020.o zzhlp021.o zzhlp022.o zzhlp023.o zzhlp024.o zzhlp025.o zzhlp026.o zzhlp027.o zzhlp028.o zzhlp029.o zzhlp030.o zzhlp031.o zzhlp032.o addcom.o extmsi.o makvtx.o mkgrid.o mkvarr.o prcset.o prscml.o rc2cor.o rdffdi.o rdffpl.o rdgrd5.o wrtdsk.o zzpsxtnt.o zztrgnvx.o zzvoxscl.o zzwseg02.o chckdo.o cmlarg.o parsdo.o redbuf.o reorbd.o setelm.o setup.o tle2spk.o linrot_m.o mkfclk.o zzmckdmp.o ckgss.o ckwss.o getchr.o getint.o pckgss.o pckwss.o spab2t.o spalog.o spardc.o spasum.o spat2b.o spkgss.o spkwss.o sumck.o sumek.o sumpck.o sumspk.o zzconvtb.o accept.o alltru.o ana.o appndc.o appndd.o appndi.o approx.o astrip.o axisar.o b1900.o b1950.o badkpv.o bedec.o beint.o benum.o beuns.o bltfrm.o bodc2n.o bodc2s.o boddef.o bodeul.o bodfnd.o bodmat.o bodn2c.o bods2c.o bodvar.o bodvcd.o bodvrd.o brcktd.o brckti.o bschoc.o bschoi.o bsrchc.o bsrchd.o bsrchi.o byebye.o cardc.o cardd.o cardi.o cgv2el.o chbase.o chbder.o chbigr.o chbint.o chbval.o chckid.o chgirf.o ckbsr.o ckcls.o ckcov.o cke01.o cke02.o cke03.o cke04.o cke05.o cke06.o ckfrot.o ckfxfm.o ckgpav.o ckgp.o ckgr01.o ckgr02.o ckgr03.o ckgr04.o ckgr05.o ckgr06.o ckmeta.o ckmp06.o cknm06.o cknr01.o cknr02.o cknr03.o cknr04.o cknr05.o ckobj.o ckopn.o ckpfs.o ckr01.o ckr02.o ckr03.o ckr04.o ckr05.o ckr06.o ckw01.o ckw02.o ckw03.o ckw04a.o ckw04b.o ckw04e.o ckw05.o ckw06.o clearc.o cleard.o cleari.o clight.o cmprss.o conics.o convrt.o copyc.o copyd.o copyi.o countc.o cpos.o cposr.o cyacip.o cyadip.o cyaiip.o cyclac.o cyclad.o cyclai.o cyclec.o cyllat.o cylrec.o cylsph.o dacosh.o dacosn.o dafa2b.o dafac.o dafah.o dafana.o dafarr.o dafb2a.o dafb2t.o dafbt.o dafdc.o dafec.o daffa.o dafgda.o dafps.o dafra.o dafrcr.o dafrda.o dafrfr.o dafrrr.o dafrwa.o dafrwd.o daft2b.o daftb.o dafwcr.o dafwda.o dafwfr.o dasa2l.o dasac.o dasacr.o dasacu.o dasadc.o dasadd.o dasadi.o dasbt.o dascls.o dascud.o dasdc.o dasec.o dasecu.o dasfm.o dasine.o dasioc.o dasiod.o dasioi.o daslla.o dasrcr.o dasrdc.o dasrdd.o dasrdi.o dasrfr.o dasrwr.o dassdr.o dastb.o dasudc.o dasudd.o dasudi.o daswfr.o datanh.o dcbrt.o dcyldr.o delfil.o deltet.o det.o dgeodr.o dhfa.o diags2.o diffc.o diffd.o diffi.o dlabbs.o dlabfs.o dlabns.o dlaens.o dlafns.o dlafps.o dlaopn.o dlassg.o dlatdr.o dnearp.o dp2hx.o dpfmt.o dpgrdr.o dpmax.o dpmin.o dpr.o dpspce.o dpstr.o dpstrf.o drdcyl.o drdgeo.o drdlat.o drdpgr.o drdsph.o drotat.o dskb02.o dskcls.o dskd02.o dskgd.o dski02.o dskmi2.o dskn02.o dskobj.o dskopn.o dskp02.o dskrb2.o dsksrf.o dsktol.o dskv02.o dskw02.o dskx02.o dskxsi.o dskxv.o dskz02.o dsphdr.o ducrss.o dvcrss.o dvdot.o dvhat.o dvnorm.o dvsep.o dxtrct.o edlimb.o ednmpt.o edpnt.o edterm.o ekacec.o ekaced.o ekacei.o ekaclc.o ekacld.o ekacli.o ekappr.o ekbseg.o ekcls.o ekdelr.o ekffld.o ekfind.o ekifld.o ekinsr.o eknseg.o ekopn.o ekopr.o ekops.o ekopw.o ekpsel.o ekqmgr.o ekrcec.o ekrced.o ekrcei.o ekshdw.o ekssum.o ekucec.o ekuced.o ekucei.o el2cgv.o elemc.o elemd.o elemi.o elltof.o enchar.o eqchr.o eqncpv.o eqstr.o erract.o errch.o errdev.o errdp.o errfnm.o errhan.o errint.o errprt.o esrchc.o et2lst.o et2utc.o etcal.o eul2m.o ev2lin.o even.o exact.o excess.o exists.o expln.o fetchc.o fetchd.o fetchi.o fillc.o filld.o filli.o fn2lun.o fndlun.o fndnwd.o fovray.o fovtrg.o frame.o framex.o frmchg.o frmget.o frstnb.o frstnp.o frstpc.o gcd.o georec.o getelm.o getfat.o getfov.o getlun.o getmsg.o gfbail.o gfdist.o gfevnt.o gffove.o gfilum.o gfocce.o gfoclt.o gfpa.o gfposc.o gfrefn.o gfrfov.o gfrprt.o gfrr.o gfsep.o gfsntc.o gfstep.o gfstol.o gfsubc.o gftfov.o gfudb.o gfuds.o halfpi.o hrmesp.o hrmint.o hx2dp.o hx2int.o hyptof.o ident.o idw2at.o illum.o illumf.o illumg.o ilumin.o incnsg.o inedpl.o inelpl.o inrypl.o insang.o inslac.o inslad.o inslai.o insrtc.o insrtd.o insrti.o inssub.o int2hx.o interc.o interd.o interi.o intmax.o intmin.o intord.o intstr.o inttxt.o invert.o invort.o invstm.o ioerr.o irftrn.o iso2utc.o isopen.o isordv.o isrchc.o isrchd.o isrchi.o isrot.o j1900.o j1950.o j2000.o j2100.o jul2gr.o jyear.o keeper.o kepleq.o kplfrm.o kpsolv.o kxtrct.o lastnb.o lastpc.o latcyl.o latrec.o latsph.o latsrf.o lbuild.o lcase.o lgresp.o lgrind.o lgrint.o limbpt.o ljucrs.o ljust.o lnkan.o lnkfsl.o lnkhl.o lnkila.o lnkilb.o lnkini.o lnknfn.o lnknxt.o lnkprv.o lnksiz.o lnktl.o lnkxsl.o locati.o locln.o lparse.o lparsm.o lparss.o lspcn.o lstcld.o lstcli.o lstlec.o lstled.o lstlei.o lstltc.o lstltd.o lstlti.o ltime.o ltrim.o lun2fn.o lx4dec.o lx4num.o lx4sgn.o lx4uns.o lxname.o lxqstr.o m2eul.o m2q.o matchi.o matchw.o maxac.o maxad.o maxai.o mequ.o mequg.o minac.o minad.o minai.o movec.o moved.o movei.o mtxm.o mtxmg.o mtxv.o mtxvg.o mxm.o mxmg.o mxmt.o mxmtg.o mxv.o mxvg.o nblen.o nbwid.o ncpos.o ncposr.o nearpt.o nextwd.o notru.o nparsd.o nparsi.o npedln.o npelpt.o nplnpt.o npsgpt.o nthwd.o nvc2pl.o nvp2pl.o occult.o odd.o opsgnd.o opsgni.o ordc.o ordd.o orderc.o orderd.o orderi.o ordi.o oscelt.o oscltx.o outmsg.o packac.o packad.o packai.o parsqs.o partof.o pck03a.o pck03b.o pck03e.o pckbsr.o pckcls.o pckcov.o pcke02.o pcke03.o pcke20.o pckeul.o pckfrm.o pckmat.o pckopn.o pckpds.o pckr02.o pckr03.o pckr20.o pckuds.o pckw02.o pckw20.o pcwid.o pgrrec.o phaseq.o pi.o pjelpl.o pl2nvc.o pl2nvp.o pl2psv.o plnsns.o pltar.o pltexp.o pltnp.o pltnrm.o pltvol.o polyds.o pool.o pos.o posr.o prefix.o prodad.o prodai.o prompt.o prop2b.o prsdp.o prsint.o prtenc.o prtpkg.o psv2pl.o putact.o putdev.o putlms.o putsms.o pxform.o pxfrm2.o q2m.o qderiv.o qdq2av.o quote.o qxq.o radrec.o rav2xf.o raxisa.o rdencc.o rdencd.o rdenci.o rdker.o rdkvar.o rdnbl.o rdtext.o readla.o readln.o reccyl.o recgeo.o reclat.o recpgr.o recrad.o recsph.o refchg.o remlac.o remlad.o remlai.o removc.o removd.o removi.o remsub.o reordc.o reordd.o reordi.o reordl.o replch.o replwd.o repmc.o repmct.o repmd.o repmf.o repmi.o repmot.o repsub.o reset.o return.o rjust.o rmaind.o rmaini.o rmdupc.o rmdupd.o rmdupi.o rotate.o rotget.o rotmat.o rotvec.o rpd.o rquad.o rtrim.o saelgv.o samch.o samchi.o sameai.o samsbi.o samsub.o sc01.o scanit.o scanrj.o scardc.o scardd.o scardi.o scdecd.o sce2c.o sce2s.o sce2t.o scencd.o scfmt.o sclu01.o scpars.o scpart.o scps01.o scs2e.o sct2e.o sctiks.o sctran.o sctype.o sdiffc.o sdiffd.o sdiffi.o sepool.o setc.o setd.o seterr.o seti.o setmsg.o sgfcon.o sgfpkt.o sgfref.o sgfrvi.o sgmeta.o sgseqw.o sharpr.o shellc.o shelld.o shelli.o shiftc.o shiftl.o shiftr.o sigdgt.o sigerr.o sincpt.o sizec.o sized.o sizei.o smsgnd.o smsgni.o somfls.o somtru.o spca2b.o spcac.o spcb2a.o spcb2t.o spcdc.o spcec.o spcopn.o spcrfl.o spct2b.o spd.o sphcyl.o sphlat.o sphrec.o sphsd.o spk14a.o spk14b.o spk14e.o spkacs.o spkapo.o spkapp.o spkaps.o spkbsr.o spkcls.o spkcov.o spkcpo.o spkcpt.o spkcvo.o spkcvt.o spke01.o spke02.o spke03.o spke05.o spke08.o spke09.o spke10.o spke12.o spke13.o spke14.o spke15.o spke17.o spke18.o spke19.o spke20.o spke21.o spkez.o spkezp.o spkezr.o spkgeo.o spkgps.o spkltc.o spkobj.o spkopa.o spkopn.o spkpds.o spkpos.o spkpv.o spkpvn.o spkr01.o spkr02.o spkr03.o spkr05.o spkr08.o spkr09.o spkr10.o spkr12.o spkr13.o spkr14.o spkr15.o spkr17.o spkr18.o spkr19.o spkr20.o spkr21.o spks01.o spks02.o spks03.o spks05.o spks08.o spks09.o spks10.o spks12.o spks13.o spks14.o spks15.o spks17.o spks18.o spks19.o spks20.o spks21.o spkssb.o spksub.o spkuds.o spkw01.o spkw02.o spkw03.o spkw05.o spkw08.o spkw09.o spkw10.o spkw12.o spkw13.o spkw15.o spkw17.o spkw18.o spkw19.o spkw20.o spkw21.o srfc2s.o srfcss.o srfnrm.o srfrec.o srfs2c.o srfscc.o srfxpt.o ssizec.o ssized.o ssizei.o stcc01.o stcf01.o stcg01.o stcl01.o stdio.o stelab.o stlabx.o stmp03.o stpool.o str2et.o subpnt.o subpt.o subslr.o subsol.o suffix.o sumad.o sumai.o surfnm.o surfpt.o surfpv.o swapac.o swapad.o swapai.o swapc.o swapd.o swapi.o sxform.o sydelc.o sydeld.o sydeli.o sydimc.o sydimd.o sydimi.o sydupc.o sydupd.o sydupi.o syenqc.o syenqd.o syenqi.o syfetc.o syfetd.o syfeti.o sygetc.o sygetd.o sygeti.o synthc.o synthd.o synthi.o syordc.o syordd.o syordi.o sypopc.o sypopd.o sypopi.o sypshc.o sypshd.o sypshi.o syputc.o syputd.o syputi.o syrenc.o syrend.o syreni.o syselc.o syseld.o syseli.o sysetc.o sysetd.o syseti.o sytrnc.o sytrnd.o sytrni.o tcheck.o termpt.o texpyr.o timdef.o timout.o tipbod.o tisbod.o tkfram.o tkvrsn.o tostdo.o touchc.o touchd.o touchi.o touchl.o tparse.o tpartv.o tpictr.o trace.o traceg.o trcpkg.o ttrans.o twopi.o twovec.o twovxf.o txtopn.o txtopr.o tyear.o ucase.o ucrss.o uddc.o uddf.o udf.o unionc.o uniond.o unioni.o unitim.o unorm.o unormg.o utc2et.o vadd.o vaddg.o validc.o validd.o validi.o vcrss.o vdist.o vdistg.o vdot.o vdotg.o vequ.o vequg.o vhat.o vhatg.o vhatip.o vlcom3.o vlcom.o vlcomg.o vminug.o vminus.o vnorm.o vnormg.o vpack.o vperp.o vprjp.o vprjpi.o vproj.o vprojg.o vrel.o vrelg.o vrotv.o vscl.o vsclg.o vsclip.o vsep.o vsepg.o vsub.o vsubg.o vtmv.o vtmvg.o vupack.o vzero.o vzerog.o wdcnt.o wdindx.o wncard.o wncomd.o wncond.o wndifd.o wnelmd.o wnexpd.o wnextd.o wnfetd.o wnfild.o wnfltd.o wnincd.o wninsd.o wnintd.o wnreld.o wnsumd.o wnunid.o wnvald.o wrencc.o wrencd.o wrenci.o writla.o writln.o wrkvar.o wrline.o xdda.o xf2eul.o xf2rav.o xfmsta.o xposbl.o xpose.o xposeg.o xpsgip.o zzaddlnk.o zzascii.o zzasryel.o zzbodblt.o zzbodbry.o zzbodini.o zzbodker.o zzbods2c.o zzbodtrn.o zzbodvcd.o zzbquad.o zzchrlat.o zzck4d2i.o zzck4i2d.o zzckcv01.o zzckcv02.o zzckcv03.o zzckcv04.o zzckcv05.o zzckcv06.o zzckspk.o zzcln.o zzcnquad.o zzcorepc.o zzcorsxf.o zzcputim.o zzctr.o zzcvpool.o zzcvstat.o zzcxbrut.o zzdafgdr.o zzdafgfr.o zzdafgsr.o zzdafnfr.o zzdasgrd.o zzdasgri.o zzdasnfr.o zzdasrfr.o zzddhclu.o zzddhf2h.o zzddhgsd.o zzddhgtu.o zzddhini.o zzddhivf.o zzddhman.o zzddhmnm.o zzddhnfc.o zzddhppf.o zzddhrcm.o zzddhrmu.o zzdiv.o zzdscm.o zzdsin.o zzdskbbl.o zzdskbsr.o zzdskbun.o zzdskbux.o zzdsksba.o zzdsksbf.o zzdsksbi.o zzdsksbr.o zzdsksel.o zzdsksgr.o zzdsksgx.o zzdsksph.o zzdspc.o zzdspr.o zzdynbid.o zzdynfid.o zzdynfr0.o zzdynfrm.o zzdynoac.o zzdynoad.o zzdynrot.o zzdynrt0.o zzdynvac.o zzdynvad.o zzdynvai.o zzedterm.o zzedtmpt.o zzekac01.o zzekac02.o zzekac03.o zzekac04.o zzekac05.o zzekac06.o zzekac07.o zzekac08.o zzekac09.o zzekacps.o zzekad01.o zzekad02.o zzekad03.o zzekad04.o zzekad05.o zzekad06.o zzekaps.o zzekbs01.o zzekbs02.o zzekcchk.o zzekcdsc.o zzekcix1.o zzekcnam.o zzekde01.o zzekde02.o zzekde03.o zzekde04.o zzekde05.o zzekde06.o zzekdps.o zzekecmp.o zzekencd.o zzekerc1.o zzekerd1.o zzekeri1.o zzekesiz.o zzekff01.o zzekfrx.o zzekgcdp.o zzekgei.o zzekgfwd.o zzekglnk.o zzekgrcp.o zzekgrs.o zzekif01.o zzekif02.o zzekiic1.o zzekiid1.o zzekiii1.o zzekille.o zzekillt.o zzekinqc.o zzekinqn.o zzekixdl.o zzekixlk.o zzekjoin.o zzekjsqz.o zzekjsrt.o zzekjtst.o zzekkey.o zzeklerc.o zzeklerd.o zzekleri.o zzekllec.o zzeklled.o zzekllei.o zzeklltc.o zzeklltd.o zzekllti.o zzekmloc.o zzeknres.o zzeknrml.o zzekordc.o zzekordd.o zzekordi.o zzekpage.o zzekpars.o zzekpcol.o zzekpdec.o zzekpgch.o zzekqcnj.o zzekqcon.o zzekqini.o zzekqord.o zzekqsel.o zzekqtab.o zzekrbck.o zzekrcmp.o zzekrd01.o zzekrd02.o zzekrd03.o zzekrd04.o zzekrd05.o zzekrd06.o zzekrd07.o zzekrd08.o zzekrd09.o zzekreqi.o zzekrmch.o zzekrp2n.o zzekrplk.o zzekrsc.o zzekrsd.o zzekrsi.o zzeksca.o zzekscan.o zzekscdp.o zzekscmp.o zzeksdsc.o zzeksei.o zzeksemc.o zzeksfwd.o zzeksinf.o zzekslnk.o zzeksrcp.o zzeksrs.o zzekstyp.o zzeksz04.o zzeksz05.o zzeksz06.o zzektcnv.o zzektloc.o zzektr13.o zzektr1s.o zzektr23.o zzektr31.o zzektr32.o zzektrap.o zzektrbn.o zzektrbs.o zzektrdl.o zzektrdp.o zzektres.o zzektrfr.o zzektrin.o zzektrit.o zzektrki.o zzektrlk.o zzektrls.o zzektrnk.o zzektrpi.o zzektrrk.o zzektrsb.o zzektrsz.o zzektrud.o zzektrui.o zzekue01.o zzekue02.o zzekue03.o zzekue04.o zzekue05.o zzekue06.o zzekvadr.o zzekvcmp.o zzekvmch.o zzekweed.o zzekweqi.o zzekwpac.o zzekwpai.o zzekwpal.o zzellbds.o zzelnaxx.o zzelvupy.o zzenut80.o zzeprc76.o zzeprcss.o zzfdat.o zzfovaxi.o zzfrmch0.o zzfrmch1.o zzfrmgt0.o zzfrmgt1.o zzftpchk.o zzftpstr.o zzgapool.o zzgetbff.o zzgetelm.o zzgetvox.o zzgfcoq.o zzgfcost.o zzgfcou.o zzgfcprx.o zzgfcslv.o zzgfdiq.o zzgfdiu.o zzgfdsps.o zzgffvu.o zzgfilu.o zzgflong.o zzgfocu.o zzgfpaq.o zzgfpau.o zzgfref.o zzgfrel.o zzgfrelx.o zzgfrpwk.o zzgfrrq.o zzgfrru.o zzgfsolv.o zzgfsolvx.o zzgfspq.o zzgfspu.o zzgfssin.o zzgfssob.o zzgftreb.o zzgfudb.o zzgfudlt.o zzgfwsts.o zzgpnm.o zzgrav.o zzhashi.o zzholdd.o zzhsc.o zzhsi.o zzhullax.o zzidmap.o zzilusta.o zzingrd.o zzinil.o zzinilnk.o zzinlat0.o zzinlat.o zzinpdt0.o zzinpdt.o zzinrec.o zzinrypl.o zzinssub.o zzinvelt.o zzlatbox.o zzldker.o zzlexmet.o zzmkpc.o zzmkspin.o zzmobliq.o zzmsxf.o zzmult.o zznamfrm.o zznofcon.o zznrddp.o zznrmlon.o zznwpool.o zzocced.o zzpdcmpl.o zzpdpltc.o zzpdtbox.o zzphsh.o zzpini.o zzplatfm.o zzpltchk.o zzprscor.o zzprsmet.o zzptpl02.o zzraybox.o zzrbrkst.o zzrecbox.o zzrefch0.o zzrefch1.o zzrepsub.o zzrept.o zzrotgt0.o zzrotgt1.o zzrtnmat.o zzrvar.o zzrvbf.o zzrxr.o zzrytelt.o zzrytlat.o zzrytpdt.o zzrytrec.o zzryxsph.o zzsclk.o zzsecprt.o zzsegbox.o zzsfxcor.o zzsglatx.o zzsgp4.o zzsinutl.o zzsizeok.o zzspkac0.o zzspkac1.o zzspkap0.o zzspkap1.o zzspkas0.o zzspkas1.o zzspkez0.o zzspkez1.o zzspkfao.o zzspkfap.o zzspkfat.o zzspkflt.o zzspkfzo.o zzspkfzt.o zzspkgo0.o zzspkgo1.o zzspkgp0.o zzspkgp1.o zzspklt0.o zzspklt1.o zzspkpa0.o zzspkpa1.o zzspksb0.o zzspksb1.o zzspkzp0.o zzspkzp1.o zzsrfini.o zzsrfker.o zzsrftrn.o zzstelab.o zztangnt.o zztanslv.o zztanutl.o zzteme.o zztime.o zztknerr.o zztogrid.o zztpats.o zztrvlnk.o zztwovxf.o zzuntngl.o zzutcpm.o zzvalcor.o zzvox2id.o zzvoxcvo.o zzvrtplt.o zzvstrng.o zzwahr.o zzwind2d.o zzwind.o zzwninsd.o zzxlated.o zzxlatei.o getsta.o stdiff.o cparse_2.o rdcmd.o wrdnln.o batch.o bboard_1.o bestwd.o builtn.o cbget_1.o cbinit_1.o cbput_1.o cbrem_1.o changu.o chbfit.o ck3sdn.o cmloop.o cmmore.o cmstup.o cnfirm_1.o cnfirm.o convbt.o convrt_2.o convrt_3.o convtb.o cputim.o crtptr.o curtim.o cutstr.o dafacu.o dafecu.o dcyphr.o dimcb_1.o dpstre.o dspvrs.o echo.o edtcmd.o edtcom.o exesys.o expfnm_1.o expfnm_2.o flgrpt.o fndcmp.o fndntk.o fndptk.o fnducv.o getcml.o getdel.o geteq.o getfnm_1.o getfnm.o getopt_1.o getopt_2.o getopt.o have.o header.o iovcmp.o langua.o lbdes_1.o lbget_1.o lbinit_1.o lbins_1.o lbpack_1.o lbrem_1.o lbupd_1.o logchk.o m2alph.o m2begr.o m2bodini.o m2bodtrn.o m2body.o m2cal.o m2chck.o m2clss.o m2core.o m2day.o m2diag.o m2engl.o m2epoc.o m2geta.o m2getb.o m2getc.o m2getd.o m2geti.o m2gmch.o m2have.o m2int.o m2ints.o m2keyw.o m2mon.o m2name.o m2ntem.o m2numb.o m2pars.o m2selb.o m2selc.o m2seld.o m2seli.o m2shll.o m2term.o m2thnq.o m2time.o m2tran.o m2trim.o m2unit.o m2wmch.o m2xist.o m2year.o makstr.o matchc.o matche.o match.o matchm.o matcho.o meta_2.o mspeld.o ncodec.o ncoded.o ncodei.o newfil_1.o newfil.o nicebt_1.o niceio_3.o nicepr_1.o no.o nsplgr.o nspopl.o nsppwd.o nspsav.o nspxcp.o nthuqt.o nthuqw.o nxtcom.o occurs.o pagman.o parcml.o pltfrm.o podaec.o podaed.o podaei.o podbec.o podbed.o podbei.o podbgc.o podbgd.o podbgi.o podcgc.o podcgd.o podcgi.o poddgc.o poddgd.o poddgi.o podegc.o podegd.o podegi.o podiec.o podied.o podiei.o podonc.o podond.o podoni.o podrec.o podred.o podrei.o podrgc.o podrgd.o podrgi.o prcomf.o prtrap.o pstack.o qlstnb.o qmini.o qrtrim.o qtran.o rc2grd.o rdstmn.o rdstmt.o reglon.o ressym.o rptsym.o sbget_1.o sbinit_1.o sbrem_1.o sbset_1.o scansl.o shosym.o sizecb_1.o spcacb.o spcacc.o stran.o syptrc.o syptri.o tabrpt.o trnlat.o txtops.o unitp.o upto.o utrans_2.o zzcapplt.o zzckcvr2.o zzckcvr3.o zzckcvr4.o zzckcvr5.o zzcke06.o zzdbrgap.o zzellplt.o zzellsec.o zzgetenv.o zzgetfat.o zzgrdplt.o zznsppok.o zztxtopn.o
+
+disply.o: disply.f
+	$(FC) $(FFLAGS) -c disply.f
+
+distim.o: distim.f
+	$(FC) $(FFLAGS) -c distim.f
+
+filtem.o: filtem.f
+	$(FC) $(FFLAGS) -c filtem.f
+
+getnam.o: getnam.f
+	$(FC) $(FFLAGS) -c getnam.f
+
+maknam.o: maknam.f
+	$(FC) $(FFLAGS) -c maknam.f
+
+objact.o: objact.f
+	$(FC) $(FFLAGS) -c objact.f
+
+objadd.o: objadd.f
+	$(FC) $(FFLAGS) -c objadd.f
+
+objcf1.o: objcf1.f
+	$(FC) $(FFLAGS) -c objcf1.f
+
+objcf2.o: objcf2.f
+	$(FC) $(FFLAGS) -c objcf2.f
+
+objchk.o: objchk.f
+	$(FC) $(FFLAGS) -c objchk.f
+
+objcmp.o: objcmp.f
+	$(FC) $(FFLAGS) -c objcmp.f
+
+objfnd.o: objfnd.f
+	$(FC) $(FFLAGS) -c objfnd.f
+
+objget.o: objget.f
+	$(FC) $(FFLAGS) -c objget.f
+
+objinl.o: objinl.f
+	$(FC) $(FFLAGS) -c objinl.f
+
+objmod.o: objmod.f
+	$(FC) $(FFLAGS) -c objmod.f
+
+objnth.o: objnth.f
+	$(FC) $(FFLAGS) -c objnth.f
+
+objnxt.o: objnxt.f
+	$(FC) $(FFLAGS) -c objnxt.f
+
+objrem.o: objrem.f
+	$(FC) $(FFLAGS) -c objrem.f
+
+objsbc.o: objsbc.f
+	$(FC) $(FFLAGS) -c objsbc.f
+
+objsbf.o: objsbf.f
+	$(FC) $(FFLAGS) -c objsbf.f
+
+objset.o: objset.f
+	$(FC) $(FFLAGS) -c objset.f
+
+objsiz.o: objsiz.f
+	$(FC) $(FFLAGS) -c objsiz.f
+
+objval.o: objval.f
+	$(FC) $(FFLAGS) -c objval.f
+
+prname.o: prname.f
+	$(FC) $(FFLAGS) -c prname.f
+
+rndem.o: rndem.f
+	$(FC) $(FFLAGS) -c rndem.f
+
+writit.o: writit.f
+	$(FC) $(FFLAGS) -c writit.f
+
+crcnst.o: crcnst.f
+	$(FC) $(FFLAGS) -c crcnst.f
+
+cronos.o: cronos.f
+	$(FC) $(FFLAGS) -c cronos.f
+
+dsplay.o: dsplay.f
+	$(FC) $(FFLAGS) -c dsplay.f
+
+ls.o: ls.f
+	$(FC) $(FFLAGS) -c ls.f
+
+lstmid.o: lstmid.f
+	$(FC) $(FFLAGS) -c lstmid.f
+
+speakr.o: speakr.f
+	$(FC) $(FFLAGS) -c speakr.f
+
+dispsm.o: dispsm.f
+	$(FC) $(FFLAGS) -c dispsm.f
+
+fixuni.o: fixuni.f
+	$(FC) $(FFLAGS) -c fixuni.f
+
+prinst.o: prinst.f
+	$(FC) $(FFLAGS) -c prinst.f
+
+repmcw.o: repmcw.f
+	$(FC) $(FFLAGS) -c repmcw.f
+
+timecn.o: timecn.f
+	$(FC) $(FFLAGS) -c timecn.f
+
+clcomm.o: clcomm.f
+	$(FC) $(FFLAGS) -c clcomm.f
+
+attcmp.o: attcmp.f
+	$(FC) $(FFLAGS) -c attcmp.f
+
+cortab.o: cortab.f
+	$(FC) $(FFLAGS) -c cortab.f
+
+dskb04.o: dskb04.f
+	$(FC) $(FFLAGS) -c dskb04.f
+
+dskd04.o: dskd04.f
+	$(FC) $(FFLAGS) -c dskd04.f
+
+dski04.o: dski04.f
+	$(FC) $(FFLAGS) -c dski04.f
+
+dspdsc.o: dspdsc.f
+	$(FC) $(FFLAGS) -c dspdsc.f
+
+dspgap.o: dspgap.f
+	$(FC) $(FFLAGS) -c dspgap.f
+
+grpseg.o: grpseg.f
+	$(FC) $(FFLAGS) -c grpseg.f
+
+prcinf.o: prcinf.f
+	$(FC) $(FFLAGS) -c prcinf.f
+
+sum02.o: sum02.f
+	$(FC) $(FFLAGS) -c sum02.f
+
+sum04.o: sum04.f
+	$(FC) $(FFLAGS) -c sum04.f
+
+chwcml.o: chwcml.f
+	$(FC) $(FFLAGS) -c chwcml.f
+
+ckcovr.o: ckcovr.f
+	$(FC) $(FFLAGS) -c ckcovr.f
+
+dpstrp.o: dpstrp.f
+	$(FC) $(FFLAGS) -c dpstrp.f
+
+dr2str.o: dr2str.f
+	$(FC) $(FFLAGS) -c dr2str.f
+
+et2str.o: et2str.f
+	$(FC) $(FFLAGS) -c et2str.f
+
+getqav.o: getqav.f
+	$(FC) $(FFLAGS) -c getqav.f
+
+ldklst.o: ldklst.f
+	$(FC) $(FFLAGS) -c ldklst.f
+
+rtdiff.o: rtdiff.f
+	$(FC) $(FFLAGS) -c rtdiff.f
+
+sc01s2d.o: sc01s2d.f
+	$(FC) $(FFLAGS) -c sc01s2d.f
+
+bgroup_1.o: bgroup_1.f
+	$(FC) $(FFLAGS) -c bgroup_1.f
+
+chunk.o: chunk.f
+	$(FC) $(FFLAGS) -c chunk.f
+
+clmgr.o: clmgr.f
+	$(FC) $(FFLAGS) -c clmgr.f
+
+expand.o: expand.f
+	$(FC) $(FFLAGS) -c expand.f
+
+fetcha.o: fetcha.f
+	$(FC) $(FFLAGS) -c fetcha.f
+
+fgroup_1.o: fgroup_1.f
+	$(FC) $(FFLAGS) -c fgroup_1.f
+
+fmtdp.o: fmtdp.f
+	$(FC) $(FFLAGS) -c fmtdp.f
+
+fmtint.o: fmtint.f
+	$(FC) $(FFLAGS) -c fmtint.f
+
+fmttim.o: fmttim.f
+	$(FC) $(FFLAGS) -c fmttim.f
+
+hlpmen.o: hlpmen.f
+	$(FC) $(FFLAGS) -c hlpmen.f
+
+hlptxt.o: hlptxt.f
+	$(FC) $(FFLAGS) -c hlptxt.f
+
+inspkn.o: inspkn.f
+	$(FC) $(FFLAGS) -c inspkn.f
+
+kerman.o: kerman.f
+	$(FC) $(FFLAGS) -c kerman.f
+
+list.o: list.f
+	$(FC) $(FFLAGS) -c list.f
+
+liter.o: liter.f
+	$(FC) $(FFLAGS) -c liter.f
+
+namxpn.o: namxpn.f
+	$(FC) $(FFLAGS) -c namxpn.f
+
+nspcht.o: nspcht.f
+	$(FC) $(FFLAGS) -c nspcht.f
+
+nspdel.o: nspdel.f
+	$(FC) $(FFLAGS) -c nspdel.f
+
+nspflg.o: nspflg.f
+	$(FC) $(FFLAGS) -c nspflg.f
+
+nspfnd.o: nspfnd.f
+	$(FC) $(FFLAGS) -c nspfnd.f
+
+nspfrp.o: nspfrp.f
+	$(FC) $(FFLAGS) -c nspfrp.f
+
+nsphi.o: nsphi.f
+	$(FC) $(FFLAGS) -c nsphi.f
+
+nsphlp.o: nsphlp.f
+	$(FC) $(FFLAGS) -c nsphlp.f
+
+nspint.o: nspint.f
+	$(FC) $(FFLAGS) -c nspint.f
+
+nspset.o: nspset.f
+	$(FC) $(FFLAGS) -c nspset.f
+
+nspshc.o: nspshc.f
+	$(FC) $(FFLAGS) -c nspshc.f
+
+nspsho.o: nspsho.f
+	$(FC) $(FFLAGS) -c nspsho.f
+
+nsptab.o: nsptab.f
+	$(FC) $(FFLAGS) -c nsptab.f
+
+nsptv.o: nsptv.f
+	$(FC) $(FFLAGS) -c nsptv.f
+
+nspvrb.o: nspvrb.f
+	$(FC) $(FFLAGS) -c nspvrb.f
+
+other.o: other.f
+	$(FC) $(FFLAGS) -c other.f
+
+param.o: param.f
+	$(FC) $(FFLAGS) -c param.f
+
+params.o: params.f
+	$(FC) $(FFLAGS) -c params.f
+
+prep.o: prep.f
+	$(FC) $(FFLAGS) -c prep.f
+
+preprc.o: preprc.f
+	$(FC) $(FFLAGS) -c preprc.f
+
+proc.o: proc.f
+	$(FC) $(FFLAGS) -c proc.f
+
+setchr.o: setchr.f
+	$(FC) $(FFLAGS) -c setchr.f
+
+size.o: size.f
+	$(FC) $(FFLAGS) -c size.f
+
+subtex.o: subtex.f
+	$(FC) $(FFLAGS) -c subtex.f
+
+tempb.o: tempb.f
+	$(FC) $(FFLAGS) -c tempb.f
+
+title.o: title.f
+	$(FC) $(FFLAGS) -c title.f
+
+tokens.o: tokens.f
+	$(FC) $(FFLAGS) -c tokens.f
+
+var.o: var.f
+	$(FC) $(FFLAGS) -c var.f
+
+wrtnpr.o: wrtnpr.f
+	$(FC) $(FFLAGS) -c wrtnpr.f
+
+wrtprs.o: wrtprs.f
+	$(FC) $(FFLAGS) -c wrtprs.f
+
+zzhlp000.o: zzhlp000.f
+	$(FC) $(FFLAGS) -c zzhlp000.f
+
+zzhlp001.o: zzhlp001.f
+	$(FC) $(FFLAGS) -c zzhlp001.f
+
+zzhlp002.o: zzhlp002.f
+	$(FC) $(FFLAGS) -c zzhlp002.f
+
+zzhlp003.o: zzhlp003.f
+	$(FC) $(FFLAGS) -c zzhlp003.f
+
+zzhlp004.o: zzhlp004.f
+	$(FC) $(FFLAGS) -c zzhlp004.f
+
+zzhlp005.o: zzhlp005.f
+	$(FC) $(FFLAGS) -c zzhlp005.f
+
+zzhlp006.o: zzhlp006.f
+	$(FC) $(FFLAGS) -c zzhlp006.f
+
+zzhlp007.o: zzhlp007.f
+	$(FC) $(FFLAGS) -c zzhlp007.f
+
+zzhlp008.o: zzhlp008.f
+	$(FC) $(FFLAGS) -c zzhlp008.f
+
+zzhlp009.o: zzhlp009.f
+	$(FC) $(FFLAGS) -c zzhlp009.f
+
+zzhlp010.o: zzhlp010.f
+	$(FC) $(FFLAGS) -c zzhlp010.f
+
+zzhlp011.o: zzhlp011.f
+	$(FC) $(FFLAGS) -c zzhlp011.f
+
+zzhlp012.o: zzhlp012.f
+	$(FC) $(FFLAGS) -c zzhlp012.f
+
+zzhlp013.o: zzhlp013.f
+	$(FC) $(FFLAGS) -c zzhlp013.f
+
+zzhlp014.o: zzhlp014.f
+	$(FC) $(FFLAGS) -c zzhlp014.f
+
+zzhlp015.o: zzhlp015.f
+	$(FC) $(FFLAGS) -c zzhlp015.f
+
+zzhlp016.o: zzhlp016.f
+	$(FC) $(FFLAGS) -c zzhlp016.f
+
+zzhlp017.o: zzhlp017.f
+	$(FC) $(FFLAGS) -c zzhlp017.f
+
+zzhlp018.o: zzhlp018.f
+	$(FC) $(FFLAGS) -c zzhlp018.f
+
+zzhlp019.o: zzhlp019.f
+	$(FC) $(FFLAGS) -c zzhlp019.f
+
+zzhlp020.o: zzhlp020.f
+	$(FC) $(FFLAGS) -c zzhlp020.f
+
+zzhlp021.o: zzhlp021.f
+	$(FC) $(FFLAGS) -c zzhlp021.f
+
+zzhlp022.o: zzhlp022.f
+	$(FC) $(FFLAGS) -c zzhlp022.f
+
+zzhlp023.o: zzhlp023.f
+	$(FC) $(FFLAGS) -c zzhlp023.f
+
+zzhlp024.o: zzhlp024.f
+	$(FC) $(FFLAGS) -c zzhlp024.f
+
+zzhlp025.o: zzhlp025.f
+	$(FC) $(FFLAGS) -c zzhlp025.f
+
+zzhlp026.o: zzhlp026.f
+	$(FC) $(FFLAGS) -c zzhlp026.f
+
+zzhlp027.o: zzhlp027.f
+	$(FC) $(FFLAGS) -c zzhlp027.f
+
+zzhlp028.o: zzhlp028.f
+	$(FC) $(FFLAGS) -c zzhlp028.f
+
+zzhlp029.o: zzhlp029.f
+	$(FC) $(FFLAGS) -c zzhlp029.f
+
+zzhlp030.o: zzhlp030.f
+	$(FC) $(FFLAGS) -c zzhlp030.f
+
+zzhlp031.o: zzhlp031.f
+	$(FC) $(FFLAGS) -c zzhlp031.f
+
+zzhlp032.o: zzhlp032.f
+	$(FC) $(FFLAGS) -c zzhlp032.f
+
+addcom.o: addcom.f
+	$(FC) $(FFLAGS) -c addcom.f
+
+extmsi.o: extmsi.f
+	$(FC) $(FFLAGS) -c extmsi.f
+
+makvtx.o: makvtx.f
+	$(FC) $(FFLAGS) -c makvtx.f
+
+mkgrid.o: mkgrid.f
+	$(FC) $(FFLAGS) -c mkgrid.f
+
+mkvarr.o: mkvarr.f
+	$(FC) $(FFLAGS) -c mkvarr.f
+
+prcset.o: prcset.f
+	$(FC) $(FFLAGS) -c prcset.f
+
+prscml.o: prscml.f
+	$(FC) $(FFLAGS) -c prscml.f
+
+rc2cor.o: rc2cor.f
+	$(FC) $(FFLAGS) -c rc2cor.f
+
+rdffdi.o: rdffdi.f
+	$(FC) $(FFLAGS) -c rdffdi.f
+
+rdffpl.o: rdffpl.f
+	$(FC) $(FFLAGS) -c rdffpl.f
+
+rdgrd5.o: rdgrd5.f
+	$(FC) $(FFLAGS) -c rdgrd5.f
+
+wrtdsk.o: wrtdsk.f
+	$(FC) $(FFLAGS) -c wrtdsk.f
+
+zzpsxtnt.o: zzpsxtnt.f
+	$(FC) $(FFLAGS) -c zzpsxtnt.f
+
+zztrgnvx.o: zztrgnvx.f
+	$(FC) $(FFLAGS) -c zztrgnvx.f
+
+zzvoxscl.o: zzvoxscl.f
+	$(FC) $(FFLAGS) -c zzvoxscl.f
+
+zzwseg02.o: zzwseg02.f
+	$(FC) $(FFLAGS) -c zzwseg02.f
+
+chckdo.o: chckdo.f
+	$(FC) $(FFLAGS) -c chckdo.f
+
+cmlarg.o: cmlarg.f
+	$(FC) $(FFLAGS) -c cmlarg.f
+
+parsdo.o: parsdo.f
+	$(FC) $(FFLAGS) -c parsdo.f
+
+redbuf.o: redbuf.f
+	$(FC) $(FFLAGS) -c redbuf.f
+
+reorbd.o: reorbd.f
+	$(FC) $(FFLAGS) -c reorbd.f
+
+setelm.o: setelm.f
+	$(FC) $(FFLAGS) -c setelm.f
+
+setup.o: setup.f
+	$(FC) $(FFLAGS) -c setup.f
+
+tle2spk.o: tle2spk.f
+	$(FC) $(FFLAGS) -c tle2spk.f
+
+linrot_m.o: linrot_m.f
+	$(FC) $(FFLAGS) -c linrot_m.f
+
+mkfclk.o: mkfclk.f
+	$(FC) $(FFLAGS) -c mkfclk.f
+
+zzmckdmp.o: zzmckdmp.f
+	$(FC) $(FFLAGS) -c zzmckdmp.f
+
+ckgss.o: ckgss.f
+	$(FC) $(FFLAGS) -c ckgss.f
+
+ckwss.o: ckwss.f
+	$(FC) $(FFLAGS) -c ckwss.f
+
+getchr.o: getchr.f
+	$(FC) $(FFLAGS) -c getchr.f
+
+getint.o: getint.f
+	$(FC) $(FFLAGS) -c getint.f
+
+pckgss.o: pckgss.f
+	$(FC) $(FFLAGS) -c pckgss.f
+
+pckwss.o: pckwss.f
+	$(FC) $(FFLAGS) -c pckwss.f
+
+spab2t.o: spab2t.f
+	$(FC) $(FFLAGS) -c spab2t.f
+
+spalog.o: spalog.f
+	$(FC) $(FFLAGS) -c spalog.f
+
+spardc.o: spardc.f
+	$(FC) $(FFLAGS) -c spardc.f
+
+spasum.o: spasum.f
+	$(FC) $(FFLAGS) -c spasum.f
+
+spat2b.o: spat2b.f
+	$(FC) $(FFLAGS) -c spat2b.f
+
+spkgss.o: spkgss.f
+	$(FC) $(FFLAGS) -c spkgss.f
+
+spkwss.o: spkwss.f
+	$(FC) $(FFLAGS) -c spkwss.f
+
+sumck.o: sumck.f
+	$(FC) $(FFLAGS) -c sumck.f
+
+sumek.o: sumek.f
+	$(FC) $(FFLAGS) -c sumek.f
+
+sumpck.o: sumpck.f
+	$(FC) $(FFLAGS) -c sumpck.f
+
+sumspk.o: sumspk.f
+	$(FC) $(FFLAGS) -c sumspk.f
+
+zzconvtb.o: zzconvtb.f
+	$(FC) $(FFLAGS) -c zzconvtb.f
+
+accept.o: accept.f
+	$(FC) $(FFLAGS) -c accept.f
+
+alltru.o: alltru.f
+	$(FC) $(FFLAGS) -c alltru.f
+
+ana.o: ana.f
+	$(FC) $(FFLAGS) -c ana.f
+
+appndc.o: appndc.f
+	$(FC) $(FFLAGS) -c appndc.f
+
+appndd.o: appndd.f
+	$(FC) $(FFLAGS) -c appndd.f
+
+appndi.o: appndi.f
+	$(FC) $(FFLAGS) -c appndi.f
+
+approx.o: approx.f
+	$(FC) $(FFLAGS) -c approx.f
+
+astrip.o: astrip.f
+	$(FC) $(FFLAGS) -c astrip.f
+
+axisar.o: axisar.f
+	$(FC) $(FFLAGS) -c axisar.f
+
+b1900.o: b1900.f
+	$(FC) $(FFLAGS) -c b1900.f
+
+b1950.o: b1950.f
+	$(FC) $(FFLAGS) -c b1950.f
+
+badkpv.o: badkpv.f
+	$(FC) $(FFLAGS) -c badkpv.f
+
+bedec.o: bedec.f
+	$(FC) $(FFLAGS) -c bedec.f
+
+beint.o: beint.f
+	$(FC) $(FFLAGS) -c beint.f
+
+benum.o: benum.f
+	$(FC) $(FFLAGS) -c benum.f
+
+beuns.o: beuns.f
+	$(FC) $(FFLAGS) -c beuns.f
+
+bltfrm.o: bltfrm.f
+	$(FC) $(FFLAGS) -c bltfrm.f
+
+bodc2n.o: bodc2n.f
+	$(FC) $(FFLAGS) -c bodc2n.f
+
+bodc2s.o: bodc2s.f
+	$(FC) $(FFLAGS) -c bodc2s.f
+
+boddef.o: boddef.f
+	$(FC) $(FFLAGS) -c boddef.f
+
+bodeul.o: bodeul.f
+	$(FC) $(FFLAGS) -c bodeul.f
+
+bodfnd.o: bodfnd.f
+	$(FC) $(FFLAGS) -c bodfnd.f
+
+bodmat.o: bodmat.f
+	$(FC) $(FFLAGS) -c bodmat.f
+
+bodn2c.o: bodn2c.f
+	$(FC) $(FFLAGS) -c bodn2c.f
+
+bods2c.o: bods2c.f
+	$(FC) $(FFLAGS) -c bods2c.f
+
+bodvar.o: bodvar.f
+	$(FC) $(FFLAGS) -c bodvar.f
+
+bodvcd.o: bodvcd.f
+	$(FC) $(FFLAGS) -c bodvcd.f
+
+bodvrd.o: bodvrd.f
+	$(FC) $(FFLAGS) -c bodvrd.f
+
+brcktd.o: brcktd.f
+	$(FC) $(FFLAGS) -c brcktd.f
+
+brckti.o: brckti.f
+	$(FC) $(FFLAGS) -c brckti.f
+
+bschoc.o: bschoc.f
+	$(FC) $(FFLAGS) -c bschoc.f
+
+bschoi.o: bschoi.f
+	$(FC) $(FFLAGS) -c bschoi.f
+
+bsrchc.o: bsrchc.f
+	$(FC) $(FFLAGS) -c bsrchc.f
+
+bsrchd.o: bsrchd.f
+	$(FC) $(FFLAGS) -c bsrchd.f
+
+bsrchi.o: bsrchi.f
+	$(FC) $(FFLAGS) -c bsrchi.f
+
+byebye.o: byebye.f
+	$(FC) $(FFLAGS) -c byebye.f
+
+cardc.o: cardc.f
+	$(FC) $(FFLAGS) -c cardc.f
+
+cardd.o: cardd.f
+	$(FC) $(FFLAGS) -c cardd.f
+
+cardi.o: cardi.f
+	$(FC) $(FFLAGS) -c cardi.f
+
+cgv2el.o: cgv2el.f
+	$(FC) $(FFLAGS) -c cgv2el.f
+
+chbase.o: chbase.f
+	$(FC) $(FFLAGS) -c chbase.f
+
+chbder.o: chbder.f
+	$(FC) $(FFLAGS) -c chbder.f
+
+chbigr.o: chbigr.f
+	$(FC) $(FFLAGS) -c chbigr.f
+
+chbint.o: chbint.f
+	$(FC) $(FFLAGS) -c chbint.f
+
+chbval.o: chbval.f
+	$(FC) $(FFLAGS) -c chbval.f
+
+chckid.o: chckid.f
+	$(FC) $(FFLAGS) -c chckid.f
+
+chgirf.o: chgirf.f
+	$(FC) $(FFLAGS) -c chgirf.f
+
+ckbsr.o: ckbsr.f
+	$(FC) $(FFLAGS) -c ckbsr.f
+
+ckcls.o: ckcls.f
+	$(FC) $(FFLAGS) -c ckcls.f
+
+ckcov.o: ckcov.f
+	$(FC) $(FFLAGS) -c ckcov.f
+
+cke01.o: cke01.f
+	$(FC) $(FFLAGS) -c cke01.f
+
+cke02.o: cke02.f
+	$(FC) $(FFLAGS) -c cke02.f
+
+cke03.o: cke03.f
+	$(FC) $(FFLAGS) -c cke03.f
+
+cke04.o: cke04.f
+	$(FC) $(FFLAGS) -c cke04.f
+
+cke05.o: cke05.f
+	$(FC) $(FFLAGS) -c cke05.f
+
+cke06.o: cke06.f
+	$(FC) $(FFLAGS) -c cke06.f
+
+ckfrot.o: ckfrot.f
+	$(FC) $(FFLAGS) -c ckfrot.f
+
+ckfxfm.o: ckfxfm.f
+	$(FC) $(FFLAGS) -c ckfxfm.f
+
+ckgpav.o: ckgpav.f
+	$(FC) $(FFLAGS) -c ckgpav.f
+
+ckgp.o: ckgp.f
+	$(FC) $(FFLAGS) -c ckgp.f
+
+ckgr01.o: ckgr01.f
+	$(FC) $(FFLAGS) -c ckgr01.f
+
+ckgr02.o: ckgr02.f
+	$(FC) $(FFLAGS) -c ckgr02.f
+
+ckgr03.o: ckgr03.f
+	$(FC) $(FFLAGS) -c ckgr03.f
+
+ckgr04.o: ckgr04.f
+	$(FC) $(FFLAGS) -c ckgr04.f
+
+ckgr05.o: ckgr05.f
+	$(FC) $(FFLAGS) -c ckgr05.f
+
+ckgr06.o: ckgr06.f
+	$(FC) $(FFLAGS) -c ckgr06.f
+
+ckmeta.o: ckmeta.f
+	$(FC) $(FFLAGS) -c ckmeta.f
+
+ckmp06.o: ckmp06.f
+	$(FC) $(FFLAGS) -c ckmp06.f
+
+cknm06.o: cknm06.f
+	$(FC) $(FFLAGS) -c cknm06.f
+
+cknr01.o: cknr01.f
+	$(FC) $(FFLAGS) -c cknr01.f
+
+cknr02.o: cknr02.f
+	$(FC) $(FFLAGS) -c cknr02.f
+
+cknr03.o: cknr03.f
+	$(FC) $(FFLAGS) -c cknr03.f
+
+cknr04.o: cknr04.f
+	$(FC) $(FFLAGS) -c cknr04.f
+
+cknr05.o: cknr05.f
+	$(FC) $(FFLAGS) -c cknr05.f
+
+ckobj.o: ckobj.f
+	$(FC) $(FFLAGS) -c ckobj.f
+
+ckopn.o: ckopn.f
+	$(FC) $(FFLAGS) -c ckopn.f
+
+ckpfs.o: ckpfs.f
+	$(FC) $(FFLAGS) -c ckpfs.f
+
+ckr01.o: ckr01.f
+	$(FC) $(FFLAGS) -c ckr01.f
+
+ckr02.o: ckr02.f
+	$(FC) $(FFLAGS) -c ckr02.f
+
+ckr03.o: ckr03.f
+	$(FC) $(FFLAGS) -c ckr03.f
+
+ckr04.o: ckr04.f
+	$(FC) $(FFLAGS) -c ckr04.f
+
+ckr05.o: ckr05.f
+	$(FC) $(FFLAGS) -c ckr05.f
+
+ckr06.o: ckr06.f
+	$(FC) $(FFLAGS) -c ckr06.f
+
+ckw01.o: ckw01.f
+	$(FC) $(FFLAGS) -c ckw01.f
+
+ckw02.o: ckw02.f
+	$(FC) $(FFLAGS) -c ckw02.f
+
+ckw03.o: ckw03.f
+	$(FC) $(FFLAGS) -c ckw03.f
+
+ckw04a.o: ckw04a.f
+	$(FC) $(FFLAGS) -c ckw04a.f
+
+ckw04b.o: ckw04b.f
+	$(FC) $(FFLAGS) -c ckw04b.f
+
+ckw04e.o: ckw04e.f
+	$(FC) $(FFLAGS) -c ckw04e.f
+
+ckw05.o: ckw05.f
+	$(FC) $(FFLAGS) -c ckw05.f
+
+ckw06.o: ckw06.f
+	$(FC) $(FFLAGS) -c ckw06.f
+
+clearc.o: clearc.f
+	$(FC) $(FFLAGS) -c clearc.f
+
+cleard.o: cleard.f
+	$(FC) $(FFLAGS) -c cleard.f
+
+cleari.o: cleari.f
+	$(FC) $(FFLAGS) -c cleari.f
+
+clight.o: clight.f
+	$(FC) $(FFLAGS) -c clight.f
+
+cmprss.o: cmprss.f
+	$(FC) $(FFLAGS) -c cmprss.f
+
+conics.o: conics.f
+	$(FC) $(FFLAGS) -c conics.f
+
+convrt.o: convrt.f
+	$(FC) $(FFLAGS) -c convrt.f
+
+copyc.o: copyc.f
+	$(FC) $(FFLAGS) -c copyc.f
+
+copyd.o: copyd.f
+	$(FC) $(FFLAGS) -c copyd.f
+
+copyi.o: copyi.f
+	$(FC) $(FFLAGS) -c copyi.f
+
+countc.o: countc.f
+	$(FC) $(FFLAGS) -c countc.f
+
+cpos.o: cpos.f
+	$(FC) $(FFLAGS) -c cpos.f
+
+cposr.o: cposr.f
+	$(FC) $(FFLAGS) -c cposr.f
+
+cyacip.o: cyacip.f
+	$(FC) $(FFLAGS) -c cyacip.f
+
+cyadip.o: cyadip.f
+	$(FC) $(FFLAGS) -c cyadip.f
+
+cyaiip.o: cyaiip.f
+	$(FC) $(FFLAGS) -c cyaiip.f
+
+cyclac.o: cyclac.f
+	$(FC) $(FFLAGS) -c cyclac.f
+
+cyclad.o: cyclad.f
+	$(FC) $(FFLAGS) -c cyclad.f
+
+cyclai.o: cyclai.f
+	$(FC) $(FFLAGS) -c cyclai.f
+
+cyclec.o: cyclec.f
+	$(FC) $(FFLAGS) -c cyclec.f
+
+cyllat.o: cyllat.f
+	$(FC) $(FFLAGS) -c cyllat.f
+
+cylrec.o: cylrec.f
+	$(FC) $(FFLAGS) -c cylrec.f
+
+cylsph.o: cylsph.f
+	$(FC) $(FFLAGS) -c cylsph.f
+
+dacosh.o: dacosh.f
+	$(FC) $(FFLAGS) -c dacosh.f
+
+dacosn.o: dacosn.f
+	$(FC) $(FFLAGS) -c dacosn.f
+
+dafa2b.o: dafa2b.f
+	$(FC) $(FFLAGS) -c dafa2b.f
+
+dafac.o: dafac.f
+	$(FC) $(FFLAGS) -c dafac.f
+
+dafah.o: dafah.f
+	$(FC) $(FFLAGS) -c dafah.f
+
+dafana.o: dafana.f
+	$(FC) $(FFLAGS) -c dafana.f
+
+dafarr.o: dafarr.f
+	$(FC) $(FFLAGS) -c dafarr.f
+
+dafb2a.o: dafb2a.f
+	$(FC) $(FFLAGS) -c dafb2a.f
+
+dafb2t.o: dafb2t.f
+	$(FC) $(FFLAGS) -c dafb2t.f
+
+dafbt.o: dafbt.f
+	$(FC) $(FFLAGS) -c dafbt.f
+
+dafdc.o: dafdc.f
+	$(FC) $(FFLAGS) -c dafdc.f
+
+dafec.o: dafec.f
+	$(FC) $(FFLAGS) -c dafec.f
+
+daffa.o: daffa.f
+	$(FC) $(FFLAGS) -c daffa.f
+
+dafgda.o: dafgda.f
+	$(FC) $(FFLAGS) -c dafgda.f
+
+dafps.o: dafps.f
+	$(FC) $(FFLAGS) -c dafps.f
+
+dafra.o: dafra.f
+	$(FC) $(FFLAGS) -c dafra.f
+
+dafrcr.o: dafrcr.f
+	$(FC) $(FFLAGS) -c dafrcr.f
+
+dafrda.o: dafrda.f
+	$(FC) $(FFLAGS) -c dafrda.f
+
+dafrfr.o: dafrfr.f
+	$(FC) $(FFLAGS) -c dafrfr.f
+
+dafrrr.o: dafrrr.f
+	$(FC) $(FFLAGS) -c dafrrr.f
+
+dafrwa.o: dafrwa.f
+	$(FC) $(FFLAGS) -c dafrwa.f
+
+dafrwd.o: dafrwd.f
+	$(FC) $(FFLAGS) -c dafrwd.f
+
+daft2b.o: daft2b.f
+	$(FC) $(FFLAGS) -c daft2b.f
+
+daftb.o: daftb.f
+	$(FC) $(FFLAGS) -c daftb.f
+
+dafwcr.o: dafwcr.f
+	$(FC) $(FFLAGS) -c dafwcr.f
+
+dafwda.o: dafwda.f
+	$(FC) $(FFLAGS) -c dafwda.f
+
+dafwfr.o: dafwfr.f
+	$(FC) $(FFLAGS) -c dafwfr.f
+
+dasa2l.o: dasa2l.f
+	$(FC) $(FFLAGS) -c dasa2l.f
+
+dasac.o: dasac.f
+	$(FC) $(FFLAGS) -c dasac.f
+
+dasacr.o: dasacr.f
+	$(FC) $(FFLAGS) -c dasacr.f
+
+dasacu.o: dasacu.f
+	$(FC) $(FFLAGS) -c dasacu.f
+
+dasadc.o: dasadc.f
+	$(FC) $(FFLAGS) -c dasadc.f
+
+dasadd.o: dasadd.f
+	$(FC) $(FFLAGS) -c dasadd.f
+
+dasadi.o: dasadi.f
+	$(FC) $(FFLAGS) -c dasadi.f
+
+dasbt.o: dasbt.f
+	$(FC) $(FFLAGS) -c dasbt.f
+
+dascls.o: dascls.f
+	$(FC) $(FFLAGS) -c dascls.f
+
+dascud.o: dascud.f
+	$(FC) $(FFLAGS) -c dascud.f
+
+dasdc.o: dasdc.f
+	$(FC) $(FFLAGS) -c dasdc.f
+
+dasec.o: dasec.f
+	$(FC) $(FFLAGS) -c dasec.f
+
+dasecu.o: dasecu.f
+	$(FC) $(FFLAGS) -c dasecu.f
+
+dasfm.o: dasfm.f
+	$(FC) $(FFLAGS) -c dasfm.f
+
+dasine.o: dasine.f
+	$(FC) $(FFLAGS) -c dasine.f
+
+dasioc.o: dasioc.f
+	$(FC) $(FFLAGS) -c dasioc.f
+
+dasiod.o: dasiod.f
+	$(FC) $(FFLAGS) -c dasiod.f
+
+dasioi.o: dasioi.f
+	$(FC) $(FFLAGS) -c dasioi.f
+
+daslla.o: daslla.f
+	$(FC) $(FFLAGS) -c daslla.f
+
+dasrcr.o: dasrcr.f
+	$(FC) $(FFLAGS) -c dasrcr.f
+
+dasrdc.o: dasrdc.f
+	$(FC) $(FFLAGS) -c dasrdc.f
+
+dasrdd.o: dasrdd.f
+	$(FC) $(FFLAGS) -c dasrdd.f
+
+dasrdi.o: dasrdi.f
+	$(FC) $(FFLAGS) -c dasrdi.f
+
+dasrfr.o: dasrfr.f
+	$(FC) $(FFLAGS) -c dasrfr.f
+
+dasrwr.o: dasrwr.f
+	$(FC) $(FFLAGS) -c dasrwr.f
+
+dassdr.o: dassdr.f
+	$(FC) $(FFLAGS) -c dassdr.f
+
+dastb.o: dastb.f
+	$(FC) $(FFLAGS) -c dastb.f
+
+dasudc.o: dasudc.f
+	$(FC) $(FFLAGS) -c dasudc.f
+
+dasudd.o: dasudd.f
+	$(FC) $(FFLAGS) -c dasudd.f
+
+dasudi.o: dasudi.f
+	$(FC) $(FFLAGS) -c dasudi.f
+
+daswfr.o: daswfr.f
+	$(FC) $(FFLAGS) -c daswfr.f
+
+datanh.o: datanh.f
+	$(FC) $(FFLAGS) -c datanh.f
+
+dcbrt.o: dcbrt.f
+	$(FC) $(FFLAGS) -c dcbrt.f
+
+dcyldr.o: dcyldr.f
+	$(FC) $(FFLAGS) -c dcyldr.f
+
+delfil.o: delfil.f
+	$(FC) $(FFLAGS) -c delfil.f
+
+deltet.o: deltet.f
+	$(FC) $(FFLAGS) -c deltet.f
+
+det.o: det.f
+	$(FC) $(FFLAGS) -c det.f
+
+dgeodr.o: dgeodr.f
+	$(FC) $(FFLAGS) -c dgeodr.f
+
+dhfa.o: dhfa.f
+	$(FC) $(FFLAGS) -c dhfa.f
+
+diags2.o: diags2.f
+	$(FC) $(FFLAGS) -c diags2.f
+
+diffc.o: diffc.f
+	$(FC) $(FFLAGS) -c diffc.f
+
+diffd.o: diffd.f
+	$(FC) $(FFLAGS) -c diffd.f
+
+diffi.o: diffi.f
+	$(FC) $(FFLAGS) -c diffi.f
+
+dlabbs.o: dlabbs.f
+	$(FC) $(FFLAGS) -c dlabbs.f
+
+dlabfs.o: dlabfs.f
+	$(FC) $(FFLAGS) -c dlabfs.f
+
+dlabns.o: dlabns.f
+	$(FC) $(FFLAGS) -c dlabns.f
+
+dlaens.o: dlaens.f
+	$(FC) $(FFLAGS) -c dlaens.f
+
+dlafns.o: dlafns.f
+	$(FC) $(FFLAGS) -c dlafns.f
+
+dlafps.o: dlafps.f
+	$(FC) $(FFLAGS) -c dlafps.f
+
+dlaopn.o: dlaopn.f
+	$(FC) $(FFLAGS) -c dlaopn.f
+
+dlassg.o: dlassg.f
+	$(FC) $(FFLAGS) -c dlassg.f
+
+dlatdr.o: dlatdr.f
+	$(FC) $(FFLAGS) -c dlatdr.f
+
+dnearp.o: dnearp.f
+	$(FC) $(FFLAGS) -c dnearp.f
+
+dp2hx.o: dp2hx.f
+	$(FC) $(FFLAGS) -c dp2hx.f
+
+dpfmt.o: dpfmt.f
+	$(FC) $(FFLAGS) -c dpfmt.f
+
+dpgrdr.o: dpgrdr.f
+	$(FC) $(FFLAGS) -c dpgrdr.f
+
+dpmax.o: dpmax.f
+	$(FC) $(FFLAGS) -c dpmax.f
+
+dpmin.o: dpmin.f
+	$(FC) $(FFLAGS) -c dpmin.f
+
+dpr.o: dpr.f
+	$(FC) $(FFLAGS) -c dpr.f
+
+dpspce.o: dpspce.f
+	$(FC) $(FFLAGS) -c dpspce.f
+
+dpstr.o: dpstr.f
+	$(FC) $(FFLAGS) -c dpstr.f
+
+dpstrf.o: dpstrf.f
+	$(FC) $(FFLAGS) -c dpstrf.f
+
+drdcyl.o: drdcyl.f
+	$(FC) $(FFLAGS) -c drdcyl.f
+
+drdgeo.o: drdgeo.f
+	$(FC) $(FFLAGS) -c drdgeo.f
+
+drdlat.o: drdlat.f
+	$(FC) $(FFLAGS) -c drdlat.f
+
+drdpgr.o: drdpgr.f
+	$(FC) $(FFLAGS) -c drdpgr.f
+
+drdsph.o: drdsph.f
+	$(FC) $(FFLAGS) -c drdsph.f
+
+drotat.o: drotat.f
+	$(FC) $(FFLAGS) -c drotat.f
+
+dskb02.o: dskb02.f
+	$(FC) $(FFLAGS) -c dskb02.f
+
+dskcls.o: dskcls.f
+	$(FC) $(FFLAGS) -c dskcls.f
+
+dskd02.o: dskd02.f
+	$(FC) $(FFLAGS) -c dskd02.f
+
+dskgd.o: dskgd.f
+	$(FC) $(FFLAGS) -c dskgd.f
+
+dski02.o: dski02.f
+	$(FC) $(FFLAGS) -c dski02.f
+
+dskmi2.o: dskmi2.f
+	$(FC) $(FFLAGS) -c dskmi2.f
+
+dskn02.o: dskn02.f
+	$(FC) $(FFLAGS) -c dskn02.f
+
+dskobj.o: dskobj.f
+	$(FC) $(FFLAGS) -c dskobj.f
+
+dskopn.o: dskopn.f
+	$(FC) $(FFLAGS) -c dskopn.f
+
+dskp02.o: dskp02.f
+	$(FC) $(FFLAGS) -c dskp02.f
+
+dskrb2.o: dskrb2.f
+	$(FC) $(FFLAGS) -c dskrb2.f
+
+dsksrf.o: dsksrf.f
+	$(FC) $(FFLAGS) -c dsksrf.f
+
+dsktol.o: dsktol.f
+	$(FC) $(FFLAGS) -c dsktol.f
+
+dskv02.o: dskv02.f
+	$(FC) $(FFLAGS) -c dskv02.f
+
+dskw02.o: dskw02.f
+	$(FC) $(FFLAGS) -c dskw02.f
+
+dskx02.o: dskx02.f
+	$(FC) $(FFLAGS) -c dskx02.f
+
+dskxsi.o: dskxsi.f
+	$(FC) $(FFLAGS) -c dskxsi.f
+
+dskxv.o: dskxv.f
+	$(FC) $(FFLAGS) -c dskxv.f
+
+dskz02.o: dskz02.f
+	$(FC) $(FFLAGS) -c dskz02.f
+
+dsphdr.o: dsphdr.f
+	$(FC) $(FFLAGS) -c dsphdr.f
+
+ducrss.o: ducrss.f
+	$(FC) $(FFLAGS) -c ducrss.f
+
+dvcrss.o: dvcrss.f
+	$(FC) $(FFLAGS) -c dvcrss.f
+
+dvdot.o: dvdot.f
+	$(FC) $(FFLAGS) -c dvdot.f
+
+dvhat.o: dvhat.f
+	$(FC) $(FFLAGS) -c dvhat.f
+
+dvnorm.o: dvnorm.f
+	$(FC) $(FFLAGS) -c dvnorm.f
+
+dvsep.o: dvsep.f
+	$(FC) $(FFLAGS) -c dvsep.f
+
+dxtrct.o: dxtrct.f
+	$(FC) $(FFLAGS) -c dxtrct.f
+
+edlimb.o: edlimb.f
+	$(FC) $(FFLAGS) -c edlimb.f
+
+ednmpt.o: ednmpt.f
+	$(FC) $(FFLAGS) -c ednmpt.f
+
+edpnt.o: edpnt.f
+	$(FC) $(FFLAGS) -c edpnt.f
+
+edterm.o: edterm.f
+	$(FC) $(FFLAGS) -c edterm.f
+
+ekacec.o: ekacec.f
+	$(FC) $(FFLAGS) -c ekacec.f
+
+ekaced.o: ekaced.f
+	$(FC) $(FFLAGS) -c ekaced.f
+
+ekacei.o: ekacei.f
+	$(FC) $(FFLAGS) -c ekacei.f
+
+ekaclc.o: ekaclc.f
+	$(FC) $(FFLAGS) -c ekaclc.f
+
+ekacld.o: ekacld.f
+	$(FC) $(FFLAGS) -c ekacld.f
+
+ekacli.o: ekacli.f
+	$(FC) $(FFLAGS) -c ekacli.f
+
+ekappr.o: ekappr.f
+	$(FC) $(FFLAGS) -c ekappr.f
+
+ekbseg.o: ekbseg.f
+	$(FC) $(FFLAGS) -c ekbseg.f
+
+ekcls.o: ekcls.f
+	$(FC) $(FFLAGS) -c ekcls.f
+
+ekdelr.o: ekdelr.f
+	$(FC) $(FFLAGS) -c ekdelr.f
+
+ekffld.o: ekffld.f
+	$(FC) $(FFLAGS) -c ekffld.f
+
+ekfind.o: ekfind.f
+	$(FC) $(FFLAGS) -c ekfind.f
+
+ekifld.o: ekifld.f
+	$(FC) $(FFLAGS) -c ekifld.f
+
+ekinsr.o: ekinsr.f
+	$(FC) $(FFLAGS) -c ekinsr.f
+
+eknseg.o: eknseg.f
+	$(FC) $(FFLAGS) -c eknseg.f
+
+ekopn.o: ekopn.f
+	$(FC) $(FFLAGS) -c ekopn.f
+
+ekopr.o: ekopr.f
+	$(FC) $(FFLAGS) -c ekopr.f
+
+ekops.o: ekops.f
+	$(FC) $(FFLAGS) -c ekops.f
+
+ekopw.o: ekopw.f
+	$(FC) $(FFLAGS) -c ekopw.f
+
+ekpsel.o: ekpsel.f
+	$(FC) $(FFLAGS) -c ekpsel.f
+
+ekqmgr.o: ekqmgr.f
+	$(FC) $(FFLAGS) -c ekqmgr.f
+
+ekrcec.o: ekrcec.f
+	$(FC) $(FFLAGS) -c ekrcec.f
+
+ekrced.o: ekrced.f
+	$(FC) $(FFLAGS) -c ekrced.f
+
+ekrcei.o: ekrcei.f
+	$(FC) $(FFLAGS) -c ekrcei.f
+
+ekshdw.o: ekshdw.f
+	$(FC) $(FFLAGS) -c ekshdw.f
+
+ekssum.o: ekssum.f
+	$(FC) $(FFLAGS) -c ekssum.f
+
+ekucec.o: ekucec.f
+	$(FC) $(FFLAGS) -c ekucec.f
+
+ekuced.o: ekuced.f
+	$(FC) $(FFLAGS) -c ekuced.f
+
+ekucei.o: ekucei.f
+	$(FC) $(FFLAGS) -c ekucei.f
+
+el2cgv.o: el2cgv.f
+	$(FC) $(FFLAGS) -c el2cgv.f
+
+elemc.o: elemc.f
+	$(FC) $(FFLAGS) -c elemc.f
+
+elemd.o: elemd.f
+	$(FC) $(FFLAGS) -c elemd.f
+
+elemi.o: elemi.f
+	$(FC) $(FFLAGS) -c elemi.f
+
+elltof.o: elltof.f
+	$(FC) $(FFLAGS) -c elltof.f
+
+enchar.o: enchar.f
+	$(FC) $(FFLAGS) -c enchar.f
+
+eqchr.o: eqchr.f
+	$(FC) $(FFLAGS) -c eqchr.f
+
+eqncpv.o: eqncpv.f
+	$(FC) $(FFLAGS) -c eqncpv.f
+
+eqstr.o: eqstr.f
+	$(FC) $(FFLAGS) -c eqstr.f
+
+erract.o: erract.f
+	$(FC) $(FFLAGS) -c erract.f
+
+errch.o: errch.f
+	$(FC) $(FFLAGS) -c errch.f
+
+errdev.o: errdev.f
+	$(FC) $(FFLAGS) -c errdev.f
+
+errdp.o: errdp.f
+	$(FC) $(FFLAGS) -c errdp.f
+
+errfnm.o: errfnm.f
+	$(FC) $(FFLAGS) -c errfnm.f
+
+errhan.o: errhan.f
+	$(FC) $(FFLAGS) -c errhan.f
+
+errint.o: errint.f
+	$(FC) $(FFLAGS) -c errint.f
+
+errprt.o: errprt.f
+	$(FC) $(FFLAGS) -c errprt.f
+
+esrchc.o: esrchc.f
+	$(FC) $(FFLAGS) -c esrchc.f
+
+et2lst.o: et2lst.f
+	$(FC) $(FFLAGS) -c et2lst.f
+
+et2utc.o: et2utc.f
+	$(FC) $(FFLAGS) -c et2utc.f
+
+etcal.o: etcal.f
+	$(FC) $(FFLAGS) -c etcal.f
+
+eul2m.o: eul2m.f
+	$(FC) $(FFLAGS) -c eul2m.f
+
+ev2lin.o: ev2lin.f
+	$(FC) $(FFLAGS) -c ev2lin.f
+
+even.o: even.f
+	$(FC) $(FFLAGS) -c even.f
+
+exact.o: exact.f
+	$(FC) $(FFLAGS) -c exact.f
+
+excess.o: excess.f
+	$(FC) $(FFLAGS) -c excess.f
+
+exists.o: exists.f
+	$(FC) $(FFLAGS) -c exists.f
+
+expln.o: expln.f
+	$(FC) $(FFLAGS) -c expln.f
+
+fetchc.o: fetchc.f
+	$(FC) $(FFLAGS) -c fetchc.f
+
+fetchd.o: fetchd.f
+	$(FC) $(FFLAGS) -c fetchd.f
+
+fetchi.o: fetchi.f
+	$(FC) $(FFLAGS) -c fetchi.f
+
+fillc.o: fillc.f
+	$(FC) $(FFLAGS) -c fillc.f
+
+filld.o: filld.f
+	$(FC) $(FFLAGS) -c filld.f
+
+filli.o: filli.f
+	$(FC) $(FFLAGS) -c filli.f
+
+fn2lun.o: fn2lun.f
+	$(FC) $(FFLAGS) -c fn2lun.f
+
+fndlun.o: fndlun.f
+	$(FC) $(FFLAGS) -c fndlun.f
+
+fndnwd.o: fndnwd.f
+	$(FC) $(FFLAGS) -c fndnwd.f
+
+fovray.o: fovray.f
+	$(FC) $(FFLAGS) -c fovray.f
+
+fovtrg.o: fovtrg.f
+	$(FC) $(FFLAGS) -c fovtrg.f
+
+frame.o: frame.f
+	$(FC) $(FFLAGS) -c frame.f
+
+framex.o: framex.f
+	$(FC) $(FFLAGS) -c framex.f
+
+frmchg.o: frmchg.f
+	$(FC) $(FFLAGS) -c frmchg.f
+
+frmget.o: frmget.f
+	$(FC) $(FFLAGS) -c frmget.f
+
+frstnb.o: frstnb.f
+	$(FC) $(FFLAGS) -c frstnb.f
+
+frstnp.o: frstnp.f
+	$(FC) $(FFLAGS) -c frstnp.f
+
+frstpc.o: frstpc.f
+	$(FC) $(FFLAGS) -c frstpc.f
+
+gcd.o: gcd.f
+	$(FC) $(FFLAGS) -c gcd.f
+
+georec.o: georec.f
+	$(FC) $(FFLAGS) -c georec.f
+
+getelm.o: getelm.f
+	$(FC) $(FFLAGS) -c getelm.f
+
+getfat.o: getfat.f
+	$(FC) $(FFLAGS) -c getfat.f
+
+getfov.o: getfov.f
+	$(FC) $(FFLAGS) -c getfov.f
+
+getlun.o: getlun.f
+	$(FC) $(FFLAGS) -c getlun.f
+
+getmsg.o: getmsg.f
+	$(FC) $(FFLAGS) -c getmsg.f
+
+gfbail.o: gfbail.f
+	$(FC) $(FFLAGS) -c gfbail.f
+
+gfdist.o: gfdist.f
+	$(FC) $(FFLAGS) -c gfdist.f
+
+gfevnt.o: gfevnt.f
+	$(FC) $(FFLAGS) -c gfevnt.f
+
+gffove.o: gffove.f
+	$(FC) $(FFLAGS) -c gffove.f
+
+gfilum.o: gfilum.f
+	$(FC) $(FFLAGS) -c gfilum.f
+
+gfocce.o: gfocce.f
+	$(FC) $(FFLAGS) -c gfocce.f
+
+gfoclt.o: gfoclt.f
+	$(FC) $(FFLAGS) -c gfoclt.f
+
+gfpa.o: gfpa.f
+	$(FC) $(FFLAGS) -c gfpa.f
+
+gfposc.o: gfposc.f
+	$(FC) $(FFLAGS) -c gfposc.f
+
+gfrefn.o: gfrefn.f
+	$(FC) $(FFLAGS) -c gfrefn.f
+
+gfrfov.o: gfrfov.f
+	$(FC) $(FFLAGS) -c gfrfov.f
+
+gfrprt.o: gfrprt.f
+	$(FC) $(FFLAGS) -c gfrprt.f
+
+gfrr.o: gfrr.f
+	$(FC) $(FFLAGS) -c gfrr.f
+
+gfsep.o: gfsep.f
+	$(FC) $(FFLAGS) -c gfsep.f
+
+gfsntc.o: gfsntc.f
+	$(FC) $(FFLAGS) -c gfsntc.f
+
+gfstep.o: gfstep.f
+	$(FC) $(FFLAGS) -c gfstep.f
+
+gfstol.o: gfstol.f
+	$(FC) $(FFLAGS) -c gfstol.f
+
+gfsubc.o: gfsubc.f
+	$(FC) $(FFLAGS) -c gfsubc.f
+
+gftfov.o: gftfov.f
+	$(FC) $(FFLAGS) -c gftfov.f
+
+gfudb.o: gfudb.f
+	$(FC) $(FFLAGS) -c gfudb.f
+
+gfuds.o: gfuds.f
+	$(FC) $(FFLAGS) -c gfuds.f
+
+halfpi.o: halfpi.f
+	$(FC) $(FFLAGS) -c halfpi.f
+
+hrmesp.o: hrmesp.f
+	$(FC) $(FFLAGS) -c hrmesp.f
+
+hrmint.o: hrmint.f
+	$(FC) $(FFLAGS) -c hrmint.f
+
+hx2dp.o: hx2dp.f
+	$(FC) $(FFLAGS) -c hx2dp.f
+
+hx2int.o: hx2int.f
+	$(FC) $(FFLAGS) -c hx2int.f
+
+hyptof.o: hyptof.f
+	$(FC) $(FFLAGS) -c hyptof.f
+
+ident.o: ident.f
+	$(FC) $(FFLAGS) -c ident.f
+
+idw2at.o: idw2at.f
+	$(FC) $(FFLAGS) -c idw2at.f
+
+illum.o: illum.f
+	$(FC) $(FFLAGS) -c illum.f
+
+illumf.o: illumf.f
+	$(FC) $(FFLAGS) -c illumf.f
+
+illumg.o: illumg.f
+	$(FC) $(FFLAGS) -c illumg.f
+
+ilumin.o: ilumin.f
+	$(FC) $(FFLAGS) -c ilumin.f
+
+incnsg.o: incnsg.f
+	$(FC) $(FFLAGS) -c incnsg.f
+
+inedpl.o: inedpl.f
+	$(FC) $(FFLAGS) -c inedpl.f
+
+inelpl.o: inelpl.f
+	$(FC) $(FFLAGS) -c inelpl.f
+
+inrypl.o: inrypl.f
+	$(FC) $(FFLAGS) -c inrypl.f
+
+insang.o: insang.f
+	$(FC) $(FFLAGS) -c insang.f
+
+inslac.o: inslac.f
+	$(FC) $(FFLAGS) -c inslac.f
+
+inslad.o: inslad.f
+	$(FC) $(FFLAGS) -c inslad.f
+
+inslai.o: inslai.f
+	$(FC) $(FFLAGS) -c inslai.f
+
+insrtc.o: insrtc.f
+	$(FC) $(FFLAGS) -c insrtc.f
+
+insrtd.o: insrtd.f
+	$(FC) $(FFLAGS) -c insrtd.f
+
+insrti.o: insrti.f
+	$(FC) $(FFLAGS) -c insrti.f
+
+inssub.o: inssub.f
+	$(FC) $(FFLAGS) -c inssub.f
+
+int2hx.o: int2hx.f
+	$(FC) $(FFLAGS) -c int2hx.f
+
+interc.o: interc.f
+	$(FC) $(FFLAGS) -c interc.f
+
+interd.o: interd.f
+	$(FC) $(FFLAGS) -c interd.f
+
+interi.o: interi.f
+	$(FC) $(FFLAGS) -c interi.f
+
+intmax.o: intmax.f
+	$(FC) $(FFLAGS) -c intmax.f
+
+intmin.o: intmin.f
+	$(FC) $(FFLAGS) -c intmin.f
+
+intord.o: intord.f
+	$(FC) $(FFLAGS) -c intord.f
+
+intstr.o: intstr.f
+	$(FC) $(FFLAGS) -c intstr.f
+
+inttxt.o: inttxt.f
+	$(FC) $(FFLAGS) -c inttxt.f
+
+invert.o: invert.f
+	$(FC) $(FFLAGS) -c invert.f
+
+invort.o: invort.f
+	$(FC) $(FFLAGS) -c invort.f
+
+invstm.o: invstm.f
+	$(FC) $(FFLAGS) -c invstm.f
+
+ioerr.o: ioerr.f
+	$(FC) $(FFLAGS) -c ioerr.f
+
+irftrn.o: irftrn.f
+	$(FC) $(FFLAGS) -c irftrn.f
+
+iso2utc.o: iso2utc.f
+	$(FC) $(FFLAGS) -c iso2utc.f
+
+isopen.o: isopen.f
+	$(FC) $(FFLAGS) -c isopen.f
+
+isordv.o: isordv.f
+	$(FC) $(FFLAGS) -c isordv.f
+
+isrchc.o: isrchc.f
+	$(FC) $(FFLAGS) -c isrchc.f
+
+isrchd.o: isrchd.f
+	$(FC) $(FFLAGS) -c isrchd.f
+
+isrchi.o: isrchi.f
+	$(FC) $(FFLAGS) -c isrchi.f
+
+isrot.o: isrot.f
+	$(FC) $(FFLAGS) -c isrot.f
+
+j1900.o: j1900.f
+	$(FC) $(FFLAGS) -c j1900.f
+
+j1950.o: j1950.f
+	$(FC) $(FFLAGS) -c j1950.f
+
+j2000.o: j2000.f
+	$(FC) $(FFLAGS) -c j2000.f
+
+j2100.o: j2100.f
+	$(FC) $(FFLAGS) -c j2100.f
+
+jul2gr.o: jul2gr.f
+	$(FC) $(FFLAGS) -c jul2gr.f
+
+jyear.o: jyear.f
+	$(FC) $(FFLAGS) -c jyear.f
+
+keeper.o: keeper.f
+	$(FC) $(FFLAGS) -c keeper.f
+
+kepleq.o: kepleq.f
+	$(FC) $(FFLAGS) -c kepleq.f
+
+kplfrm.o: kplfrm.f
+	$(FC) $(FFLAGS) -c kplfrm.f
+
+kpsolv.o: kpsolv.f
+	$(FC) $(FFLAGS) -c kpsolv.f
+
+kxtrct.o: kxtrct.f
+	$(FC) $(FFLAGS) -c kxtrct.f
+
+lastnb.o: lastnb.f
+	$(FC) $(FFLAGS) -c lastnb.f
+
+lastpc.o: lastpc.f
+	$(FC) $(FFLAGS) -c lastpc.f
+
+latcyl.o: latcyl.f
+	$(FC) $(FFLAGS) -c latcyl.f
+
+latrec.o: latrec.f
+	$(FC) $(FFLAGS) -c latrec.f
+
+latsph.o: latsph.f
+	$(FC) $(FFLAGS) -c latsph.f
+
+latsrf.o: latsrf.f
+	$(FC) $(FFLAGS) -c latsrf.f
+
+lbuild.o: lbuild.f
+	$(FC) $(FFLAGS) -c lbuild.f
+
+lcase.o: lcase.f
+	$(FC) $(FFLAGS) -c lcase.f
+
+lgresp.o: lgresp.f
+	$(FC) $(FFLAGS) -c lgresp.f
+
+lgrind.o: lgrind.f
+	$(FC) $(FFLAGS) -c lgrind.f
+
+lgrint.o: lgrint.f
+	$(FC) $(FFLAGS) -c lgrint.f
+
+limbpt.o: limbpt.f
+	$(FC) $(FFLAGS) -c limbpt.f
+
+ljucrs.o: ljucrs.f
+	$(FC) $(FFLAGS) -c ljucrs.f
+
+ljust.o: ljust.f
+	$(FC) $(FFLAGS) -c ljust.f
+
+lnkan.o: lnkan.f
+	$(FC) $(FFLAGS) -c lnkan.f
+
+lnkfsl.o: lnkfsl.f
+	$(FC) $(FFLAGS) -c lnkfsl.f
+
+lnkhl.o: lnkhl.f
+	$(FC) $(FFLAGS) -c lnkhl.f
+
+lnkila.o: lnkila.f
+	$(FC) $(FFLAGS) -c lnkila.f
+
+lnkilb.o: lnkilb.f
+	$(FC) $(FFLAGS) -c lnkilb.f
+
+lnkini.o: lnkini.f
+	$(FC) $(FFLAGS) -c lnkini.f
+
+lnknfn.o: lnknfn.f
+	$(FC) $(FFLAGS) -c lnknfn.f
+
+lnknxt.o: lnknxt.f
+	$(FC) $(FFLAGS) -c lnknxt.f
+
+lnkprv.o: lnkprv.f
+	$(FC) $(FFLAGS) -c lnkprv.f
+
+lnksiz.o: lnksiz.f
+	$(FC) $(FFLAGS) -c lnksiz.f
+
+lnktl.o: lnktl.f
+	$(FC) $(FFLAGS) -c lnktl.f
+
+lnkxsl.o: lnkxsl.f
+	$(FC) $(FFLAGS) -c lnkxsl.f
+
+locati.o: locati.f
+	$(FC) $(FFLAGS) -c locati.f
+
+locln.o: locln.f
+	$(FC) $(FFLAGS) -c locln.f
+
+lparse.o: lparse.f
+	$(FC) $(FFLAGS) -c lparse.f
+
+lparsm.o: lparsm.f
+	$(FC) $(FFLAGS) -c lparsm.f
+
+lparss.o: lparss.f
+	$(FC) $(FFLAGS) -c lparss.f
+
+lspcn.o: lspcn.f
+	$(FC) $(FFLAGS) -c lspcn.f
+
+lstcld.o: lstcld.f
+	$(FC) $(FFLAGS) -c lstcld.f
+
+lstcli.o: lstcli.f
+	$(FC) $(FFLAGS) -c lstcli.f
+
+lstlec.o: lstlec.f
+	$(FC) $(FFLAGS) -c lstlec.f
+
+lstled.o: lstled.f
+	$(FC) $(FFLAGS) -c lstled.f
+
+lstlei.o: lstlei.f
+	$(FC) $(FFLAGS) -c lstlei.f
+
+lstltc.o: lstltc.f
+	$(FC) $(FFLAGS) -c lstltc.f
+
+lstltd.o: lstltd.f
+	$(FC) $(FFLAGS) -c lstltd.f
+
+lstlti.o: lstlti.f
+	$(FC) $(FFLAGS) -c lstlti.f
+
+ltime.o: ltime.f
+	$(FC) $(FFLAGS) -c ltime.f
+
+ltrim.o: ltrim.f
+	$(FC) $(FFLAGS) -c ltrim.f
+
+lun2fn.o: lun2fn.f
+	$(FC) $(FFLAGS) -c lun2fn.f
+
+lx4dec.o: lx4dec.f
+	$(FC) $(FFLAGS) -c lx4dec.f
+
+lx4num.o: lx4num.f
+	$(FC) $(FFLAGS) -c lx4num.f
+
+lx4sgn.o: lx4sgn.f
+	$(FC) $(FFLAGS) -c lx4sgn.f
+
+lx4uns.o: lx4uns.f
+	$(FC) $(FFLAGS) -c lx4uns.f
+
+lxname.o: lxname.f
+	$(FC) $(FFLAGS) -c lxname.f
+
+lxqstr.o: lxqstr.f
+	$(FC) $(FFLAGS) -c lxqstr.f
+
+m2eul.o: m2eul.f
+	$(FC) $(FFLAGS) -c m2eul.f
+
+m2q.o: m2q.f
+	$(FC) $(FFLAGS) -c m2q.f
+
+matchi.o: matchi.f
+	$(FC) $(FFLAGS) -c matchi.f
+
+matchw.o: matchw.f
+	$(FC) $(FFLAGS) -c matchw.f
+
+maxac.o: maxac.f
+	$(FC) $(FFLAGS) -c maxac.f
+
+maxad.o: maxad.f
+	$(FC) $(FFLAGS) -c maxad.f
+
+maxai.o: maxai.f
+	$(FC) $(FFLAGS) -c maxai.f
+
+mequ.o: mequ.f
+	$(FC) $(FFLAGS) -c mequ.f
+
+mequg.o: mequg.f
+	$(FC) $(FFLAGS) -c mequg.f
+
+minac.o: minac.f
+	$(FC) $(FFLAGS) -c minac.f
+
+minad.o: minad.f
+	$(FC) $(FFLAGS) -c minad.f
+
+minai.o: minai.f
+	$(FC) $(FFLAGS) -c minai.f
+
+movec.o: movec.f
+	$(FC) $(FFLAGS) -c movec.f
+
+moved.o: moved.f
+	$(FC) $(FFLAGS) -c moved.f
+
+movei.o: movei.f
+	$(FC) $(FFLAGS) -c movei.f
+
+mtxm.o: mtxm.f
+	$(FC) $(FFLAGS) -c mtxm.f
+
+mtxmg.o: mtxmg.f
+	$(FC) $(FFLAGS) -c mtxmg.f
+
+mtxv.o: mtxv.f
+	$(FC) $(FFLAGS) -c mtxv.f
+
+mtxvg.o: mtxvg.f
+	$(FC) $(FFLAGS) -c mtxvg.f
+
+mxm.o: mxm.f
+	$(FC) $(FFLAGS) -c mxm.f
+
+mxmg.o: mxmg.f
+	$(FC) $(FFLAGS) -c mxmg.f
+
+mxmt.o: mxmt.f
+	$(FC) $(FFLAGS) -c mxmt.f
+
+mxmtg.o: mxmtg.f
+	$(FC) $(FFLAGS) -c mxmtg.f
+
+mxv.o: mxv.f
+	$(FC) $(FFLAGS) -c mxv.f
+
+mxvg.o: mxvg.f
+	$(FC) $(FFLAGS) -c mxvg.f
+
+nblen.o: nblen.f
+	$(FC) $(FFLAGS) -c nblen.f
+
+nbwid.o: nbwid.f
+	$(FC) $(FFLAGS) -c nbwid.f
+
+ncpos.o: ncpos.f
+	$(FC) $(FFLAGS) -c ncpos.f
+
+ncposr.o: ncposr.f
+	$(FC) $(FFLAGS) -c ncposr.f
+
+nearpt.o: nearpt.f
+	$(FC) $(FFLAGS) -c nearpt.f
+
+nextwd.o: nextwd.f
+	$(FC) $(FFLAGS) -c nextwd.f
+
+notru.o: notru.f
+	$(FC) $(FFLAGS) -c notru.f
+
+nparsd.o: nparsd.f
+	$(FC) $(FFLAGS) -c nparsd.f
+
+nparsi.o: nparsi.f
+	$(FC) $(FFLAGS) -c nparsi.f
+
+npedln.o: npedln.f
+	$(FC) $(FFLAGS) -c npedln.f
+
+npelpt.o: npelpt.f
+	$(FC) $(FFLAGS) -c npelpt.f
+
+nplnpt.o: nplnpt.f
+	$(FC) $(FFLAGS) -c nplnpt.f
+
+npsgpt.o: npsgpt.f
+	$(FC) $(FFLAGS) -c npsgpt.f
+
+nthwd.o: nthwd.f
+	$(FC) $(FFLAGS) -c nthwd.f
+
+nvc2pl.o: nvc2pl.f
+	$(FC) $(FFLAGS) -c nvc2pl.f
+
+nvp2pl.o: nvp2pl.f
+	$(FC) $(FFLAGS) -c nvp2pl.f
+
+occult.o: occult.f
+	$(FC) $(FFLAGS) -c occult.f
+
+odd.o: odd.f
+	$(FC) $(FFLAGS) -c odd.f
+
+opsgnd.o: opsgnd.f
+	$(FC) $(FFLAGS) -c opsgnd.f
+
+opsgni.o: opsgni.f
+	$(FC) $(FFLAGS) -c opsgni.f
+
+ordc.o: ordc.f
+	$(FC) $(FFLAGS) -c ordc.f
+
+ordd.o: ordd.f
+	$(FC) $(FFLAGS) -c ordd.f
+
+orderc.o: orderc.f
+	$(FC) $(FFLAGS) -c orderc.f
+
+orderd.o: orderd.f
+	$(FC) $(FFLAGS) -c orderd.f
+
+orderi.o: orderi.f
+	$(FC) $(FFLAGS) -c orderi.f
+
+ordi.o: ordi.f
+	$(FC) $(FFLAGS) -c ordi.f
+
+oscelt.o: oscelt.f
+	$(FC) $(FFLAGS) -c oscelt.f
+
+oscltx.o: oscltx.f
+	$(FC) $(FFLAGS) -c oscltx.f
+
+outmsg.o: outmsg.f
+	$(FC) $(FFLAGS) -c outmsg.f
+
+packac.o: packac.f
+	$(FC) $(FFLAGS) -c packac.f
+
+packad.o: packad.f
+	$(FC) $(FFLAGS) -c packad.f
+
+packai.o: packai.f
+	$(FC) $(FFLAGS) -c packai.f
+
+parsqs.o: parsqs.f
+	$(FC) $(FFLAGS) -c parsqs.f
+
+partof.o: partof.f
+	$(FC) $(FFLAGS) -c partof.f
+
+pck03a.o: pck03a.f
+	$(FC) $(FFLAGS) -c pck03a.f
+
+pck03b.o: pck03b.f
+	$(FC) $(FFLAGS) -c pck03b.f
+
+pck03e.o: pck03e.f
+	$(FC) $(FFLAGS) -c pck03e.f
+
+pckbsr.o: pckbsr.f
+	$(FC) $(FFLAGS) -c pckbsr.f
+
+pckcls.o: pckcls.f
+	$(FC) $(FFLAGS) -c pckcls.f
+
+pckcov.o: pckcov.f
+	$(FC) $(FFLAGS) -c pckcov.f
+
+pcke02.o: pcke02.f
+	$(FC) $(FFLAGS) -c pcke02.f
+
+pcke03.o: pcke03.f
+	$(FC) $(FFLAGS) -c pcke03.f
+
+pcke20.o: pcke20.f
+	$(FC) $(FFLAGS) -c pcke20.f
+
+pckeul.o: pckeul.f
+	$(FC) $(FFLAGS) -c pckeul.f
+
+pckfrm.o: pckfrm.f
+	$(FC) $(FFLAGS) -c pckfrm.f
+
+pckmat.o: pckmat.f
+	$(FC) $(FFLAGS) -c pckmat.f
+
+pckopn.o: pckopn.f
+	$(FC) $(FFLAGS) -c pckopn.f
+
+pckpds.o: pckpds.f
+	$(FC) $(FFLAGS) -c pckpds.f
+
+pckr02.o: pckr02.f
+	$(FC) $(FFLAGS) -c pckr02.f
+
+pckr03.o: pckr03.f
+	$(FC) $(FFLAGS) -c pckr03.f
+
+pckr20.o: pckr20.f
+	$(FC) $(FFLAGS) -c pckr20.f
+
+pckuds.o: pckuds.f
+	$(FC) $(FFLAGS) -c pckuds.f
+
+pckw02.o: pckw02.f
+	$(FC) $(FFLAGS) -c pckw02.f
+
+pckw20.o: pckw20.f
+	$(FC) $(FFLAGS) -c pckw20.f
+
+pcwid.o: pcwid.f
+	$(FC) $(FFLAGS) -c pcwid.f
+
+pgrrec.o: pgrrec.f
+	$(FC) $(FFLAGS) -c pgrrec.f
+
+phaseq.o: phaseq.f
+	$(FC) $(FFLAGS) -c phaseq.f
+
+pi.o: pi.f
+	$(FC) $(FFLAGS) -c pi.f
+
+pjelpl.o: pjelpl.f
+	$(FC) $(FFLAGS) -c pjelpl.f
+
+pl2nvc.o: pl2nvc.f
+	$(FC) $(FFLAGS) -c pl2nvc.f
+
+pl2nvp.o: pl2nvp.f
+	$(FC) $(FFLAGS) -c pl2nvp.f
+
+pl2psv.o: pl2psv.f
+	$(FC) $(FFLAGS) -c pl2psv.f
+
+plnsns.o: plnsns.f
+	$(FC) $(FFLAGS) -c plnsns.f
+
+pltar.o: pltar.f
+	$(FC) $(FFLAGS) -c pltar.f
+
+pltexp.o: pltexp.f
+	$(FC) $(FFLAGS) -c pltexp.f
+
+pltnp.o: pltnp.f
+	$(FC) $(FFLAGS) -c pltnp.f
+
+pltnrm.o: pltnrm.f
+	$(FC) $(FFLAGS) -c pltnrm.f
+
+pltvol.o: pltvol.f
+	$(FC) $(FFLAGS) -c pltvol.f
+
+polyds.o: polyds.f
+	$(FC) $(FFLAGS) -c polyds.f
+
+pool.o: pool.f
+	$(FC) $(FFLAGS) -c pool.f
+
+pos.o: pos.f
+	$(FC) $(FFLAGS) -c pos.f
+
+posr.o: posr.f
+	$(FC) $(FFLAGS) -c posr.f
+
+prefix.o: prefix.f
+	$(FC) $(FFLAGS) -c prefix.f
+
+prodad.o: prodad.f
+	$(FC) $(FFLAGS) -c prodad.f
+
+prodai.o: prodai.f
+	$(FC) $(FFLAGS) -c prodai.f
+
+prompt.o: prompt.f
+	$(FC) $(FFLAGS) -c prompt.f
+
+prop2b.o: prop2b.f
+	$(FC) $(FFLAGS) -c prop2b.f
+
+prsdp.o: prsdp.f
+	$(FC) $(FFLAGS) -c prsdp.f
+
+prsint.o: prsint.f
+	$(FC) $(FFLAGS) -c prsint.f
+
+prtenc.o: prtenc.f
+	$(FC) $(FFLAGS) -c prtenc.f
+
+prtpkg.o: prtpkg.f
+	$(FC) $(FFLAGS) -c prtpkg.f
+
+psv2pl.o: psv2pl.f
+	$(FC) $(FFLAGS) -c psv2pl.f
+
+putact.o: putact.f
+	$(FC) $(FFLAGS) -c putact.f
+
+putdev.o: putdev.f
+	$(FC) $(FFLAGS) -c putdev.f
+
+putlms.o: putlms.f
+	$(FC) $(FFLAGS) -c putlms.f
+
+putsms.o: putsms.f
+	$(FC) $(FFLAGS) -c putsms.f
+
+pxform.o: pxform.f
+	$(FC) $(FFLAGS) -c pxform.f
+
+pxfrm2.o: pxfrm2.f
+	$(FC) $(FFLAGS) -c pxfrm2.f
+
+q2m.o: q2m.f
+	$(FC) $(FFLAGS) -c q2m.f
+
+qderiv.o: qderiv.f
+	$(FC) $(FFLAGS) -c qderiv.f
+
+qdq2av.o: qdq2av.f
+	$(FC) $(FFLAGS) -c qdq2av.f
+
+quote.o: quote.f
+	$(FC) $(FFLAGS) -c quote.f
+
+qxq.o: qxq.f
+	$(FC) $(FFLAGS) -c qxq.f
+
+radrec.o: radrec.f
+	$(FC) $(FFLAGS) -c radrec.f
+
+rav2xf.o: rav2xf.f
+	$(FC) $(FFLAGS) -c rav2xf.f
+
+raxisa.o: raxisa.f
+	$(FC) $(FFLAGS) -c raxisa.f
+
+rdencc.o: rdencc.f
+	$(FC) $(FFLAGS) -c rdencc.f
+
+rdencd.o: rdencd.f
+	$(FC) $(FFLAGS) -c rdencd.f
+
+rdenci.o: rdenci.f
+	$(FC) $(FFLAGS) -c rdenci.f
+
+rdker.o: rdker.f
+	$(FC) $(FFLAGS) -c rdker.f
+
+rdkvar.o: rdkvar.f
+	$(FC) $(FFLAGS) -c rdkvar.f
+
+rdnbl.o: rdnbl.f
+	$(FC) $(FFLAGS) -c rdnbl.f
+
+rdtext.o: rdtext.f
+	$(FC) $(FFLAGS) -c rdtext.f
+
+readla.o: readla.f
+	$(FC) $(FFLAGS) -c readla.f
+
+readln.o: readln.f
+	$(FC) $(FFLAGS) -c readln.f
+
+reccyl.o: reccyl.f
+	$(FC) $(FFLAGS) -c reccyl.f
+
+recgeo.o: recgeo.f
+	$(FC) $(FFLAGS) -c recgeo.f
+
+reclat.o: reclat.f
+	$(FC) $(FFLAGS) -c reclat.f
+
+recpgr.o: recpgr.f
+	$(FC) $(FFLAGS) -c recpgr.f
+
+recrad.o: recrad.f
+	$(FC) $(FFLAGS) -c recrad.f
+
+recsph.o: recsph.f
+	$(FC) $(FFLAGS) -c recsph.f
+
+refchg.o: refchg.f
+	$(FC) $(FFLAGS) -c refchg.f
+
+remlac.o: remlac.f
+	$(FC) $(FFLAGS) -c remlac.f
+
+remlad.o: remlad.f
+	$(FC) $(FFLAGS) -c remlad.f
+
+remlai.o: remlai.f
+	$(FC) $(FFLAGS) -c remlai.f
+
+removc.o: removc.f
+	$(FC) $(FFLAGS) -c removc.f
+
+removd.o: removd.f
+	$(FC) $(FFLAGS) -c removd.f
+
+removi.o: removi.f
+	$(FC) $(FFLAGS) -c removi.f
+
+remsub.o: remsub.f
+	$(FC) $(FFLAGS) -c remsub.f
+
+reordc.o: reordc.f
+	$(FC) $(FFLAGS) -c reordc.f
+
+reordd.o: reordd.f
+	$(FC) $(FFLAGS) -c reordd.f
+
+reordi.o: reordi.f
+	$(FC) $(FFLAGS) -c reordi.f
+
+reordl.o: reordl.f
+	$(FC) $(FFLAGS) -c reordl.f
+
+replch.o: replch.f
+	$(FC) $(FFLAGS) -c replch.f
+
+replwd.o: replwd.f
+	$(FC) $(FFLAGS) -c replwd.f
+
+repmc.o: repmc.f
+	$(FC) $(FFLAGS) -c repmc.f
+
+repmct.o: repmct.f
+	$(FC) $(FFLAGS) -c repmct.f
+
+repmd.o: repmd.f
+	$(FC) $(FFLAGS) -c repmd.f
+
+repmf.o: repmf.f
+	$(FC) $(FFLAGS) -c repmf.f
+
+repmi.o: repmi.f
+	$(FC) $(FFLAGS) -c repmi.f
+
+repmot.o: repmot.f
+	$(FC) $(FFLAGS) -c repmot.f
+
+repsub.o: repsub.f
+	$(FC) $(FFLAGS) -c repsub.f
+
+reset.o: reset.f
+	$(FC) $(FFLAGS) -c reset.f
+
+return.o: return.f
+	$(FC) $(FFLAGS) -c return.f
+
+rjust.o: rjust.f
+	$(FC) $(FFLAGS) -c rjust.f
+
+rmaind.o: rmaind.f
+	$(FC) $(FFLAGS) -c rmaind.f
+
+rmaini.o: rmaini.f
+	$(FC) $(FFLAGS) -c rmaini.f
+
+rmdupc.o: rmdupc.f
+	$(FC) $(FFLAGS) -c rmdupc.f
+
+rmdupd.o: rmdupd.f
+	$(FC) $(FFLAGS) -c rmdupd.f
+
+rmdupi.o: rmdupi.f
+	$(FC) $(FFLAGS) -c rmdupi.f
+
+rotate.o: rotate.f
+	$(FC) $(FFLAGS) -c rotate.f
+
+rotget.o: rotget.f
+	$(FC) $(FFLAGS) -c rotget.f
+
+rotmat.o: rotmat.f
+	$(FC) $(FFLAGS) -c rotmat.f
+
+rotvec.o: rotvec.f
+	$(FC) $(FFLAGS) -c rotvec.f
+
+rpd.o: rpd.f
+	$(FC) $(FFLAGS) -c rpd.f
+
+rquad.o: rquad.f
+	$(FC) $(FFLAGS) -c rquad.f
+
+rtrim.o: rtrim.f
+	$(FC) $(FFLAGS) -c rtrim.f
+
+saelgv.o: saelgv.f
+	$(FC) $(FFLAGS) -c saelgv.f
+
+samch.o: samch.f
+	$(FC) $(FFLAGS) -c samch.f
+
+samchi.o: samchi.f
+	$(FC) $(FFLAGS) -c samchi.f
+
+sameai.o: sameai.f
+	$(FC) $(FFLAGS) -c sameai.f
+
+samsbi.o: samsbi.f
+	$(FC) $(FFLAGS) -c samsbi.f
+
+samsub.o: samsub.f
+	$(FC) $(FFLAGS) -c samsub.f
+
+sc01.o: sc01.f
+	$(FC) $(FFLAGS) -c sc01.f
+
+scanit.o: scanit.f
+	$(FC) $(FFLAGS) -c scanit.f
+
+scanrj.o: scanrj.f
+	$(FC) $(FFLAGS) -c scanrj.f
+
+scardc.o: scardc.f
+	$(FC) $(FFLAGS) -c scardc.f
+
+scardd.o: scardd.f
+	$(FC) $(FFLAGS) -c scardd.f
+
+scardi.o: scardi.f
+	$(FC) $(FFLAGS) -c scardi.f
+
+scdecd.o: scdecd.f
+	$(FC) $(FFLAGS) -c scdecd.f
+
+sce2c.o: sce2c.f
+	$(FC) $(FFLAGS) -c sce2c.f
+
+sce2s.o: sce2s.f
+	$(FC) $(FFLAGS) -c sce2s.f
+
+sce2t.o: sce2t.f
+	$(FC) $(FFLAGS) -c sce2t.f
+
+scencd.o: scencd.f
+	$(FC) $(FFLAGS) -c scencd.f
+
+scfmt.o: scfmt.f
+	$(FC) $(FFLAGS) -c scfmt.f
+
+sclu01.o: sclu01.f
+	$(FC) $(FFLAGS) -c sclu01.f
+
+scpars.o: scpars.f
+	$(FC) $(FFLAGS) -c scpars.f
+
+scpart.o: scpart.f
+	$(FC) $(FFLAGS) -c scpart.f
+
+scps01.o: scps01.f
+	$(FC) $(FFLAGS) -c scps01.f
+
+scs2e.o: scs2e.f
+	$(FC) $(FFLAGS) -c scs2e.f
+
+sct2e.o: sct2e.f
+	$(FC) $(FFLAGS) -c sct2e.f
+
+sctiks.o: sctiks.f
+	$(FC) $(FFLAGS) -c sctiks.f
+
+sctran.o: sctran.f
+	$(FC) $(FFLAGS) -c sctran.f
+
+sctype.o: sctype.f
+	$(FC) $(FFLAGS) -c sctype.f
+
+sdiffc.o: sdiffc.f
+	$(FC) $(FFLAGS) -c sdiffc.f
+
+sdiffd.o: sdiffd.f
+	$(FC) $(FFLAGS) -c sdiffd.f
+
+sdiffi.o: sdiffi.f
+	$(FC) $(FFLAGS) -c sdiffi.f
+
+sepool.o: sepool.f
+	$(FC) $(FFLAGS) -c sepool.f
+
+setc.o: setc.f
+	$(FC) $(FFLAGS) -c setc.f
+
+setd.o: setd.f
+	$(FC) $(FFLAGS) -c setd.f
+
+seterr.o: seterr.f
+	$(FC) $(FFLAGS) -c seterr.f
+
+seti.o: seti.f
+	$(FC) $(FFLAGS) -c seti.f
+
+setmsg.o: setmsg.f
+	$(FC) $(FFLAGS) -c setmsg.f
+
+sgfcon.o: sgfcon.f
+	$(FC) $(FFLAGS) -c sgfcon.f
+
+sgfpkt.o: sgfpkt.f
+	$(FC) $(FFLAGS) -c sgfpkt.f
+
+sgfref.o: sgfref.f
+	$(FC) $(FFLAGS) -c sgfref.f
+
+sgfrvi.o: sgfrvi.f
+	$(FC) $(FFLAGS) -c sgfrvi.f
+
+sgmeta.o: sgmeta.f
+	$(FC) $(FFLAGS) -c sgmeta.f
+
+sgseqw.o: sgseqw.f
+	$(FC) $(FFLAGS) -c sgseqw.f
+
+sharpr.o: sharpr.f
+	$(FC) $(FFLAGS) -c sharpr.f
+
+shellc.o: shellc.f
+	$(FC) $(FFLAGS) -c shellc.f
+
+shelld.o: shelld.f
+	$(FC) $(FFLAGS) -c shelld.f
+
+shelli.o: shelli.f
+	$(FC) $(FFLAGS) -c shelli.f
+
+shiftc.o: shiftc.f
+	$(FC) $(FFLAGS) -c shiftc.f
+
+shiftl.o: shiftl.f
+	$(FC) $(FFLAGS) -c shiftl.f
+
+shiftr.o: shiftr.f
+	$(FC) $(FFLAGS) -c shiftr.f
+
+sigdgt.o: sigdgt.f
+	$(FC) $(FFLAGS) -c sigdgt.f
+
+sigerr.o: sigerr.f
+	$(FC) $(FFLAGS) -c sigerr.f
+
+sincpt.o: sincpt.f
+	$(FC) $(FFLAGS) -c sincpt.f
+
+sizec.o: sizec.f
+	$(FC) $(FFLAGS) -c sizec.f
+
+sized.o: sized.f
+	$(FC) $(FFLAGS) -c sized.f
+
+sizei.o: sizei.f
+	$(FC) $(FFLAGS) -c sizei.f
+
+smsgnd.o: smsgnd.f
+	$(FC) $(FFLAGS) -c smsgnd.f
+
+smsgni.o: smsgni.f
+	$(FC) $(FFLAGS) -c smsgni.f
+
+somfls.o: somfls.f
+	$(FC) $(FFLAGS) -c somfls.f
+
+somtru.o: somtru.f
+	$(FC) $(FFLAGS) -c somtru.f
+
+spca2b.o: spca2b.f
+	$(FC) $(FFLAGS) -c spca2b.f
+
+spcac.o: spcac.f
+	$(FC) $(FFLAGS) -c spcac.f
+
+spcb2a.o: spcb2a.f
+	$(FC) $(FFLAGS) -c spcb2a.f
+
+spcb2t.o: spcb2t.f
+	$(FC) $(FFLAGS) -c spcb2t.f
+
+spcdc.o: spcdc.f
+	$(FC) $(FFLAGS) -c spcdc.f
+
+spcec.o: spcec.f
+	$(FC) $(FFLAGS) -c spcec.f
+
+spcopn.o: spcopn.f
+	$(FC) $(FFLAGS) -c spcopn.f
+
+spcrfl.o: spcrfl.f
+	$(FC) $(FFLAGS) -c spcrfl.f
+
+spct2b.o: spct2b.f
+	$(FC) $(FFLAGS) -c spct2b.f
+
+spd.o: spd.f
+	$(FC) $(FFLAGS) -c spd.f
+
+sphcyl.o: sphcyl.f
+	$(FC) $(FFLAGS) -c sphcyl.f
+
+sphlat.o: sphlat.f
+	$(FC) $(FFLAGS) -c sphlat.f
+
+sphrec.o: sphrec.f
+	$(FC) $(FFLAGS) -c sphrec.f
+
+sphsd.o: sphsd.f
+	$(FC) $(FFLAGS) -c sphsd.f
+
+spk14a.o: spk14a.f
+	$(FC) $(FFLAGS) -c spk14a.f
+
+spk14b.o: spk14b.f
+	$(FC) $(FFLAGS) -c spk14b.f
+
+spk14e.o: spk14e.f
+	$(FC) $(FFLAGS) -c spk14e.f
+
+spkacs.o: spkacs.f
+	$(FC) $(FFLAGS) -c spkacs.f
+
+spkapo.o: spkapo.f
+	$(FC) $(FFLAGS) -c spkapo.f
+
+spkapp.o: spkapp.f
+	$(FC) $(FFLAGS) -c spkapp.f
+
+spkaps.o: spkaps.f
+	$(FC) $(FFLAGS) -c spkaps.f
+
+spkbsr.o: spkbsr.f
+	$(FC) $(FFLAGS) -c spkbsr.f
+
+spkcls.o: spkcls.f
+	$(FC) $(FFLAGS) -c spkcls.f
+
+spkcov.o: spkcov.f
+	$(FC) $(FFLAGS) -c spkcov.f
+
+spkcpo.o: spkcpo.f
+	$(FC) $(FFLAGS) -c spkcpo.f
+
+spkcpt.o: spkcpt.f
+	$(FC) $(FFLAGS) -c spkcpt.f
+
+spkcvo.o: spkcvo.f
+	$(FC) $(FFLAGS) -c spkcvo.f
+
+spkcvt.o: spkcvt.f
+	$(FC) $(FFLAGS) -c spkcvt.f
+
+spke01.o: spke01.f
+	$(FC) $(FFLAGS) -c spke01.f
+
+spke02.o: spke02.f
+	$(FC) $(FFLAGS) -c spke02.f
+
+spke03.o: spke03.f
+	$(FC) $(FFLAGS) -c spke03.f
+
+spke05.o: spke05.f
+	$(FC) $(FFLAGS) -c spke05.f
+
+spke08.o: spke08.f
+	$(FC) $(FFLAGS) -c spke08.f
+
+spke09.o: spke09.f
+	$(FC) $(FFLAGS) -c spke09.f
+
+spke10.o: spke10.f
+	$(FC) $(FFLAGS) -c spke10.f
+
+spke12.o: spke12.f
+	$(FC) $(FFLAGS) -c spke12.f
+
+spke13.o: spke13.f
+	$(FC) $(FFLAGS) -c spke13.f
+
+spke14.o: spke14.f
+	$(FC) $(FFLAGS) -c spke14.f
+
+spke15.o: spke15.f
+	$(FC) $(FFLAGS) -c spke15.f
+
+spke17.o: spke17.f
+	$(FC) $(FFLAGS) -c spke17.f
+
+spke18.o: spke18.f
+	$(FC) $(FFLAGS) -c spke18.f
+
+spke19.o: spke19.f
+	$(FC) $(FFLAGS) -c spke19.f
+
+spke20.o: spke20.f
+	$(FC) $(FFLAGS) -c spke20.f
+
+spke21.o: spke21.f
+	$(FC) $(FFLAGS) -c spke21.f
+
+spkez.o: spkez.f
+	$(FC) $(FFLAGS) -c spkez.f
+
+spkezp.o: spkezp.f
+	$(FC) $(FFLAGS) -c spkezp.f
+
+spkezr.o: spkezr.f
+	$(FC) $(FFLAGS) -c spkezr.f
+
+spkgeo.o: spkgeo.f
+	$(FC) $(FFLAGS) -c spkgeo.f
+
+spkgps.o: spkgps.f
+	$(FC) $(FFLAGS) -c spkgps.f
+
+spkltc.o: spkltc.f
+	$(FC) $(FFLAGS) -c spkltc.f
+
+spkobj.o: spkobj.f
+	$(FC) $(FFLAGS) -c spkobj.f
+
+spkopa.o: spkopa.f
+	$(FC) $(FFLAGS) -c spkopa.f
+
+spkopn.o: spkopn.f
+	$(FC) $(FFLAGS) -c spkopn.f
+
+spkpds.o: spkpds.f
+	$(FC) $(FFLAGS) -c spkpds.f
+
+spkpos.o: spkpos.f
+	$(FC) $(FFLAGS) -c spkpos.f
+
+spkpv.o: spkpv.f
+	$(FC) $(FFLAGS) -c spkpv.f
+
+spkpvn.o: spkpvn.f
+	$(FC) $(FFLAGS) -c spkpvn.f
+
+spkr01.o: spkr01.f
+	$(FC) $(FFLAGS) -c spkr01.f
+
+spkr02.o: spkr02.f
+	$(FC) $(FFLAGS) -c spkr02.f
+
+spkr03.o: spkr03.f
+	$(FC) $(FFLAGS) -c spkr03.f
+
+spkr05.o: spkr05.f
+	$(FC) $(FFLAGS) -c spkr05.f
+
+spkr08.o: spkr08.f
+	$(FC) $(FFLAGS) -c spkr08.f
+
+spkr09.o: spkr09.f
+	$(FC) $(FFLAGS) -c spkr09.f
+
+spkr10.o: spkr10.f
+	$(FC) $(FFLAGS) -c spkr10.f
+
+spkr12.o: spkr12.f
+	$(FC) $(FFLAGS) -c spkr12.f
+
+spkr13.o: spkr13.f
+	$(FC) $(FFLAGS) -c spkr13.f
+
+spkr14.o: spkr14.f
+	$(FC) $(FFLAGS) -c spkr14.f
+
+spkr15.o: spkr15.f
+	$(FC) $(FFLAGS) -c spkr15.f
+
+spkr17.o: spkr17.f
+	$(FC) $(FFLAGS) -c spkr17.f
+
+spkr18.o: spkr18.f
+	$(FC) $(FFLAGS) -c spkr18.f
+
+spkr19.o: spkr19.f
+	$(FC) $(FFLAGS) -c spkr19.f
+
+spkr20.o: spkr20.f
+	$(FC) $(FFLAGS) -c spkr20.f
+
+spkr21.o: spkr21.f
+	$(FC) $(FFLAGS) -c spkr21.f
+
+spks01.o: spks01.f
+	$(FC) $(FFLAGS) -c spks01.f
+
+spks02.o: spks02.f
+	$(FC) $(FFLAGS) -c spks02.f
+
+spks03.o: spks03.f
+	$(FC) $(FFLAGS) -c spks03.f
+
+spks05.o: spks05.f
+	$(FC) $(FFLAGS) -c spks05.f
+
+spks08.o: spks08.f
+	$(FC) $(FFLAGS) -c spks08.f
+
+spks09.o: spks09.f
+	$(FC) $(FFLAGS) -c spks09.f
+
+spks10.o: spks10.f
+	$(FC) $(FFLAGS) -c spks10.f
+
+spks12.o: spks12.f
+	$(FC) $(FFLAGS) -c spks12.f
+
+spks13.o: spks13.f
+	$(FC) $(FFLAGS) -c spks13.f
+
+spks14.o: spks14.f
+	$(FC) $(FFLAGS) -c spks14.f
+
+spks15.o: spks15.f
+	$(FC) $(FFLAGS) -c spks15.f
+
+spks17.o: spks17.f
+	$(FC) $(FFLAGS) -c spks17.f
+
+spks18.o: spks18.f
+	$(FC) $(FFLAGS) -c spks18.f
+
+spks19.o: spks19.f
+	$(FC) $(FFLAGS) -c spks19.f
+
+spks20.o: spks20.f
+	$(FC) $(FFLAGS) -c spks20.f
+
+spks21.o: spks21.f
+	$(FC) $(FFLAGS) -c spks21.f
+
+spkssb.o: spkssb.f
+	$(FC) $(FFLAGS) -c spkssb.f
+
+spksub.o: spksub.f
+	$(FC) $(FFLAGS) -c spksub.f
+
+spkuds.o: spkuds.f
+	$(FC) $(FFLAGS) -c spkuds.f
+
+spkw01.o: spkw01.f
+	$(FC) $(FFLAGS) -c spkw01.f
+
+spkw02.o: spkw02.f
+	$(FC) $(FFLAGS) -c spkw02.f
+
+spkw03.o: spkw03.f
+	$(FC) $(FFLAGS) -c spkw03.f
+
+spkw05.o: spkw05.f
+	$(FC) $(FFLAGS) -c spkw05.f
+
+spkw08.o: spkw08.f
+	$(FC) $(FFLAGS) -c spkw08.f
+
+spkw09.o: spkw09.f
+	$(FC) $(FFLAGS) -c spkw09.f
+
+spkw10.o: spkw10.f
+	$(FC) $(FFLAGS) -c spkw10.f
+
+spkw12.o: spkw12.f
+	$(FC) $(FFLAGS) -c spkw12.f
+
+spkw13.o: spkw13.f
+	$(FC) $(FFLAGS) -c spkw13.f
+
+spkw15.o: spkw15.f
+	$(FC) $(FFLAGS) -c spkw15.f
+
+spkw17.o: spkw17.f
+	$(FC) $(FFLAGS) -c spkw17.f
+
+spkw18.o: spkw18.f
+	$(FC) $(FFLAGS) -c spkw18.f
+
+spkw19.o: spkw19.f
+	$(FC) $(FFLAGS) -c spkw19.f
+
+spkw20.o: spkw20.f
+	$(FC) $(FFLAGS) -c spkw20.f
+
+spkw21.o: spkw21.f
+	$(FC) $(FFLAGS) -c spkw21.f
+
+srfc2s.o: srfc2s.f
+	$(FC) $(FFLAGS) -c srfc2s.f
+
+srfcss.o: srfcss.f
+	$(FC) $(FFLAGS) -c srfcss.f
+
+srfnrm.o: srfnrm.f
+	$(FC) $(FFLAGS) -c srfnrm.f
+
+srfrec.o: srfrec.f
+	$(FC) $(FFLAGS) -c srfrec.f
+
+srfs2c.o: srfs2c.f
+	$(FC) $(FFLAGS) -c srfs2c.f
+
+srfscc.o: srfscc.f
+	$(FC) $(FFLAGS) -c srfscc.f
+
+srfxpt.o: srfxpt.f
+	$(FC) $(FFLAGS) -c srfxpt.f
+
+ssizec.o: ssizec.f
+	$(FC) $(FFLAGS) -c ssizec.f
+
+ssized.o: ssized.f
+	$(FC) $(FFLAGS) -c ssized.f
+
+ssizei.o: ssizei.f
+	$(FC) $(FFLAGS) -c ssizei.f
+
+stcc01.o: stcc01.f
+	$(FC) $(FFLAGS) -c stcc01.f
+
+stcf01.o: stcf01.f
+	$(FC) $(FFLAGS) -c stcf01.f
+
+stcg01.o: stcg01.f
+	$(FC) $(FFLAGS) -c stcg01.f
+
+stcl01.o: stcl01.f
+	$(FC) $(FFLAGS) -c stcl01.f
+
+stdio.o: stdio.f
+	$(FC) $(FFLAGS) -c stdio.f
+
+stelab.o: stelab.f
+	$(FC) $(FFLAGS) -c stelab.f
+
+stlabx.o: stlabx.f
+	$(FC) $(FFLAGS) -c stlabx.f
+
+stmp03.o: stmp03.f
+	$(FC) $(FFLAGS) -c stmp03.f
+
+stpool.o: stpool.f
+	$(FC) $(FFLAGS) -c stpool.f
+
+str2et.o: str2et.f
+	$(FC) $(FFLAGS) -c str2et.f
+
+subpnt.o: subpnt.f
+	$(FC) $(FFLAGS) -c subpnt.f
+
+subpt.o: subpt.f
+	$(FC) $(FFLAGS) -c subpt.f
+
+subslr.o: subslr.f
+	$(FC) $(FFLAGS) -c subslr.f
+
+subsol.o: subsol.f
+	$(FC) $(FFLAGS) -c subsol.f
+
+suffix.o: suffix.f
+	$(FC) $(FFLAGS) -c suffix.f
+
+sumad.o: sumad.f
+	$(FC) $(FFLAGS) -c sumad.f
+
+sumai.o: sumai.f
+	$(FC) $(FFLAGS) -c sumai.f
+
+surfnm.o: surfnm.f
+	$(FC) $(FFLAGS) -c surfnm.f
+
+surfpt.o: surfpt.f
+	$(FC) $(FFLAGS) -c surfpt.f
+
+surfpv.o: surfpv.f
+	$(FC) $(FFLAGS) -c surfpv.f
+
+swapac.o: swapac.f
+	$(FC) $(FFLAGS) -c swapac.f
+
+swapad.o: swapad.f
+	$(FC) $(FFLAGS) -c swapad.f
+
+swapai.o: swapai.f
+	$(FC) $(FFLAGS) -c swapai.f
+
+swapc.o: swapc.f
+	$(FC) $(FFLAGS) -c swapc.f
+
+swapd.o: swapd.f
+	$(FC) $(FFLAGS) -c swapd.f
+
+swapi.o: swapi.f
+	$(FC) $(FFLAGS) -c swapi.f
+
+sxform.o: sxform.f
+	$(FC) $(FFLAGS) -c sxform.f
+
+sydelc.o: sydelc.f
+	$(FC) $(FFLAGS) -c sydelc.f
+
+sydeld.o: sydeld.f
+	$(FC) $(FFLAGS) -c sydeld.f
+
+sydeli.o: sydeli.f
+	$(FC) $(FFLAGS) -c sydeli.f
+
+sydimc.o: sydimc.f
+	$(FC) $(FFLAGS) -c sydimc.f
+
+sydimd.o: sydimd.f
+	$(FC) $(FFLAGS) -c sydimd.f
+
+sydimi.o: sydimi.f
+	$(FC) $(FFLAGS) -c sydimi.f
+
+sydupc.o: sydupc.f
+	$(FC) $(FFLAGS) -c sydupc.f
+
+sydupd.o: sydupd.f
+	$(FC) $(FFLAGS) -c sydupd.f
+
+sydupi.o: sydupi.f
+	$(FC) $(FFLAGS) -c sydupi.f
+
+syenqc.o: syenqc.f
+	$(FC) $(FFLAGS) -c syenqc.f
+
+syenqd.o: syenqd.f
+	$(FC) $(FFLAGS) -c syenqd.f
+
+syenqi.o: syenqi.f
+	$(FC) $(FFLAGS) -c syenqi.f
+
+syfetc.o: syfetc.f
+	$(FC) $(FFLAGS) -c syfetc.f
+
+syfetd.o: syfetd.f
+	$(FC) $(FFLAGS) -c syfetd.f
+
+syfeti.o: syfeti.f
+	$(FC) $(FFLAGS) -c syfeti.f
+
+sygetc.o: sygetc.f
+	$(FC) $(FFLAGS) -c sygetc.f
+
+sygetd.o: sygetd.f
+	$(FC) $(FFLAGS) -c sygetd.f
+
+sygeti.o: sygeti.f
+	$(FC) $(FFLAGS) -c sygeti.f
+
+synthc.o: synthc.f
+	$(FC) $(FFLAGS) -c synthc.f
+
+synthd.o: synthd.f
+	$(FC) $(FFLAGS) -c synthd.f
+
+synthi.o: synthi.f
+	$(FC) $(FFLAGS) -c synthi.f
+
+syordc.o: syordc.f
+	$(FC) $(FFLAGS) -c syordc.f
+
+syordd.o: syordd.f
+	$(FC) $(FFLAGS) -c syordd.f
+
+syordi.o: syordi.f
+	$(FC) $(FFLAGS) -c syordi.f
+
+sypopc.o: sypopc.f
+	$(FC) $(FFLAGS) -c sypopc.f
+
+sypopd.o: sypopd.f
+	$(FC) $(FFLAGS) -c sypopd.f
+
+sypopi.o: sypopi.f
+	$(FC) $(FFLAGS) -c sypopi.f
+
+sypshc.o: sypshc.f
+	$(FC) $(FFLAGS) -c sypshc.f
+
+sypshd.o: sypshd.f
+	$(FC) $(FFLAGS) -c sypshd.f
+
+sypshi.o: sypshi.f
+	$(FC) $(FFLAGS) -c sypshi.f
+
+syputc.o: syputc.f
+	$(FC) $(FFLAGS) -c syputc.f
+
+syputd.o: syputd.f
+	$(FC) $(FFLAGS) -c syputd.f
+
+syputi.o: syputi.f
+	$(FC) $(FFLAGS) -c syputi.f
+
+syrenc.o: syrenc.f
+	$(FC) $(FFLAGS) -c syrenc.f
+
+syrend.o: syrend.f
+	$(FC) $(FFLAGS) -c syrend.f
+
+syreni.o: syreni.f
+	$(FC) $(FFLAGS) -c syreni.f
+
+syselc.o: syselc.f
+	$(FC) $(FFLAGS) -c syselc.f
+
+syseld.o: syseld.f
+	$(FC) $(FFLAGS) -c syseld.f
+
+syseli.o: syseli.f
+	$(FC) $(FFLAGS) -c syseli.f
+
+sysetc.o: sysetc.f
+	$(FC) $(FFLAGS) -c sysetc.f
+
+sysetd.o: sysetd.f
+	$(FC) $(FFLAGS) -c sysetd.f
+
+syseti.o: syseti.f
+	$(FC) $(FFLAGS) -c syseti.f
+
+sytrnc.o: sytrnc.f
+	$(FC) $(FFLAGS) -c sytrnc.f
+
+sytrnd.o: sytrnd.f
+	$(FC) $(FFLAGS) -c sytrnd.f
+
+sytrni.o: sytrni.f
+	$(FC) $(FFLAGS) -c sytrni.f
+
+tcheck.o: tcheck.f
+	$(FC) $(FFLAGS) -c tcheck.f
+
+termpt.o: termpt.f
+	$(FC) $(FFLAGS) -c termpt.f
+
+texpyr.o: texpyr.f
+	$(FC) $(FFLAGS) -c texpyr.f
+
+timdef.o: timdef.f
+	$(FC) $(FFLAGS) -c timdef.f
+
+timout.o: timout.f
+	$(FC) $(FFLAGS) -c timout.f
+
+tipbod.o: tipbod.f
+	$(FC) $(FFLAGS) -c tipbod.f
+
+tisbod.o: tisbod.f
+	$(FC) $(FFLAGS) -c tisbod.f
+
+tkfram.o: tkfram.f
+	$(FC) $(FFLAGS) -c tkfram.f
+
+tkvrsn.o: tkvrsn.f
+	$(FC) $(FFLAGS) -c tkvrsn.f
+
+tostdo.o: tostdo.f
+	$(FC) $(FFLAGS) -c tostdo.f
+
+touchc.o: touchc.f
+	$(FC) $(FFLAGS) -c touchc.f
+
+touchd.o: touchd.f
+	$(FC) $(FFLAGS) -c touchd.f
+
+touchi.o: touchi.f
+	$(FC) $(FFLAGS) -c touchi.f
+
+touchl.o: touchl.f
+	$(FC) $(FFLAGS) -c touchl.f
+
+tparse.o: tparse.f
+	$(FC) $(FFLAGS) -c tparse.f
+
+tpartv.o: tpartv.f
+	$(FC) $(FFLAGS) -c tpartv.f
+
+tpictr.o: tpictr.f
+	$(FC) $(FFLAGS) -c tpictr.f
+
+trace.o: trace.f
+	$(FC) $(FFLAGS) -c trace.f
+
+traceg.o: traceg.f
+	$(FC) $(FFLAGS) -c traceg.f
+
+trcpkg.o: trcpkg.f
+	$(FC) $(FFLAGS) -c trcpkg.f
+
+ttrans.o: ttrans.f
+	$(FC) $(FFLAGS) -c ttrans.f
+
+twopi.o: twopi.f
+	$(FC) $(FFLAGS) -c twopi.f
+
+twovec.o: twovec.f
+	$(FC) $(FFLAGS) -c twovec.f
+
+twovxf.o: twovxf.f
+	$(FC) $(FFLAGS) -c twovxf.f
+
+txtopn.o: txtopn.f
+	$(FC) $(FFLAGS) -c txtopn.f
+
+txtopr.o: txtopr.f
+	$(FC) $(FFLAGS) -c txtopr.f
+
+tyear.o: tyear.f
+	$(FC) $(FFLAGS) -c tyear.f
+
+ucase.o: ucase.f
+	$(FC) $(FFLAGS) -c ucase.f
+
+ucrss.o: ucrss.f
+	$(FC) $(FFLAGS) -c ucrss.f
+
+uddc.o: uddc.f
+	$(FC) $(FFLAGS) -c uddc.f
+
+uddf.o: uddf.f
+	$(FC) $(FFLAGS) -c uddf.f
+
+udf.o: udf.f
+	$(FC) $(FFLAGS) -c udf.f
+
+unionc.o: unionc.f
+	$(FC) $(FFLAGS) -c unionc.f
+
+uniond.o: uniond.f
+	$(FC) $(FFLAGS) -c uniond.f
+
+unioni.o: unioni.f
+	$(FC) $(FFLAGS) -c unioni.f
+
+unitim.o: unitim.f
+	$(FC) $(FFLAGS) -c unitim.f
+
+unorm.o: unorm.f
+	$(FC) $(FFLAGS) -c unorm.f
+
+unormg.o: unormg.f
+	$(FC) $(FFLAGS) -c unormg.f
+
+utc2et.o: utc2et.f
+	$(FC) $(FFLAGS) -c utc2et.f
+
+vadd.o: vadd.f
+	$(FC) $(FFLAGS) -c vadd.f
+
+vaddg.o: vaddg.f
+	$(FC) $(FFLAGS) -c vaddg.f
+
+validc.o: validc.f
+	$(FC) $(FFLAGS) -c validc.f
+
+validd.o: validd.f
+	$(FC) $(FFLAGS) -c validd.f
+
+validi.o: validi.f
+	$(FC) $(FFLAGS) -c validi.f
+
+vcrss.o: vcrss.f
+	$(FC) $(FFLAGS) -c vcrss.f
+
+vdist.o: vdist.f
+	$(FC) $(FFLAGS) -c vdist.f
+
+vdistg.o: vdistg.f
+	$(FC) $(FFLAGS) -c vdistg.f
+
+vdot.o: vdot.f
+	$(FC) $(FFLAGS) -c vdot.f
+
+vdotg.o: vdotg.f
+	$(FC) $(FFLAGS) -c vdotg.f
+
+vequ.o: vequ.f
+	$(FC) $(FFLAGS) -c vequ.f
+
+vequg.o: vequg.f
+	$(FC) $(FFLAGS) -c vequg.f
+
+vhat.o: vhat.f
+	$(FC) $(FFLAGS) -c vhat.f
+
+vhatg.o: vhatg.f
+	$(FC) $(FFLAGS) -c vhatg.f
+
+vhatip.o: vhatip.f
+	$(FC) $(FFLAGS) -c vhatip.f
+
+vlcom3.o: vlcom3.f
+	$(FC) $(FFLAGS) -c vlcom3.f
+
+vlcom.o: vlcom.f
+	$(FC) $(FFLAGS) -c vlcom.f
+
+vlcomg.o: vlcomg.f
+	$(FC) $(FFLAGS) -c vlcomg.f
+
+vminug.o: vminug.f
+	$(FC) $(FFLAGS) -c vminug.f
+
+vminus.o: vminus.f
+	$(FC) $(FFLAGS) -c vminus.f
+
+vnorm.o: vnorm.f
+	$(FC) $(FFLAGS) -c vnorm.f
+
+vnormg.o: vnormg.f
+	$(FC) $(FFLAGS) -c vnormg.f
+
+vpack.o: vpack.f
+	$(FC) $(FFLAGS) -c vpack.f
+
+vperp.o: vperp.f
+	$(FC) $(FFLAGS) -c vperp.f
+
+vprjp.o: vprjp.f
+	$(FC) $(FFLAGS) -c vprjp.f
+
+vprjpi.o: vprjpi.f
+	$(FC) $(FFLAGS) -c vprjpi.f
+
+vproj.o: vproj.f
+	$(FC) $(FFLAGS) -c vproj.f
+
+vprojg.o: vprojg.f
+	$(FC) $(FFLAGS) -c vprojg.f
+
+vrel.o: vrel.f
+	$(FC) $(FFLAGS) -c vrel.f
+
+vrelg.o: vrelg.f
+	$(FC) $(FFLAGS) -c vrelg.f
+
+vrotv.o: vrotv.f
+	$(FC) $(FFLAGS) -c vrotv.f
+
+vscl.o: vscl.f
+	$(FC) $(FFLAGS) -c vscl.f
+
+vsclg.o: vsclg.f
+	$(FC) $(FFLAGS) -c vsclg.f
+
+vsclip.o: vsclip.f
+	$(FC) $(FFLAGS) -c vsclip.f
+
+vsep.o: vsep.f
+	$(FC) $(FFLAGS) -c vsep.f
+
+vsepg.o: vsepg.f
+	$(FC) $(FFLAGS) -c vsepg.f
+
+vsub.o: vsub.f
+	$(FC) $(FFLAGS) -c vsub.f
+
+vsubg.o: vsubg.f
+	$(FC) $(FFLAGS) -c vsubg.f
+
+vtmv.o: vtmv.f
+	$(FC) $(FFLAGS) -c vtmv.f
+
+vtmvg.o: vtmvg.f
+	$(FC) $(FFLAGS) -c vtmvg.f
+
+vupack.o: vupack.f
+	$(FC) $(FFLAGS) -c vupack.f
+
+vzero.o: vzero.f
+	$(FC) $(FFLAGS) -c vzero.f
+
+vzerog.o: vzerog.f
+	$(FC) $(FFLAGS) -c vzerog.f
+
+wdcnt.o: wdcnt.f
+	$(FC) $(FFLAGS) -c wdcnt.f
+
+wdindx.o: wdindx.f
+	$(FC) $(FFLAGS) -c wdindx.f
+
+wncard.o: wncard.f
+	$(FC) $(FFLAGS) -c wncard.f
+
+wncomd.o: wncomd.f
+	$(FC) $(FFLAGS) -c wncomd.f
+
+wncond.o: wncond.f
+	$(FC) $(FFLAGS) -c wncond.f
+
+wndifd.o: wndifd.f
+	$(FC) $(FFLAGS) -c wndifd.f
+
+wnelmd.o: wnelmd.f
+	$(FC) $(FFLAGS) -c wnelmd.f
+
+wnexpd.o: wnexpd.f
+	$(FC) $(FFLAGS) -c wnexpd.f
+
+wnextd.o: wnextd.f
+	$(FC) $(FFLAGS) -c wnextd.f
+
+wnfetd.o: wnfetd.f
+	$(FC) $(FFLAGS) -c wnfetd.f
+
+wnfild.o: wnfild.f
+	$(FC) $(FFLAGS) -c wnfild.f
+
+wnfltd.o: wnfltd.f
+	$(FC) $(FFLAGS) -c wnfltd.f
+
+wnincd.o: wnincd.f
+	$(FC) $(FFLAGS) -c wnincd.f
+
+wninsd.o: wninsd.f
+	$(FC) $(FFLAGS) -c wninsd.f
+
+wnintd.o: wnintd.f
+	$(FC) $(FFLAGS) -c wnintd.f
+
+wnreld.o: wnreld.f
+	$(FC) $(FFLAGS) -c wnreld.f
+
+wnsumd.o: wnsumd.f
+	$(FC) $(FFLAGS) -c wnsumd.f
+
+wnunid.o: wnunid.f
+	$(FC) $(FFLAGS) -c wnunid.f
+
+wnvald.o: wnvald.f
+	$(FC) $(FFLAGS) -c wnvald.f
+
+wrencc.o: wrencc.f
+	$(FC) $(FFLAGS) -c wrencc.f
+
+wrencd.o: wrencd.f
+	$(FC) $(FFLAGS) -c wrencd.f
+
+wrenci.o: wrenci.f
+	$(FC) $(FFLAGS) -c wrenci.f
+
+writla.o: writla.f
+	$(FC) $(FFLAGS) -c writla.f
+
+writln.o: writln.f
+	$(FC) $(FFLAGS) -c writln.f
+
+wrkvar.o: wrkvar.f
+	$(FC) $(FFLAGS) -c wrkvar.f
+
+wrline.o: wrline.f
+	$(FC) $(FFLAGS) -c wrline.f
+
+xdda.o: xdda.f
+	$(FC) $(FFLAGS) -c xdda.f
+
+xf2eul.o: xf2eul.f
+	$(FC) $(FFLAGS) -c xf2eul.f
+
+xf2rav.o: xf2rav.f
+	$(FC) $(FFLAGS) -c xf2rav.f
+
+xfmsta.o: xfmsta.f
+	$(FC) $(FFLAGS) -c xfmsta.f
+
+xposbl.o: xposbl.f
+	$(FC) $(FFLAGS) -c xposbl.f
+
+xpose.o: xpose.f
+	$(FC) $(FFLAGS) -c xpose.f
+
+xposeg.o: xposeg.f
+	$(FC) $(FFLAGS) -c xposeg.f
+
+xpsgip.o: xpsgip.f
+	$(FC) $(FFLAGS) -c xpsgip.f
+
+zzaddlnk.o: zzaddlnk.f
+	$(FC) $(FFLAGS) -c zzaddlnk.f
+
+zzascii.o: zzascii.f
+	$(FC) $(FFLAGS) -c zzascii.f
+
+zzasryel.o: zzasryel.f
+	$(FC) $(FFLAGS) -c zzasryel.f
+
+zzbodblt.o: zzbodblt.f
+	$(FC) $(FFLAGS) -c zzbodblt.f
+
+zzbodbry.o: zzbodbry.f
+	$(FC) $(FFLAGS) -c zzbodbry.f
+
+zzbodini.o: zzbodini.f
+	$(FC) $(FFLAGS) -c zzbodini.f
+
+zzbodker.o: zzbodker.f
+	$(FC) $(FFLAGS) -c zzbodker.f
+
+zzbods2c.o: zzbods2c.f
+	$(FC) $(FFLAGS) -c zzbods2c.f
+
+zzbodtrn.o: zzbodtrn.f
+	$(FC) $(FFLAGS) -c zzbodtrn.f
+
+zzbodvcd.o: zzbodvcd.f
+	$(FC) $(FFLAGS) -c zzbodvcd.f
+
+zzbquad.o: zzbquad.f
+	$(FC) $(FFLAGS) -c zzbquad.f
+
+zzchrlat.o: zzchrlat.f
+	$(FC) $(FFLAGS) -c zzchrlat.f
+
+zzck4d2i.o: zzck4d2i.f
+	$(FC) $(FFLAGS) -c zzck4d2i.f
+
+zzck4i2d.o: zzck4i2d.f
+	$(FC) $(FFLAGS) -c zzck4i2d.f
+
+zzckcv01.o: zzckcv01.f
+	$(FC) $(FFLAGS) -c zzckcv01.f
+
+zzckcv02.o: zzckcv02.f
+	$(FC) $(FFLAGS) -c zzckcv02.f
+
+zzckcv03.o: zzckcv03.f
+	$(FC) $(FFLAGS) -c zzckcv03.f
+
+zzckcv04.o: zzckcv04.f
+	$(FC) $(FFLAGS) -c zzckcv04.f
+
+zzckcv05.o: zzckcv05.f
+	$(FC) $(FFLAGS) -c zzckcv05.f
+
+zzckcv06.o: zzckcv06.f
+	$(FC) $(FFLAGS) -c zzckcv06.f
+
+zzckspk.o: zzckspk.f
+	$(FC) $(FFLAGS) -c zzckspk.f
+
+zzcln.o: zzcln.f
+	$(FC) $(FFLAGS) -c zzcln.f
+
+zzcnquad.o: zzcnquad.f
+	$(FC) $(FFLAGS) -c zzcnquad.f
+
+zzcorepc.o: zzcorepc.f
+	$(FC) $(FFLAGS) -c zzcorepc.f
+
+zzcorsxf.o: zzcorsxf.f
+	$(FC) $(FFLAGS) -c zzcorsxf.f
+
+zzcputim.o: zzcputim.f
+	$(FC) $(FFLAGS) -c zzcputim.f
+
+zzctr.o: zzctr.f
+	$(FC) $(FFLAGS) -c zzctr.f
+
+zzcvpool.o: zzcvpool.f
+	$(FC) $(FFLAGS) -c zzcvpool.f
+
+zzcvstat.o: zzcvstat.f
+	$(FC) $(FFLAGS) -c zzcvstat.f
+
+zzcxbrut.o: zzcxbrut.f
+	$(FC) $(FFLAGS) -c zzcxbrut.f
+
+zzdafgdr.o: zzdafgdr.f
+	$(FC) $(FFLAGS) -c zzdafgdr.f
+
+zzdafgfr.o: zzdafgfr.f
+	$(FC) $(FFLAGS) -c zzdafgfr.f
+
+zzdafgsr.o: zzdafgsr.f
+	$(FC) $(FFLAGS) -c zzdafgsr.f
+
+zzdafnfr.o: zzdafnfr.f
+	$(FC) $(FFLAGS) -c zzdafnfr.f
+
+zzdasgrd.o: zzdasgrd.f
+	$(FC) $(FFLAGS) -c zzdasgrd.f
+
+zzdasgri.o: zzdasgri.f
+	$(FC) $(FFLAGS) -c zzdasgri.f
+
+zzdasnfr.o: zzdasnfr.f
+	$(FC) $(FFLAGS) -c zzdasnfr.f
+
+zzdasrfr.o: zzdasrfr.f
+	$(FC) $(FFLAGS) -c zzdasrfr.f
+
+zzddhclu.o: zzddhclu.f
+	$(FC) $(FFLAGS) -c zzddhclu.f
+
+zzddhf2h.o: zzddhf2h.f
+	$(FC) $(FFLAGS) -c zzddhf2h.f
+
+zzddhgsd.o: zzddhgsd.f
+	$(FC) $(FFLAGS) -c zzddhgsd.f
+
+zzddhgtu.o: zzddhgtu.f
+	$(FC) $(FFLAGS) -c zzddhgtu.f
+
+zzddhini.o: zzddhini.f
+	$(FC) $(FFLAGS) -c zzddhini.f
+
+zzddhivf.o: zzddhivf.f
+	$(FC) $(FFLAGS) -c zzddhivf.f
+
+zzddhman.o: zzddhman.f
+	$(FC) $(FFLAGS) -c zzddhman.f
+
+zzddhmnm.o: zzddhmnm.f
+	$(FC) $(FFLAGS) -c zzddhmnm.f
+
+zzddhnfc.o: zzddhnfc.f
+	$(FC) $(FFLAGS) -c zzddhnfc.f
+
+zzddhppf.o: zzddhppf.f
+	$(FC) $(FFLAGS) -c zzddhppf.f
+
+zzddhrcm.o: zzddhrcm.f
+	$(FC) $(FFLAGS) -c zzddhrcm.f
+
+zzddhrmu.o: zzddhrmu.f
+	$(FC) $(FFLAGS) -c zzddhrmu.f
+
+zzdiv.o: zzdiv.f
+	$(FC) $(FFLAGS) -c zzdiv.f
+
+zzdscm.o: zzdscm.f
+	$(FC) $(FFLAGS) -c zzdscm.f
+
+zzdsin.o: zzdsin.f
+	$(FC) $(FFLAGS) -c zzdsin.f
+
+zzdskbbl.o: zzdskbbl.f
+	$(FC) $(FFLAGS) -c zzdskbbl.f
+
+zzdskbsr.o: zzdskbsr.f
+	$(FC) $(FFLAGS) -c zzdskbsr.f
+
+zzdskbun.o: zzdskbun.f
+	$(FC) $(FFLAGS) -c zzdskbun.f
+
+zzdskbux.o: zzdskbux.f
+	$(FC) $(FFLAGS) -c zzdskbux.f
+
+zzdsksba.o: zzdsksba.f
+	$(FC) $(FFLAGS) -c zzdsksba.f
+
+zzdsksbf.o: zzdsksbf.f
+	$(FC) $(FFLAGS) -c zzdsksbf.f
+
+zzdsksbi.o: zzdsksbi.f
+	$(FC) $(FFLAGS) -c zzdsksbi.f
+
+zzdsksbr.o: zzdsksbr.f
+	$(FC) $(FFLAGS) -c zzdsksbr.f
+
+zzdsksel.o: zzdsksel.f
+	$(FC) $(FFLAGS) -c zzdsksel.f
+
+zzdsksgr.o: zzdsksgr.f
+	$(FC) $(FFLAGS) -c zzdsksgr.f
+
+zzdsksgx.o: zzdsksgx.f
+	$(FC) $(FFLAGS) -c zzdsksgx.f
+
+zzdsksph.o: zzdsksph.f
+	$(FC) $(FFLAGS) -c zzdsksph.f
+
+zzdspc.o: zzdspc.f
+	$(FC) $(FFLAGS) -c zzdspc.f
+
+zzdspr.o: zzdspr.f
+	$(FC) $(FFLAGS) -c zzdspr.f
+
+zzdynbid.o: zzdynbid.f
+	$(FC) $(FFLAGS) -c zzdynbid.f
+
+zzdynfid.o: zzdynfid.f
+	$(FC) $(FFLAGS) -c zzdynfid.f
+
+zzdynfr0.o: zzdynfr0.f
+	$(FC) $(FFLAGS) -c zzdynfr0.f
+
+zzdynfrm.o: zzdynfrm.f
+	$(FC) $(FFLAGS) -c zzdynfrm.f
+
+zzdynoac.o: zzdynoac.f
+	$(FC) $(FFLAGS) -c zzdynoac.f
+
+zzdynoad.o: zzdynoad.f
+	$(FC) $(FFLAGS) -c zzdynoad.f
+
+zzdynrot.o: zzdynrot.f
+	$(FC) $(FFLAGS) -c zzdynrot.f
+
+zzdynrt0.o: zzdynrt0.f
+	$(FC) $(FFLAGS) -c zzdynrt0.f
+
+zzdynvac.o: zzdynvac.f
+	$(FC) $(FFLAGS) -c zzdynvac.f
+
+zzdynvad.o: zzdynvad.f
+	$(FC) $(FFLAGS) -c zzdynvad.f
+
+zzdynvai.o: zzdynvai.f
+	$(FC) $(FFLAGS) -c zzdynvai.f
+
+zzedterm.o: zzedterm.f
+	$(FC) $(FFLAGS) -c zzedterm.f
+
+zzedtmpt.o: zzedtmpt.f
+	$(FC) $(FFLAGS) -c zzedtmpt.f
+
+zzekac01.o: zzekac01.f
+	$(FC) $(FFLAGS) -c zzekac01.f
+
+zzekac02.o: zzekac02.f
+	$(FC) $(FFLAGS) -c zzekac02.f
+
+zzekac03.o: zzekac03.f
+	$(FC) $(FFLAGS) -c zzekac03.f
+
+zzekac04.o: zzekac04.f
+	$(FC) $(FFLAGS) -c zzekac04.f
+
+zzekac05.o: zzekac05.f
+	$(FC) $(FFLAGS) -c zzekac05.f
+
+zzekac06.o: zzekac06.f
+	$(FC) $(FFLAGS) -c zzekac06.f
+
+zzekac07.o: zzekac07.f
+	$(FC) $(FFLAGS) -c zzekac07.f
+
+zzekac08.o: zzekac08.f
+	$(FC) $(FFLAGS) -c zzekac08.f
+
+zzekac09.o: zzekac09.f
+	$(FC) $(FFLAGS) -c zzekac09.f
+
+zzekacps.o: zzekacps.f
+	$(FC) $(FFLAGS) -c zzekacps.f
+
+zzekad01.o: zzekad01.f
+	$(FC) $(FFLAGS) -c zzekad01.f
+
+zzekad02.o: zzekad02.f
+	$(FC) $(FFLAGS) -c zzekad02.f
+
+zzekad03.o: zzekad03.f
+	$(FC) $(FFLAGS) -c zzekad03.f
+
+zzekad04.o: zzekad04.f
+	$(FC) $(FFLAGS) -c zzekad04.f
+
+zzekad05.o: zzekad05.f
+	$(FC) $(FFLAGS) -c zzekad05.f
+
+zzekad06.o: zzekad06.f
+	$(FC) $(FFLAGS) -c zzekad06.f
+
+zzekaps.o: zzekaps.f
+	$(FC) $(FFLAGS) -c zzekaps.f
+
+zzekbs01.o: zzekbs01.f
+	$(FC) $(FFLAGS) -c zzekbs01.f
+
+zzekbs02.o: zzekbs02.f
+	$(FC) $(FFLAGS) -c zzekbs02.f
+
+zzekcchk.o: zzekcchk.f
+	$(FC) $(FFLAGS) -c zzekcchk.f
+
+zzekcdsc.o: zzekcdsc.f
+	$(FC) $(FFLAGS) -c zzekcdsc.f
+
+zzekcix1.o: zzekcix1.f
+	$(FC) $(FFLAGS) -c zzekcix1.f
+
+zzekcnam.o: zzekcnam.f
+	$(FC) $(FFLAGS) -c zzekcnam.f
+
+zzekde01.o: zzekde01.f
+	$(FC) $(FFLAGS) -c zzekde01.f
+
+zzekde02.o: zzekde02.f
+	$(FC) $(FFLAGS) -c zzekde02.f
+
+zzekde03.o: zzekde03.f
+	$(FC) $(FFLAGS) -c zzekde03.f
+
+zzekde04.o: zzekde04.f
+	$(FC) $(FFLAGS) -c zzekde04.f
+
+zzekde05.o: zzekde05.f
+	$(FC) $(FFLAGS) -c zzekde05.f
+
+zzekde06.o: zzekde06.f
+	$(FC) $(FFLAGS) -c zzekde06.f
+
+zzekdps.o: zzekdps.f
+	$(FC) $(FFLAGS) -c zzekdps.f
+
+zzekecmp.o: zzekecmp.f
+	$(FC) $(FFLAGS) -c zzekecmp.f
+
+zzekencd.o: zzekencd.f
+	$(FC) $(FFLAGS) -c zzekencd.f
+
+zzekerc1.o: zzekerc1.f
+	$(FC) $(FFLAGS) -c zzekerc1.f
+
+zzekerd1.o: zzekerd1.f
+	$(FC) $(FFLAGS) -c zzekerd1.f
+
+zzekeri1.o: zzekeri1.f
+	$(FC) $(FFLAGS) -c zzekeri1.f
+
+zzekesiz.o: zzekesiz.f
+	$(FC) $(FFLAGS) -c zzekesiz.f
+
+zzekff01.o: zzekff01.f
+	$(FC) $(FFLAGS) -c zzekff01.f
+
+zzekfrx.o: zzekfrx.f
+	$(FC) $(FFLAGS) -c zzekfrx.f
+
+zzekgcdp.o: zzekgcdp.f
+	$(FC) $(FFLAGS) -c zzekgcdp.f
+
+zzekgei.o: zzekgei.f
+	$(FC) $(FFLAGS) -c zzekgei.f
+
+zzekgfwd.o: zzekgfwd.f
+	$(FC) $(FFLAGS) -c zzekgfwd.f
+
+zzekglnk.o: zzekglnk.f
+	$(FC) $(FFLAGS) -c zzekglnk.f
+
+zzekgrcp.o: zzekgrcp.f
+	$(FC) $(FFLAGS) -c zzekgrcp.f
+
+zzekgrs.o: zzekgrs.f
+	$(FC) $(FFLAGS) -c zzekgrs.f
+
+zzekif01.o: zzekif01.f
+	$(FC) $(FFLAGS) -c zzekif01.f
+
+zzekif02.o: zzekif02.f
+	$(FC) $(FFLAGS) -c zzekif02.f
+
+zzekiic1.o: zzekiic1.f
+	$(FC) $(FFLAGS) -c zzekiic1.f
+
+zzekiid1.o: zzekiid1.f
+	$(FC) $(FFLAGS) -c zzekiid1.f
+
+zzekiii1.o: zzekiii1.f
+	$(FC) $(FFLAGS) -c zzekiii1.f
+
+zzekille.o: zzekille.f
+	$(FC) $(FFLAGS) -c zzekille.f
+
+zzekillt.o: zzekillt.f
+	$(FC) $(FFLAGS) -c zzekillt.f
+
+zzekinqc.o: zzekinqc.f
+	$(FC) $(FFLAGS) -c zzekinqc.f
+
+zzekinqn.o: zzekinqn.f
+	$(FC) $(FFLAGS) -c zzekinqn.f
+
+zzekixdl.o: zzekixdl.f
+	$(FC) $(FFLAGS) -c zzekixdl.f
+
+zzekixlk.o: zzekixlk.f
+	$(FC) $(FFLAGS) -c zzekixlk.f
+
+zzekjoin.o: zzekjoin.f
+	$(FC) $(FFLAGS) -c zzekjoin.f
+
+zzekjsqz.o: zzekjsqz.f
+	$(FC) $(FFLAGS) -c zzekjsqz.f
+
+zzekjsrt.o: zzekjsrt.f
+	$(FC) $(FFLAGS) -c zzekjsrt.f
+
+zzekjtst.o: zzekjtst.f
+	$(FC) $(FFLAGS) -c zzekjtst.f
+
+zzekkey.o: zzekkey.f
+	$(FC) $(FFLAGS) -c zzekkey.f
+
+zzeklerc.o: zzeklerc.f
+	$(FC) $(FFLAGS) -c zzeklerc.f
+
+zzeklerd.o: zzeklerd.f
+	$(FC) $(FFLAGS) -c zzeklerd.f
+
+zzekleri.o: zzekleri.f
+	$(FC) $(FFLAGS) -c zzekleri.f
+
+zzekllec.o: zzekllec.f
+	$(FC) $(FFLAGS) -c zzekllec.f
+
+zzeklled.o: zzeklled.f
+	$(FC) $(FFLAGS) -c zzeklled.f
+
+zzekllei.o: zzekllei.f
+	$(FC) $(FFLAGS) -c zzekllei.f
+
+zzeklltc.o: zzeklltc.f
+	$(FC) $(FFLAGS) -c zzeklltc.f
+
+zzeklltd.o: zzeklltd.f
+	$(FC) $(FFLAGS) -c zzeklltd.f
+
+zzekllti.o: zzekllti.f
+	$(FC) $(FFLAGS) -c zzekllti.f
+
+zzekmloc.o: zzekmloc.f
+	$(FC) $(FFLAGS) -c zzekmloc.f
+
+zzeknres.o: zzeknres.f
+	$(FC) $(FFLAGS) -c zzeknres.f
+
+zzeknrml.o: zzeknrml.f
+	$(FC) $(FFLAGS) -c zzeknrml.f
+
+zzekordc.o: zzekordc.f
+	$(FC) $(FFLAGS) -c zzekordc.f
+
+zzekordd.o: zzekordd.f
+	$(FC) $(FFLAGS) -c zzekordd.f
+
+zzekordi.o: zzekordi.f
+	$(FC) $(FFLAGS) -c zzekordi.f
+
+zzekpage.o: zzekpage.f
+	$(FC) $(FFLAGS) -c zzekpage.f
+
+zzekpars.o: zzekpars.f
+	$(FC) $(FFLAGS) -c zzekpars.f
+
+zzekpcol.o: zzekpcol.f
+	$(FC) $(FFLAGS) -c zzekpcol.f
+
+zzekpdec.o: zzekpdec.f
+	$(FC) $(FFLAGS) -c zzekpdec.f
+
+zzekpgch.o: zzekpgch.f
+	$(FC) $(FFLAGS) -c zzekpgch.f
+
+zzekqcnj.o: zzekqcnj.f
+	$(FC) $(FFLAGS) -c zzekqcnj.f
+
+zzekqcon.o: zzekqcon.f
+	$(FC) $(FFLAGS) -c zzekqcon.f
+
+zzekqini.o: zzekqini.f
+	$(FC) $(FFLAGS) -c zzekqini.f
+
+zzekqord.o: zzekqord.f
+	$(FC) $(FFLAGS) -c zzekqord.f
+
+zzekqsel.o: zzekqsel.f
+	$(FC) $(FFLAGS) -c zzekqsel.f
+
+zzekqtab.o: zzekqtab.f
+	$(FC) $(FFLAGS) -c zzekqtab.f
+
+zzekrbck.o: zzekrbck.f
+	$(FC) $(FFLAGS) -c zzekrbck.f
+
+zzekrcmp.o: zzekrcmp.f
+	$(FC) $(FFLAGS) -c zzekrcmp.f
+
+zzekrd01.o: zzekrd01.f
+	$(FC) $(FFLAGS) -c zzekrd01.f
+
+zzekrd02.o: zzekrd02.f
+	$(FC) $(FFLAGS) -c zzekrd02.f
+
+zzekrd03.o: zzekrd03.f
+	$(FC) $(FFLAGS) -c zzekrd03.f
+
+zzekrd04.o: zzekrd04.f
+	$(FC) $(FFLAGS) -c zzekrd04.f
+
+zzekrd05.o: zzekrd05.f
+	$(FC) $(FFLAGS) -c zzekrd05.f
+
+zzekrd06.o: zzekrd06.f
+	$(FC) $(FFLAGS) -c zzekrd06.f
+
+zzekrd07.o: zzekrd07.f
+	$(FC) $(FFLAGS) -c zzekrd07.f
+
+zzekrd08.o: zzekrd08.f
+	$(FC) $(FFLAGS) -c zzekrd08.f
+
+zzekrd09.o: zzekrd09.f
+	$(FC) $(FFLAGS) -c zzekrd09.f
+
+zzekreqi.o: zzekreqi.f
+	$(FC) $(FFLAGS) -c zzekreqi.f
+
+zzekrmch.o: zzekrmch.f
+	$(FC) $(FFLAGS) -c zzekrmch.f
+
+zzekrp2n.o: zzekrp2n.f
+	$(FC) $(FFLAGS) -c zzekrp2n.f
+
+zzekrplk.o: zzekrplk.f
+	$(FC) $(FFLAGS) -c zzekrplk.f
+
+zzekrsc.o: zzekrsc.f
+	$(FC) $(FFLAGS) -c zzekrsc.f
+
+zzekrsd.o: zzekrsd.f
+	$(FC) $(FFLAGS) -c zzekrsd.f
+
+zzekrsi.o: zzekrsi.f
+	$(FC) $(FFLAGS) -c zzekrsi.f
+
+zzeksca.o: zzeksca.f
+	$(FC) $(FFLAGS) -c zzeksca.f
+
+zzekscan.o: zzekscan.f
+	$(FC) $(FFLAGS) -c zzekscan.f
+
+zzekscdp.o: zzekscdp.f
+	$(FC) $(FFLAGS) -c zzekscdp.f
+
+zzekscmp.o: zzekscmp.f
+	$(FC) $(FFLAGS) -c zzekscmp.f
+
+zzeksdsc.o: zzeksdsc.f
+	$(FC) $(FFLAGS) -c zzeksdsc.f
+
+zzeksei.o: zzeksei.f
+	$(FC) $(FFLAGS) -c zzeksei.f
+
+zzeksemc.o: zzeksemc.f
+	$(FC) $(FFLAGS) -c zzeksemc.f
+
+zzeksfwd.o: zzeksfwd.f
+	$(FC) $(FFLAGS) -c zzeksfwd.f
+
+zzeksinf.o: zzeksinf.f
+	$(FC) $(FFLAGS) -c zzeksinf.f
+
+zzekslnk.o: zzekslnk.f
+	$(FC) $(FFLAGS) -c zzekslnk.f
+
+zzeksrcp.o: zzeksrcp.f
+	$(FC) $(FFLAGS) -c zzeksrcp.f
+
+zzeksrs.o: zzeksrs.f
+	$(FC) $(FFLAGS) -c zzeksrs.f
+
+zzekstyp.o: zzekstyp.f
+	$(FC) $(FFLAGS) -c zzekstyp.f
+
+zzeksz04.o: zzeksz04.f
+	$(FC) $(FFLAGS) -c zzeksz04.f
+
+zzeksz05.o: zzeksz05.f
+	$(FC) $(FFLAGS) -c zzeksz05.f
+
+zzeksz06.o: zzeksz06.f
+	$(FC) $(FFLAGS) -c zzeksz06.f
+
+zzektcnv.o: zzektcnv.f
+	$(FC) $(FFLAGS) -c zzektcnv.f
+
+zzektloc.o: zzektloc.f
+	$(FC) $(FFLAGS) -c zzektloc.f
+
+zzektr13.o: zzektr13.f
+	$(FC) $(FFLAGS) -c zzektr13.f
+
+zzektr1s.o: zzektr1s.f
+	$(FC) $(FFLAGS) -c zzektr1s.f
+
+zzektr23.o: zzektr23.f
+	$(FC) $(FFLAGS) -c zzektr23.f
+
+zzektr31.o: zzektr31.f
+	$(FC) $(FFLAGS) -c zzektr31.f
+
+zzektr32.o: zzektr32.f
+	$(FC) $(FFLAGS) -c zzektr32.f
+
+zzektrap.o: zzektrap.f
+	$(FC) $(FFLAGS) -c zzektrap.f
+
+zzektrbn.o: zzektrbn.f
+	$(FC) $(FFLAGS) -c zzektrbn.f
+
+zzektrbs.o: zzektrbs.f
+	$(FC) $(FFLAGS) -c zzektrbs.f
+
+zzektrdl.o: zzektrdl.f
+	$(FC) $(FFLAGS) -c zzektrdl.f
+
+zzektrdp.o: zzektrdp.f
+	$(FC) $(FFLAGS) -c zzektrdp.f
+
+zzektres.o: zzektres.f
+	$(FC) $(FFLAGS) -c zzektres.f
+
+zzektrfr.o: zzektrfr.f
+	$(FC) $(FFLAGS) -c zzektrfr.f
+
+zzektrin.o: zzektrin.f
+	$(FC) $(FFLAGS) -c zzektrin.f
+
+zzektrit.o: zzektrit.f
+	$(FC) $(FFLAGS) -c zzektrit.f
+
+zzektrki.o: zzektrki.f
+	$(FC) $(FFLAGS) -c zzektrki.f
+
+zzektrlk.o: zzektrlk.f
+	$(FC) $(FFLAGS) -c zzektrlk.f
+
+zzektrls.o: zzektrls.f
+	$(FC) $(FFLAGS) -c zzektrls.f
+
+zzektrnk.o: zzektrnk.f
+	$(FC) $(FFLAGS) -c zzektrnk.f
+
+zzektrpi.o: zzektrpi.f
+	$(FC) $(FFLAGS) -c zzektrpi.f
+
+zzektrrk.o: zzektrrk.f
+	$(FC) $(FFLAGS) -c zzektrrk.f
+
+zzektrsb.o: zzektrsb.f
+	$(FC) $(FFLAGS) -c zzektrsb.f
+
+zzektrsz.o: zzektrsz.f
+	$(FC) $(FFLAGS) -c zzektrsz.f
+
+zzektrud.o: zzektrud.f
+	$(FC) $(FFLAGS) -c zzektrud.f
+
+zzektrui.o: zzektrui.f
+	$(FC) $(FFLAGS) -c zzektrui.f
+
+zzekue01.o: zzekue01.f
+	$(FC) $(FFLAGS) -c zzekue01.f
+
+zzekue02.o: zzekue02.f
+	$(FC) $(FFLAGS) -c zzekue02.f
+
+zzekue03.o: zzekue03.f
+	$(FC) $(FFLAGS) -c zzekue03.f
+
+zzekue04.o: zzekue04.f
+	$(FC) $(FFLAGS) -c zzekue04.f
+
+zzekue05.o: zzekue05.f
+	$(FC) $(FFLAGS) -c zzekue05.f
+
+zzekue06.o: zzekue06.f
+	$(FC) $(FFLAGS) -c zzekue06.f
+
+zzekvadr.o: zzekvadr.f
+	$(FC) $(FFLAGS) -c zzekvadr.f
+
+zzekvcmp.o: zzekvcmp.f
+	$(FC) $(FFLAGS) -c zzekvcmp.f
+
+zzekvmch.o: zzekvmch.f
+	$(FC) $(FFLAGS) -c zzekvmch.f
+
+zzekweed.o: zzekweed.f
+	$(FC) $(FFLAGS) -c zzekweed.f
+
+zzekweqi.o: zzekweqi.f
+	$(FC) $(FFLAGS) -c zzekweqi.f
+
+zzekwpac.o: zzekwpac.f
+	$(FC) $(FFLAGS) -c zzekwpac.f
+
+zzekwpai.o: zzekwpai.f
+	$(FC) $(FFLAGS) -c zzekwpai.f
+
+zzekwpal.o: zzekwpal.f
+	$(FC) $(FFLAGS) -c zzekwpal.f
+
+zzellbds.o: zzellbds.f
+	$(FC) $(FFLAGS) -c zzellbds.f
+
+zzelnaxx.o: zzelnaxx.f
+	$(FC) $(FFLAGS) -c zzelnaxx.f
+
+zzelvupy.o: zzelvupy.f
+	$(FC) $(FFLAGS) -c zzelvupy.f
+
+zzenut80.o: zzenut80.f
+	$(FC) $(FFLAGS) -c zzenut80.f
+
+zzeprc76.o: zzeprc76.f
+	$(FC) $(FFLAGS) -c zzeprc76.f
+
+zzeprcss.o: zzeprcss.f
+	$(FC) $(FFLAGS) -c zzeprcss.f
+
+zzfdat.o: zzfdat.f
+	$(FC) $(FFLAGS) -c zzfdat.f
+
+zzfovaxi.o: zzfovaxi.f
+	$(FC) $(FFLAGS) -c zzfovaxi.f
+
+zzfrmch0.o: zzfrmch0.f
+	$(FC) $(FFLAGS) -c zzfrmch0.f
+
+zzfrmch1.o: zzfrmch1.f
+	$(FC) $(FFLAGS) -c zzfrmch1.f
+
+zzfrmgt0.o: zzfrmgt0.f
+	$(FC) $(FFLAGS) -c zzfrmgt0.f
+
+zzfrmgt1.o: zzfrmgt1.f
+	$(FC) $(FFLAGS) -c zzfrmgt1.f
+
+zzftpchk.o: zzftpchk.f
+	$(FC) $(FFLAGS) -c zzftpchk.f
+
+zzftpstr.o: zzftpstr.f
+	$(FC) $(FFLAGS) -c zzftpstr.f
+
+zzgapool.o: zzgapool.f
+	$(FC) $(FFLAGS) -c zzgapool.f
+
+zzgetbff.o: zzgetbff.f
+	$(FC) $(FFLAGS) -c zzgetbff.f
+
+zzgetelm.o: zzgetelm.f
+	$(FC) $(FFLAGS) -c zzgetelm.f
+
+zzgetvox.o: zzgetvox.f
+	$(FC) $(FFLAGS) -c zzgetvox.f
+
+zzgfcoq.o: zzgfcoq.f
+	$(FC) $(FFLAGS) -c zzgfcoq.f
+
+zzgfcost.o: zzgfcost.f
+	$(FC) $(FFLAGS) -c zzgfcost.f
+
+zzgfcou.o: zzgfcou.f
+	$(FC) $(FFLAGS) -c zzgfcou.f
+
+zzgfcprx.o: zzgfcprx.f
+	$(FC) $(FFLAGS) -c zzgfcprx.f
+
+zzgfcslv.o: zzgfcslv.f
+	$(FC) $(FFLAGS) -c zzgfcslv.f
+
+zzgfdiq.o: zzgfdiq.f
+	$(FC) $(FFLAGS) -c zzgfdiq.f
+
+zzgfdiu.o: zzgfdiu.f
+	$(FC) $(FFLAGS) -c zzgfdiu.f
+
+zzgfdsps.o: zzgfdsps.f
+	$(FC) $(FFLAGS) -c zzgfdsps.f
+
+zzgffvu.o: zzgffvu.f
+	$(FC) $(FFLAGS) -c zzgffvu.f
+
+zzgfilu.o: zzgfilu.f
+	$(FC) $(FFLAGS) -c zzgfilu.f
+
+zzgflong.o: zzgflong.f
+	$(FC) $(FFLAGS) -c zzgflong.f
+
+zzgfocu.o: zzgfocu.f
+	$(FC) $(FFLAGS) -c zzgfocu.f
+
+zzgfpaq.o: zzgfpaq.f
+	$(FC) $(FFLAGS) -c zzgfpaq.f
+
+zzgfpau.o: zzgfpau.f
+	$(FC) $(FFLAGS) -c zzgfpau.f
+
+zzgfref.o: zzgfref.f
+	$(FC) $(FFLAGS) -c zzgfref.f
+
+zzgfrel.o: zzgfrel.f
+	$(FC) $(FFLAGS) -c zzgfrel.f
+
+zzgfrelx.o: zzgfrelx.f
+	$(FC) $(FFLAGS) -c zzgfrelx.f
+
+zzgfrpwk.o: zzgfrpwk.f
+	$(FC) $(FFLAGS) -c zzgfrpwk.f
+
+zzgfrrq.o: zzgfrrq.f
+	$(FC) $(FFLAGS) -c zzgfrrq.f
+
+zzgfrru.o: zzgfrru.f
+	$(FC) $(FFLAGS) -c zzgfrru.f
+
+zzgfsolv.o: zzgfsolv.f
+	$(FC) $(FFLAGS) -c zzgfsolv.f
+
+zzgfsolvx.o: zzgfsolvx.f
+	$(FC) $(FFLAGS) -c zzgfsolvx.f
+
+zzgfspq.o: zzgfspq.f
+	$(FC) $(FFLAGS) -c zzgfspq.f
+
+zzgfspu.o: zzgfspu.f
+	$(FC) $(FFLAGS) -c zzgfspu.f
+
+zzgfssin.o: zzgfssin.f
+	$(FC) $(FFLAGS) -c zzgfssin.f
+
+zzgfssob.o: zzgfssob.f
+	$(FC) $(FFLAGS) -c zzgfssob.f
+
+zzgftreb.o: zzgftreb.f
+	$(FC) $(FFLAGS) -c zzgftreb.f
+
+zzgfudb.o: zzgfudb.f
+	$(FC) $(FFLAGS) -c zzgfudb.f
+
+zzgfudlt.o: zzgfudlt.f
+	$(FC) $(FFLAGS) -c zzgfudlt.f
+
+zzgfwsts.o: zzgfwsts.f
+	$(FC) $(FFLAGS) -c zzgfwsts.f
+
+zzgpnm.o: zzgpnm.f
+	$(FC) $(FFLAGS) -c zzgpnm.f
+
+zzgrav.o: zzgrav.f
+	$(FC) $(FFLAGS) -c zzgrav.f
+
+zzhashi.o: zzhashi.f
+	$(FC) $(FFLAGS) -c zzhashi.f
+
+zzholdd.o: zzholdd.f
+	$(FC) $(FFLAGS) -c zzholdd.f
+
+zzhsc.o: zzhsc.f
+	$(FC) $(FFLAGS) -c zzhsc.f
+
+zzhsi.o: zzhsi.f
+	$(FC) $(FFLAGS) -c zzhsi.f
+
+zzhullax.o: zzhullax.f
+	$(FC) $(FFLAGS) -c zzhullax.f
+
+zzidmap.o: zzidmap.f
+	$(FC) $(FFLAGS) -c zzidmap.f
+
+zzilusta.o: zzilusta.f
+	$(FC) $(FFLAGS) -c zzilusta.f
+
+zzingrd.o: zzingrd.f
+	$(FC) $(FFLAGS) -c zzingrd.f
+
+zzinil.o: zzinil.f
+	$(FC) $(FFLAGS) -c zzinil.f
+
+zzinilnk.o: zzinilnk.f
+	$(FC) $(FFLAGS) -c zzinilnk.f
+
+zzinlat0.o: zzinlat0.f
+	$(FC) $(FFLAGS) -c zzinlat0.f
+
+zzinlat.o: zzinlat.f
+	$(FC) $(FFLAGS) -c zzinlat.f
+
+zzinpdt0.o: zzinpdt0.f
+	$(FC) $(FFLAGS) -c zzinpdt0.f
+
+zzinpdt.o: zzinpdt.f
+	$(FC) $(FFLAGS) -c zzinpdt.f
+
+zzinrec.o: zzinrec.f
+	$(FC) $(FFLAGS) -c zzinrec.f
+
+zzinrypl.o: zzinrypl.f
+	$(FC) $(FFLAGS) -c zzinrypl.f
+
+zzinssub.o: zzinssub.f
+	$(FC) $(FFLAGS) -c zzinssub.f
+
+zzinvelt.o: zzinvelt.f
+	$(FC) $(FFLAGS) -c zzinvelt.f
+
+zzlatbox.o: zzlatbox.f
+	$(FC) $(FFLAGS) -c zzlatbox.f
+
+zzldker.o: zzldker.f
+	$(FC) $(FFLAGS) -c zzldker.f
+
+zzlexmet.o: zzlexmet.f
+	$(FC) $(FFLAGS) -c zzlexmet.f
+
+zzmkpc.o: zzmkpc.f
+	$(FC) $(FFLAGS) -c zzmkpc.f
+
+zzmkspin.o: zzmkspin.f
+	$(FC) $(FFLAGS) -c zzmkspin.f
+
+zzmobliq.o: zzmobliq.f
+	$(FC) $(FFLAGS) -c zzmobliq.f
+
+zzmsxf.o: zzmsxf.f
+	$(FC) $(FFLAGS) -c zzmsxf.f
+
+zzmult.o: zzmult.f
+	$(FC) $(FFLAGS) -c zzmult.f
+
+zznamfrm.o: zznamfrm.f
+	$(FC) $(FFLAGS) -c zznamfrm.f
+
+zznofcon.o: zznofcon.f
+	$(FC) $(FFLAGS) -c zznofcon.f
+
+zznrddp.o: zznrddp.f
+	$(FC) $(FFLAGS) -c zznrddp.f
+
+zznrmlon.o: zznrmlon.f
+	$(FC) $(FFLAGS) -c zznrmlon.f
+
+zznwpool.o: zznwpool.f
+	$(FC) $(FFLAGS) -c zznwpool.f
+
+zzocced.o: zzocced.f
+	$(FC) $(FFLAGS) -c zzocced.f
+
+zzpdcmpl.o: zzpdcmpl.f
+	$(FC) $(FFLAGS) -c zzpdcmpl.f
+
+zzpdpltc.o: zzpdpltc.f
+	$(FC) $(FFLAGS) -c zzpdpltc.f
+
+zzpdtbox.o: zzpdtbox.f
+	$(FC) $(FFLAGS) -c zzpdtbox.f
+
+zzphsh.o: zzphsh.f
+	$(FC) $(FFLAGS) -c zzphsh.f
+
+zzpini.o: zzpini.f
+	$(FC) $(FFLAGS) -c zzpini.f
+
+zzplatfm.o: zzplatfm.f
+	$(FC) $(FFLAGS) -c zzplatfm.f
+
+zzpltchk.o: zzpltchk.f
+	$(FC) $(FFLAGS) -c zzpltchk.f
+
+zzprscor.o: zzprscor.f
+	$(FC) $(FFLAGS) -c zzprscor.f
+
+zzprsmet.o: zzprsmet.f
+	$(FC) $(FFLAGS) -c zzprsmet.f
+
+zzptpl02.o: zzptpl02.f
+	$(FC) $(FFLAGS) -c zzptpl02.f
+
+zzraybox.o: zzraybox.f
+	$(FC) $(FFLAGS) -c zzraybox.f
+
+zzrbrkst.o: zzrbrkst.f
+	$(FC) $(FFLAGS) -c zzrbrkst.f
+
+zzrecbox.o: zzrecbox.f
+	$(FC) $(FFLAGS) -c zzrecbox.f
+
+zzrefch0.o: zzrefch0.f
+	$(FC) $(FFLAGS) -c zzrefch0.f
+
+zzrefch1.o: zzrefch1.f
+	$(FC) $(FFLAGS) -c zzrefch1.f
+
+zzrepsub.o: zzrepsub.f
+	$(FC) $(FFLAGS) -c zzrepsub.f
+
+zzrept.o: zzrept.f
+	$(FC) $(FFLAGS) -c zzrept.f
+
+zzrotgt0.o: zzrotgt0.f
+	$(FC) $(FFLAGS) -c zzrotgt0.f
+
+zzrotgt1.o: zzrotgt1.f
+	$(FC) $(FFLAGS) -c zzrotgt1.f
+
+zzrtnmat.o: zzrtnmat.f
+	$(FC) $(FFLAGS) -c zzrtnmat.f
+
+zzrvar.o: zzrvar.f
+	$(FC) $(FFLAGS) -c zzrvar.f
+
+zzrvbf.o: zzrvbf.f
+	$(FC) $(FFLAGS) -c zzrvbf.f
+
+zzrxr.o: zzrxr.f
+	$(FC) $(FFLAGS) -c zzrxr.f
+
+zzrytelt.o: zzrytelt.f
+	$(FC) $(FFLAGS) -c zzrytelt.f
+
+zzrytlat.o: zzrytlat.f
+	$(FC) $(FFLAGS) -c zzrytlat.f
+
+zzrytpdt.o: zzrytpdt.f
+	$(FC) $(FFLAGS) -c zzrytpdt.f
+
+zzrytrec.o: zzrytrec.f
+	$(FC) $(FFLAGS) -c zzrytrec.f
+
+zzryxsph.o: zzryxsph.f
+	$(FC) $(FFLAGS) -c zzryxsph.f
+
+zzsclk.o: zzsclk.f
+	$(FC) $(FFLAGS) -c zzsclk.f
+
+zzsecprt.o: zzsecprt.f
+	$(FC) $(FFLAGS) -c zzsecprt.f
+
+zzsegbox.o: zzsegbox.f
+	$(FC) $(FFLAGS) -c zzsegbox.f
+
+zzsfxcor.o: zzsfxcor.f
+	$(FC) $(FFLAGS) -c zzsfxcor.f
+
+zzsglatx.o: zzsglatx.f
+	$(FC) $(FFLAGS) -c zzsglatx.f
+
+zzsgp4.o: zzsgp4.f
+	$(FC) $(FFLAGS) -c zzsgp4.f
+
+zzsinutl.o: zzsinutl.f
+	$(FC) $(FFLAGS) -c zzsinutl.f
+
+zzsizeok.o: zzsizeok.f
+	$(FC) $(FFLAGS) -c zzsizeok.f
+
+zzspkac0.o: zzspkac0.f
+	$(FC) $(FFLAGS) -c zzspkac0.f
+
+zzspkac1.o: zzspkac1.f
+	$(FC) $(FFLAGS) -c zzspkac1.f
+
+zzspkap0.o: zzspkap0.f
+	$(FC) $(FFLAGS) -c zzspkap0.f
+
+zzspkap1.o: zzspkap1.f
+	$(FC) $(FFLAGS) -c zzspkap1.f
+
+zzspkas0.o: zzspkas0.f
+	$(FC) $(FFLAGS) -c zzspkas0.f
+
+zzspkas1.o: zzspkas1.f
+	$(FC) $(FFLAGS) -c zzspkas1.f
+
+zzspkez0.o: zzspkez0.f
+	$(FC) $(FFLAGS) -c zzspkez0.f
+
+zzspkez1.o: zzspkez1.f
+	$(FC) $(FFLAGS) -c zzspkez1.f
+
+zzspkfao.o: zzspkfao.f
+	$(FC) $(FFLAGS) -c zzspkfao.f
+
+zzspkfap.o: zzspkfap.f
+	$(FC) $(FFLAGS) -c zzspkfap.f
+
+zzspkfat.o: zzspkfat.f
+	$(FC) $(FFLAGS) -c zzspkfat.f
+
+zzspkflt.o: zzspkflt.f
+	$(FC) $(FFLAGS) -c zzspkflt.f
+
+zzspkfzo.o: zzspkfzo.f
+	$(FC) $(FFLAGS) -c zzspkfzo.f
+
+zzspkfzt.o: zzspkfzt.f
+	$(FC) $(FFLAGS) -c zzspkfzt.f
+
+zzspkgo0.o: zzspkgo0.f
+	$(FC) $(FFLAGS) -c zzspkgo0.f
+
+zzspkgo1.o: zzspkgo1.f
+	$(FC) $(FFLAGS) -c zzspkgo1.f
+
+zzspkgp0.o: zzspkgp0.f
+	$(FC) $(FFLAGS) -c zzspkgp0.f
+
+zzspkgp1.o: zzspkgp1.f
+	$(FC) $(FFLAGS) -c zzspkgp1.f
+
+zzspklt0.o: zzspklt0.f
+	$(FC) $(FFLAGS) -c zzspklt0.f
+
+zzspklt1.o: zzspklt1.f
+	$(FC) $(FFLAGS) -c zzspklt1.f
+
+zzspkpa0.o: zzspkpa0.f
+	$(FC) $(FFLAGS) -c zzspkpa0.f
+
+zzspkpa1.o: zzspkpa1.f
+	$(FC) $(FFLAGS) -c zzspkpa1.f
+
+zzspksb0.o: zzspksb0.f
+	$(FC) $(FFLAGS) -c zzspksb0.f
+
+zzspksb1.o: zzspksb1.f
+	$(FC) $(FFLAGS) -c zzspksb1.f
+
+zzspkzp0.o: zzspkzp0.f
+	$(FC) $(FFLAGS) -c zzspkzp0.f
+
+zzspkzp1.o: zzspkzp1.f
+	$(FC) $(FFLAGS) -c zzspkzp1.f
+
+zzsrfini.o: zzsrfini.f
+	$(FC) $(FFLAGS) -c zzsrfini.f
+
+zzsrfker.o: zzsrfker.f
+	$(FC) $(FFLAGS) -c zzsrfker.f
+
+zzsrftrn.o: zzsrftrn.f
+	$(FC) $(FFLAGS) -c zzsrftrn.f
+
+zzstelab.o: zzstelab.f
+	$(FC) $(FFLAGS) -c zzstelab.f
+
+zztangnt.o: zztangnt.f
+	$(FC) $(FFLAGS) -c zztangnt.f
+
+zztanslv.o: zztanslv.f
+	$(FC) $(FFLAGS) -c zztanslv.f
+
+zztanutl.o: zztanutl.f
+	$(FC) $(FFLAGS) -c zztanutl.f
+
+zzteme.o: zzteme.f
+	$(FC) $(FFLAGS) -c zzteme.f
+
+zztime.o: zztime.f
+	$(FC) $(FFLAGS) -c zztime.f
+
+zztknerr.o: zztknerr.f
+	$(FC) $(FFLAGS) -c zztknerr.f
+
+zztogrid.o: zztogrid.f
+	$(FC) $(FFLAGS) -c zztogrid.f
+
+zztpats.o: zztpats.f
+	$(FC) $(FFLAGS) -c zztpats.f
+
+zztrvlnk.o: zztrvlnk.f
+	$(FC) $(FFLAGS) -c zztrvlnk.f
+
+zztwovxf.o: zztwovxf.f
+	$(FC) $(FFLAGS) -c zztwovxf.f
+
+zzuntngl.o: zzuntngl.f
+	$(FC) $(FFLAGS) -c zzuntngl.f
+
+zzutcpm.o: zzutcpm.f
+	$(FC) $(FFLAGS) -c zzutcpm.f
+
+zzvalcor.o: zzvalcor.f
+	$(FC) $(FFLAGS) -c zzvalcor.f
+
+zzvox2id.o: zzvox2id.f
+	$(FC) $(FFLAGS) -c zzvox2id.f
+
+zzvoxcvo.o: zzvoxcvo.f
+	$(FC) $(FFLAGS) -c zzvoxcvo.f
+
+zzvrtplt.o: zzvrtplt.f
+	$(FC) $(FFLAGS) -c zzvrtplt.f
+
+zzvstrng.o: zzvstrng.f
+	$(FC) $(FFLAGS) -c zzvstrng.f
+
+zzwahr.o: zzwahr.f
+	$(FC) $(FFLAGS) -c zzwahr.f
+
+zzwind2d.o: zzwind2d.f
+	$(FC) $(FFLAGS) -c zzwind2d.f
+
+zzwind.o: zzwind.f
+	$(FC) $(FFLAGS) -c zzwind.f
+
+zzwninsd.o: zzwninsd.f
+	$(FC) $(FFLAGS) -c zzwninsd.f
+
+zzxlated.o: zzxlated.f
+	$(FC) $(FFLAGS) -c zzxlated.f
+
+zzxlatei.o: zzxlatei.f
+	$(FC) $(FFLAGS) -c zzxlatei.f
+
+getsta.o: getsta.f
+	$(FC) $(FFLAGS) -c getsta.f
+
+stdiff.o: stdiff.f
+	$(FC) $(FFLAGS) -c stdiff.f
+
+cparse_2.o: cparse_2.f
+	$(FC) $(FFLAGS) -c cparse_2.f
+
+rdcmd.o: rdcmd.f
+	$(FC) $(FFLAGS) -c rdcmd.f
+
+wrdnln.o: wrdnln.f
+	$(FC) $(FFLAGS) -c wrdnln.f
+
+batch.o: batch.f
+	$(FC) $(FFLAGS) -c batch.f
+
+bboard_1.o: bboard_1.f
+	$(FC) $(FFLAGS) -c bboard_1.f
+
+bestwd.o: bestwd.f
+	$(FC) $(FFLAGS) -c bestwd.f
+
+builtn.o: builtn.f
+	$(FC) $(FFLAGS) -c builtn.f
+
+cbget_1.o: cbget_1.f
+	$(FC) $(FFLAGS) -c cbget_1.f
+
+cbinit_1.o: cbinit_1.f
+	$(FC) $(FFLAGS) -c cbinit_1.f
+
+cbput_1.o: cbput_1.f
+	$(FC) $(FFLAGS) -c cbput_1.f
+
+cbrem_1.o: cbrem_1.f
+	$(FC) $(FFLAGS) -c cbrem_1.f
+
+changu.o: changu.f
+	$(FC) $(FFLAGS) -c changu.f
+
+chbfit.o: chbfit.f
+	$(FC) $(FFLAGS) -c chbfit.f
+
+ck3sdn.o: ck3sdn.f
+	$(FC) $(FFLAGS) -c ck3sdn.f
+
+cmloop.o: cmloop.f
+	$(FC) $(FFLAGS) -c cmloop.f
+
+cmmore.o: cmmore.f
+	$(FC) $(FFLAGS) -c cmmore.f
+
+cmstup.o: cmstup.f
+	$(FC) $(FFLAGS) -c cmstup.f
+
+cnfirm_1.o: cnfirm_1.f
+	$(FC) $(FFLAGS) -c cnfirm_1.f
+
+cnfirm.o: cnfirm.f
+	$(FC) $(FFLAGS) -c cnfirm.f
+
+convbt.o: convbt.f
+	$(FC) $(FFLAGS) -c convbt.f
+
+convrt_2.o: convrt_2.f
+	$(FC) $(FFLAGS) -c convrt_2.f
+
+convrt_3.o: convrt_3.f
+	$(FC) $(FFLAGS) -c convrt_3.f
+
+convtb.o: convtb.f
+	$(FC) $(FFLAGS) -c convtb.f
+
+cputim.o: cputim.f
+	$(FC) $(FFLAGS) -c cputim.f
+
+crtptr.o: crtptr.f
+	$(FC) $(FFLAGS) -c crtptr.f
+
+curtim.o: curtim.f
+	$(FC) $(FFLAGS) -c curtim.f
+
+cutstr.o: cutstr.f
+	$(FC) $(FFLAGS) -c cutstr.f
+
+dafacu.o: dafacu.f
+	$(FC) $(FFLAGS) -c dafacu.f
+
+dafecu.o: dafecu.f
+	$(FC) $(FFLAGS) -c dafecu.f
+
+dcyphr.o: dcyphr.f
+	$(FC) $(FFLAGS) -c dcyphr.f
+
+dimcb_1.o: dimcb_1.f
+	$(FC) $(FFLAGS) -c dimcb_1.f
+
+dpstre.o: dpstre.f
+	$(FC) $(FFLAGS) -c dpstre.f
+
+dspvrs.o: dspvrs.f
+	$(FC) $(FFLAGS) -c dspvrs.f
+
+echo.o: echo.f
+	$(FC) $(FFLAGS) -c echo.f
+
+edtcmd.o: edtcmd.f
+	$(FC) $(FFLAGS) -c edtcmd.f
+
+edtcom.o: edtcom.f
+	$(FC) $(FFLAGS) -c edtcom.f
+
+exesys.o: exesys.f
+	$(FC) $(FFLAGS) -c exesys.f
+
+expfnm_1.o: expfnm_1.f
+	$(FC) $(FFLAGS) -c expfnm_1.f
+
+expfnm_2.o: expfnm_2.f
+	$(FC) $(FFLAGS) -c expfnm_2.f
+
+flgrpt.o: flgrpt.f
+	$(FC) $(FFLAGS) -c flgrpt.f
+
+fndcmp.o: fndcmp.f
+	$(FC) $(FFLAGS) -c fndcmp.f
+
+fndntk.o: fndntk.f
+	$(FC) $(FFLAGS) -c fndntk.f
+
+fndptk.o: fndptk.f
+	$(FC) $(FFLAGS) -c fndptk.f
+
+fnducv.o: fnducv.f
+	$(FC) $(FFLAGS) -c fnducv.f
+
+getcml.o: getcml.f
+	$(FC) $(FFLAGS) -c getcml.f
+
+getdel.o: getdel.f
+	$(FC) $(FFLAGS) -c getdel.f
+
+geteq.o: geteq.f
+	$(FC) $(FFLAGS) -c geteq.f
+
+getfnm_1.o: getfnm_1.f
+	$(FC) $(FFLAGS) -c getfnm_1.f
+
+getfnm.o: getfnm.f
+	$(FC) $(FFLAGS) -c getfnm.f
+
+getopt_1.o: getopt_1.f
+	$(FC) $(FFLAGS) -c getopt_1.f
+
+getopt_2.o: getopt_2.f
+	$(FC) $(FFLAGS) -c getopt_2.f
+
+getopt.o: getopt.f
+	$(FC) $(FFLAGS) -c getopt.f
+
+have.o: have.f
+	$(FC) $(FFLAGS) -c have.f
+
+header.o: header.f
+	$(FC) $(FFLAGS) -c header.f
+
+iovcmp.o: iovcmp.f
+	$(FC) $(FFLAGS) -c iovcmp.f
+
+langua.o: langua.f
+	$(FC) $(FFLAGS) -c langua.f
+
+lbdes_1.o: lbdes_1.f
+	$(FC) $(FFLAGS) -c lbdes_1.f
+
+lbget_1.o: lbget_1.f
+	$(FC) $(FFLAGS) -c lbget_1.f
+
+lbinit_1.o: lbinit_1.f
+	$(FC) $(FFLAGS) -c lbinit_1.f
+
+lbins_1.o: lbins_1.f
+	$(FC) $(FFLAGS) -c lbins_1.f
+
+lbpack_1.o: lbpack_1.f
+	$(FC) $(FFLAGS) -c lbpack_1.f
+
+lbrem_1.o: lbrem_1.f
+	$(FC) $(FFLAGS) -c lbrem_1.f
+
+lbupd_1.o: lbupd_1.f
+	$(FC) $(FFLAGS) -c lbupd_1.f
+
+logchk.o: logchk.f
+	$(FC) $(FFLAGS) -c logchk.f
+
+m2alph.o: m2alph.f
+	$(FC) $(FFLAGS) -c m2alph.f
+
+m2begr.o: m2begr.f
+	$(FC) $(FFLAGS) -c m2begr.f
+
+m2bodini.o: m2bodini.f
+	$(FC) $(FFLAGS) -c m2bodini.f
+
+m2bodtrn.o: m2bodtrn.f
+	$(FC) $(FFLAGS) -c m2bodtrn.f
+
+m2body.o: m2body.f
+	$(FC) $(FFLAGS) -c m2body.f
+
+m2cal.o: m2cal.f
+	$(FC) $(FFLAGS) -c m2cal.f
+
+m2chck.o: m2chck.f
+	$(FC) $(FFLAGS) -c m2chck.f
+
+m2clss.o: m2clss.f
+	$(FC) $(FFLAGS) -c m2clss.f
+
+m2core.o: m2core.f
+	$(FC) $(FFLAGS) -c m2core.f
+
+m2day.o: m2day.f
+	$(FC) $(FFLAGS) -c m2day.f
+
+m2diag.o: m2diag.f
+	$(FC) $(FFLAGS) -c m2diag.f
+
+m2engl.o: m2engl.f
+	$(FC) $(FFLAGS) -c m2engl.f
+
+m2epoc.o: m2epoc.f
+	$(FC) $(FFLAGS) -c m2epoc.f
+
+m2geta.o: m2geta.f
+	$(FC) $(FFLAGS) -c m2geta.f
+
+m2getb.o: m2getb.f
+	$(FC) $(FFLAGS) -c m2getb.f
+
+m2getc.o: m2getc.f
+	$(FC) $(FFLAGS) -c m2getc.f
+
+m2getd.o: m2getd.f
+	$(FC) $(FFLAGS) -c m2getd.f
+
+m2geti.o: m2geti.f
+	$(FC) $(FFLAGS) -c m2geti.f
+
+m2gmch.o: m2gmch.f
+	$(FC) $(FFLAGS) -c m2gmch.f
+
+m2have.o: m2have.f
+	$(FC) $(FFLAGS) -c m2have.f
+
+m2int.o: m2int.f
+	$(FC) $(FFLAGS) -c m2int.f
+
+m2ints.o: m2ints.f
+	$(FC) $(FFLAGS) -c m2ints.f
+
+m2keyw.o: m2keyw.f
+	$(FC) $(FFLAGS) -c m2keyw.f
+
+m2mon.o: m2mon.f
+	$(FC) $(FFLAGS) -c m2mon.f
+
+m2name.o: m2name.f
+	$(FC) $(FFLAGS) -c m2name.f
+
+m2ntem.o: m2ntem.f
+	$(FC) $(FFLAGS) -c m2ntem.f
+
+m2numb.o: m2numb.f
+	$(FC) $(FFLAGS) -c m2numb.f
+
+m2pars.o: m2pars.f
+	$(FC) $(FFLAGS) -c m2pars.f
+
+m2selb.o: m2selb.f
+	$(FC) $(FFLAGS) -c m2selb.f
+
+m2selc.o: m2selc.f
+	$(FC) $(FFLAGS) -c m2selc.f
+
+m2seld.o: m2seld.f
+	$(FC) $(FFLAGS) -c m2seld.f
+
+m2seli.o: m2seli.f
+	$(FC) $(FFLAGS) -c m2seli.f
+
+m2shll.o: m2shll.f
+	$(FC) $(FFLAGS) -c m2shll.f
+
+m2term.o: m2term.f
+	$(FC) $(FFLAGS) -c m2term.f
+
+m2thnq.o: m2thnq.f
+	$(FC) $(FFLAGS) -c m2thnq.f
+
+m2time.o: m2time.f
+	$(FC) $(FFLAGS) -c m2time.f
+
+m2tran.o: m2tran.f
+	$(FC) $(FFLAGS) -c m2tran.f
+
+m2trim.o: m2trim.f
+	$(FC) $(FFLAGS) -c m2trim.f
+
+m2unit.o: m2unit.f
+	$(FC) $(FFLAGS) -c m2unit.f
+
+m2wmch.o: m2wmch.f
+	$(FC) $(FFLAGS) -c m2wmch.f
+
+m2xist.o: m2xist.f
+	$(FC) $(FFLAGS) -c m2xist.f
+
+m2year.o: m2year.f
+	$(FC) $(FFLAGS) -c m2year.f
+
+makstr.o: makstr.f
+	$(FC) $(FFLAGS) -c makstr.f
+
+matchc.o: matchc.f
+	$(FC) $(FFLAGS) -c matchc.f
+
+matche.o: matche.f
+	$(FC) $(FFLAGS) -c matche.f
+
+match.o: match.f
+	$(FC) $(FFLAGS) -c match.f
+
+matchm.o: matchm.f
+	$(FC) $(FFLAGS) -c matchm.f
+
+matcho.o: matcho.f
+	$(FC) $(FFLAGS) -c matcho.f
+
+meta_2.o: meta_2.f
+	$(FC) $(FFLAGS) -c meta_2.f
+
+mspeld.o: mspeld.f
+	$(FC) $(FFLAGS) -c mspeld.f
+
+ncodec.o: ncodec.f
+	$(FC) $(FFLAGS) -c ncodec.f
+
+ncoded.o: ncoded.f
+	$(FC) $(FFLAGS) -c ncoded.f
+
+ncodei.o: ncodei.f
+	$(FC) $(FFLAGS) -c ncodei.f
+
+newfil_1.o: newfil_1.f
+	$(FC) $(FFLAGS) -c newfil_1.f
+
+newfil.o: newfil.f
+	$(FC) $(FFLAGS) -c newfil.f
+
+nicebt_1.o: nicebt_1.f
+	$(FC) $(FFLAGS) -c nicebt_1.f
+
+niceio_3.o: niceio_3.f
+	$(FC) $(FFLAGS) -c niceio_3.f
+
+nicepr_1.o: nicepr_1.f
+	$(FC) $(FFLAGS) -c nicepr_1.f
+
+no.o: no.f
+	$(FC) $(FFLAGS) -c no.f
+
+nsplgr.o: nsplgr.f
+	$(FC) $(FFLAGS) -c nsplgr.f
+
+nspopl.o: nspopl.f
+	$(FC) $(FFLAGS) -c nspopl.f
+
+nsppwd.o: nsppwd.f
+	$(FC) $(FFLAGS) -c nsppwd.f
+
+nspsav.o: nspsav.f
+	$(FC) $(FFLAGS) -c nspsav.f
+
+nspxcp.o: nspxcp.f
+	$(FC) $(FFLAGS) -c nspxcp.f
+
+nthuqt.o: nthuqt.f
+	$(FC) $(FFLAGS) -c nthuqt.f
+
+nthuqw.o: nthuqw.f
+	$(FC) $(FFLAGS) -c nthuqw.f
+
+nxtcom.o: nxtcom.f
+	$(FC) $(FFLAGS) -c nxtcom.f
+
+occurs.o: occurs.f
+	$(FC) $(FFLAGS) -c occurs.f
+
+pagman.o: pagman.f
+	$(FC) $(FFLAGS) -c pagman.f
+
+parcml.o: parcml.f
+	$(FC) $(FFLAGS) -c parcml.f
+
+pltfrm.o: pltfrm.f
+	$(FC) $(FFLAGS) -c pltfrm.f
+
+podaec.o: podaec.f
+	$(FC) $(FFLAGS) -c podaec.f
+
+podaed.o: podaed.f
+	$(FC) $(FFLAGS) -c podaed.f
+
+podaei.o: podaei.f
+	$(FC) $(FFLAGS) -c podaei.f
+
+podbec.o: podbec.f
+	$(FC) $(FFLAGS) -c podbec.f
+
+podbed.o: podbed.f
+	$(FC) $(FFLAGS) -c podbed.f
+
+podbei.o: podbei.f
+	$(FC) $(FFLAGS) -c podbei.f
+
+podbgc.o: podbgc.f
+	$(FC) $(FFLAGS) -c podbgc.f
+
+podbgd.o: podbgd.f
+	$(FC) $(FFLAGS) -c podbgd.f
+
+podbgi.o: podbgi.f
+	$(FC) $(FFLAGS) -c podbgi.f
+
+podcgc.o: podcgc.f
+	$(FC) $(FFLAGS) -c podcgc.f
+
+podcgd.o: podcgd.f
+	$(FC) $(FFLAGS) -c podcgd.f
+
+podcgi.o: podcgi.f
+	$(FC) $(FFLAGS) -c podcgi.f
+
+poddgc.o: poddgc.f
+	$(FC) $(FFLAGS) -c poddgc.f
+
+poddgd.o: poddgd.f
+	$(FC) $(FFLAGS) -c poddgd.f
+
+poddgi.o: poddgi.f
+	$(FC) $(FFLAGS) -c poddgi.f
+
+podegc.o: podegc.f
+	$(FC) $(FFLAGS) -c podegc.f
+
+podegd.o: podegd.f
+	$(FC) $(FFLAGS) -c podegd.f
+
+podegi.o: podegi.f
+	$(FC) $(FFLAGS) -c podegi.f
+
+podiec.o: podiec.f
+	$(FC) $(FFLAGS) -c podiec.f
+
+podied.o: podied.f
+	$(FC) $(FFLAGS) -c podied.f
+
+podiei.o: podiei.f
+	$(FC) $(FFLAGS) -c podiei.f
+
+podonc.o: podonc.f
+	$(FC) $(FFLAGS) -c podonc.f
+
+podond.o: podond.f
+	$(FC) $(FFLAGS) -c podond.f
+
+podoni.o: podoni.f
+	$(FC) $(FFLAGS) -c podoni.f
+
+podrec.o: podrec.f
+	$(FC) $(FFLAGS) -c podrec.f
+
+podred.o: podred.f
+	$(FC) $(FFLAGS) -c podred.f
+
+podrei.o: podrei.f
+	$(FC) $(FFLAGS) -c podrei.f
+
+podrgc.o: podrgc.f
+	$(FC) $(FFLAGS) -c podrgc.f
+
+podrgd.o: podrgd.f
+	$(FC) $(FFLAGS) -c podrgd.f
+
+podrgi.o: podrgi.f
+	$(FC) $(FFLAGS) -c podrgi.f
+
+prcomf.o: prcomf.f
+	$(FC) $(FFLAGS) -c prcomf.f
+
+prtrap.o: prtrap.f
+	$(FC) $(FFLAGS) -c prtrap.f
+
+pstack.o: pstack.f
+	$(FC) $(FFLAGS) -c pstack.f
+
+qlstnb.o: qlstnb.f
+	$(FC) $(FFLAGS) -c qlstnb.f
+
+qmini.o: qmini.f
+	$(FC) $(FFLAGS) -c qmini.f
+
+qrtrim.o: qrtrim.f
+	$(FC) $(FFLAGS) -c qrtrim.f
+
+qtran.o: qtran.f
+	$(FC) $(FFLAGS) -c qtran.f
+
+rc2grd.o: rc2grd.f
+	$(FC) $(FFLAGS) -c rc2grd.f
+
+rdstmn.o: rdstmn.f
+	$(FC) $(FFLAGS) -c rdstmn.f
+
+rdstmt.o: rdstmt.f
+	$(FC) $(FFLAGS) -c rdstmt.f
+
+reglon.o: reglon.f
+	$(FC) $(FFLAGS) -c reglon.f
+
+ressym.o: ressym.f
+	$(FC) $(FFLAGS) -c ressym.f
+
+rptsym.o: rptsym.f
+	$(FC) $(FFLAGS) -c rptsym.f
+
+sbget_1.o: sbget_1.f
+	$(FC) $(FFLAGS) -c sbget_1.f
+
+sbinit_1.o: sbinit_1.f
+	$(FC) $(FFLAGS) -c sbinit_1.f
+
+sbrem_1.o: sbrem_1.f
+	$(FC) $(FFLAGS) -c sbrem_1.f
+
+sbset_1.o: sbset_1.f
+	$(FC) $(FFLAGS) -c sbset_1.f
+
+scansl.o: scansl.f
+	$(FC) $(FFLAGS) -c scansl.f
+
+shosym.o: shosym.f
+	$(FC) $(FFLAGS) -c shosym.f
+
+sizecb_1.o: sizecb_1.f
+	$(FC) $(FFLAGS) -c sizecb_1.f
+
+spcacb.o: spcacb.f
+	$(FC) $(FFLAGS) -c spcacb.f
+
+spcacc.o: spcacc.f
+	$(FC) $(FFLAGS) -c spcacc.f
+
+stran.o: stran.f
+	$(FC) $(FFLAGS) -c stran.f
+
+syptrc.o: syptrc.f
+	$(FC) $(FFLAGS) -c syptrc.f
+
+syptri.o: syptri.f
+	$(FC) $(FFLAGS) -c syptri.f
+
+tabrpt.o: tabrpt.f
+	$(FC) $(FFLAGS) -c tabrpt.f
+
+trnlat.o: trnlat.f
+	$(FC) $(FFLAGS) -c trnlat.f
+
+txtops.o: txtops.f
+	$(FC) $(FFLAGS) -c txtops.f
+
+unitp.o: unitp.f
+	$(FC) $(FFLAGS) -c unitp.f
+
+upto.o: upto.f
+	$(FC) $(FFLAGS) -c upto.f
+
+utrans_2.o: utrans_2.f
+	$(FC) $(FFLAGS) -c utrans_2.f
+
+zzcapplt.o: zzcapplt.f
+	$(FC) $(FFLAGS) -c zzcapplt.f
+
+zzckcvr2.o: zzckcvr2.f
+	$(FC) $(FFLAGS) -c zzckcvr2.f
+
+zzckcvr3.o: zzckcvr3.f
+	$(FC) $(FFLAGS) -c zzckcvr3.f
+
+zzckcvr4.o: zzckcvr4.f
+	$(FC) $(FFLAGS) -c zzckcvr4.f
+
+zzckcvr5.o: zzckcvr5.f
+	$(FC) $(FFLAGS) -c zzckcvr5.f
+
+zzcke06.o: zzcke06.f
+	$(FC) $(FFLAGS) -c zzcke06.f
+
+zzdbrgap.o: zzdbrgap.f
+	$(FC) $(FFLAGS) -c zzdbrgap.f
+
+zzellplt.o: zzellplt.f
+	$(FC) $(FFLAGS) -c zzellplt.f
+
+zzellsec.o: zzellsec.f
+	$(FC) $(FFLAGS) -c zzellsec.f
+
+zzgetenv.o: zzgetenv.f
+	$(FC) $(FFLAGS) -c zzgetenv.f
+
+zzgetfat.o: zzgetfat.f
+	$(FC) $(FFLAGS) -c zzgetfat.f
+
+zzgrdplt.o: zzgrdplt.f
+	$(FC) $(FFLAGS) -c zzgrdplt.f
+
+zznsppok.o: zznsppok.f
+	$(FC) $(FFLAGS) -c zznsppok.f
+
+zztxtopn.o: zztxtopn.f
+	$(FC) $(FFLAGS) -c zztxtopn.f
+
+clean:
+	rm -f *.exe *.o *.mod

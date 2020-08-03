@@ -1,0 +1,74 @@
+FC ?= gfortran
+FFLAGS ?=
+
+.PHONY: all clean
+all:  divide.exe hello.exe loop.exe namer.exe nestedloop.exe readdata.exe strToInt.exe sum.exe writedata.exe choice.exe writedatamulti.exe
+
+divide.exe: divide.o
+	$(FC) $(FFLAGS) divide.o -o divide.exe
+
+divide.o: divide.f90
+	$(FC) $(FFLAGS) -c divide.f90
+
+hello.exe: hello.o
+	$(FC) $(FFLAGS) hello.o -o hello.exe
+
+hello.o: hello.f90
+	$(FC) $(FFLAGS) -c hello.f90
+
+loop.exe: loop.o
+	$(FC) $(FFLAGS) loop.o -o loop.exe
+
+loop.o: loop.f90
+	$(FC) $(FFLAGS) -c loop.f90
+
+namer.exe: namer.o
+	$(FC) $(FFLAGS) namer.o -o namer.exe
+
+namer.o: namer.f90
+	$(FC) $(FFLAGS) -c namer.f90
+
+nestedloop.exe: nestedloop.o
+	$(FC) $(FFLAGS) nestedloop.o -o nestedloop.exe
+
+nestedloop.o: nestedloop.f90
+	$(FC) $(FFLAGS) -c nestedloop.f90
+
+readdata.exe: readdata.o
+	$(FC) $(FFLAGS) readdata.o -o readdata.exe
+
+readdata.o: readdata.f90
+	$(FC) $(FFLAGS) -c readdata.f90
+
+strToInt.exe: strToInt.o
+	$(FC) $(FFLAGS) strToInt.o -o strToInt.exe
+
+strToInt.o: strToInt.f90
+	$(FC) $(FFLAGS) -c strToInt.f90
+
+sum.exe: sum.o
+	$(FC) $(FFLAGS) sum.o -o sum.exe
+
+sum.o: sum.f90
+	$(FC) $(FFLAGS) -c sum.f90
+
+writedata.exe: writedata.o
+	$(FC) $(FFLAGS) writedata.o -o writedata.exe
+
+writedata.o: writedata.f90
+	$(FC) $(FFLAGS) -c writedata.f90
+
+choice.exe: choice.o
+	$(FC) $(FFLAGS) choice.o -o choice.exe
+
+choice.o: choice.f90
+	$(FC) $(FFLAGS) -c choice.f90
+
+writedatamulti.exe: writedatamulti.o
+	$(FC) $(FFLAGS) writedatamulti.o -o writedatamulti.exe
+
+writedatamulti.o: writedatamulti.f90
+	$(FC) $(FFLAGS) -c writedatamulti.f90
+
+clean:
+	rm -f *.exe *.o *.mod

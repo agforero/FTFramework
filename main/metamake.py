@@ -15,7 +15,7 @@ def findl_files():
         elif len(glob.glob(ext.upper())) != 0: files += glob.glob(ext.upper())
     return files
 
-class rDepList():
+class rDepList:
     def __init__(self):
         self.ls = []
 

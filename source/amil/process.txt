@@ -1,0 +1,3681 @@
+as110.f90:
+as126.f90:
+as132.f90:
+as135.f90:
+PROGRAM test_lfnorm
+IMPLICIT NONE
+INTEGER, PARAMETER     :: dp = SELECTED_REAL_KIND(12, 60)
+INTEGER                :: i, ier, niter, m, n
+REAL (dp), ALLOCATABLE :: x(:,:), y(:), beta(:)
+REAL (dp)              :: z
+DO
+  WRITE(*, '(a)', ADVANCE='NO') ' Enter number of predictor variables: '
+  READ(*, *) m
+  IF (m < 1) THEN
+    WRITE(*, *) '** Must be greater than zero **'
+    CYCLE
+  ELSE
+    EXIT
+  END IF
+END DO
+n = 3 * m
+ALLOCATE( x(n,m), y(n), beta(m) )
+beta = (/ (DBLE(i),i=1,m) /)
+DO i = 1, n
+  CALL RANDOM_NUMBER( x(i,2:) )
+  CALL RANDOM_NUMBER( z )
+  x(i,1) = 1.0_dp
+  y(i) = DOT_PRODUCT( x(i,:), beta ) + z - 0.5_dp
+END DO
+CALL lfnorm(n, m, x, y, beta, z, niter, ier)
+IF (ier > 0) THEN
+  WRITE(*, *) '** X-matrix has rank < m **'
+ELSE
+  WRITE(*, *) 'Regression coefficients'
+  WRITE(*, '(t2, 10f7.3)') beta
+  WRITE(*, '(a, i6)') ' No. of iterations = ', niter
+  WRITE(*, '(a, f9.5)') ' Least max. abs. deviation = ', z
+END IF
+STOP
+END PROGRAM test_lfnorm
+as136.f90:
+as152.f90:
+as154.f90:
+as155.f90:
+as157.f90:
+as177.f90:
+as181.f90:
+PROGRAM test_swilk
+as190.f90:
+as192.f90:
+PROGRAM test_as192
+IMPLICIT NONE
+INTEGER :: itype, ifault
+REAL    :: xbar, sd, rb1, b2, bndry, sigpt(11)
+DO
+  WRITE(*, '(a)', ADVANCE='NO') ' Enter mean & st.devn.: '
+  READ(*, *) xbar, sd
+  WRITE(*, *) 'ITYPE = 1  4 moments used'
+  WRITE(*, *) 'ITYPE = 2  3 moments + left boundary used'
+  WRITE(*, *) 'ITYPE = 3  3 moments + right boundary used'
+  WRITE(*, '(a)', ADVANCE='NO') ' Enter ITYPE: '
+  READ(*, *) itype
+  WRITE(*, '(a)', ADVANCE='NO') ' Enter root(beta1) with sign of beta1: '
+  READ(*, *) rb1
+  IF (itype == 1) THEN
+    WRITE(*, '(a)', ADVANCE='NO') ' Enter beta2: '
+    READ(*, *) b2
+  END IF
+  IF (itype > 1) THEN
+    WRITE(*, '(a)', ADVANCE='NO') ' Enter boundary: '
+    READ(*, *) bndry
+  END IF
+  CALL pearsn(xbar, sd, itype, rb1, b2, bndry, sigpt, ifault)
+  IF (ifault /= 0) THEN
+    WRITE(*, *) 'IFAULT = ', ifault
+  ELSE
+    WRITE(*, '(" Percentage points"/ " ", 11f7.2)') sigpt
+  END IF
+END DO
+STOP
+END PROGRAM test_as192
+as205.f90:
+as207.f90:
+as217.f90:
+as227.f90:
+PROGRAM t_as227
+IMPLICIT NONE
+INTEGER  :: n = 4, ifault
+CALL gcount(n, print_comb, ifault)
+STOP
+END PROGRAM t_as227
+as241.f90:
+PROGRAM test_as241
+IMPLICIT NONE
+INTEGER, PARAMETER :: sp = SELECTED_REAL_KIND(6, 30),  &
+                      dp = SELECTED_REAL_KIND(12, 60)
+REAL (sp)  :: p_single, z_single
+REAL (dp)  :: p_dble, z_dble
+INTEGER    :: ifault
+DO
+  WRITE(*, *)'Enter area under normal curve: '
+  READ(*, *) p_dble
+  p_single = p_dble
+  CALL ppnd7(p_single, z_single, ifault)
+  IF (ifault /= 0) THEN
+    WRITE(*, '(1x, "IFAULT =", i3)') ifault
+    CYCLE
+  END IF
+  CALL ppnd16(p_dble, z_dble, ifault)
+  IF (ifault /= 0) THEN
+    WRITE(*, '(1x, "IFAULT =", i3)') ifault
+    CYCLE
+  END IF
+  WRITE(*, '(1x, a, f11.6, 2x, a, f16.11)')   &
+        'Low prec. result =',  z_single, ' High prec. result =', z_dble
+END DO
+STOP
+END PROGRAM test_as241
+as245.f90:
+as260.f90:
+as261.f90:
+PROGRAM main
+as275.f90:
+as27.f90:
+as282.f90:
+as285.f90:
+PROGRAM Driver285
+as298.f90:
+as304.f90:
+as310.f90:
+as60.f90:
+as63.f90:
+as66.f90:
+as6.f90:
+as91.f90:
+assndx.f90:
+big_solv.f90:
+PROGRAM test_big_solve
+IMPLICIT NONE
+INTEGER, PARAMETER      :: dp = SELECTED_REAL_KIND(12, 60)
+INTEGER                 :: i, ierr, n, row
+REAL (dp), ALLOCATABLE  :: b(:), c(:)
+REAL (dp)               :: errmax, total
+REAL                    :: finish, start
+WRITE(*, '(a)', ADVANCE='NO') ' Enter no. of rows (n): '
+READ(*, *) n
+ALLOCATE( b(n), c(n) )
+OPEN(UNIT=9, STATUS='SCRATCH', FORM='UNFORMATTED')
+DO row = 1, n
+  CALL RANDOM_NUMBER( c )
+  total = 0
+  DO i = 1, n
+    total = total + i * c(i)
+  END DO
+  b(row) = total
+  WRITE(9) c
+END DO
+REWIND (9)
+CALL CPU_TIME(start)
+CALL dple(rowk, n, b, c, ierr)
+CALL CPU_TIME(finish)
+WRITE(*, '(a, F9.2, a)') ' Time taken = ', finish-start, 'sec.'
+errmax = 0.0_dp
+DO i = 1, n
+  errmax = MAX( errmax, ABS(c(i)-i) )
+END DO
+WRITE(*, '(a, g12.3)') ' Max. error = ', errmax
+STOP
+END PROGRAM test_big_solve
+bivnorm.f90:
+bnd_solv.f90:
+PROGRAM t_dbslv
+IMPLICIT NONE
+REAL (dp)  :: a(8,5), x(8)
+INTEGER    :: i, ind, ka = 8, n = 8, ml = 1, mu = 2
+a = 0.0_dp
+DO i = 1, ka
+  IF (i > 1)   a(i,1) = 10*i + i - 1   ! Below the diagonal
+               a(i,2) = 10*i + i       ! On the diagonal
+  IF (i < n)   a(i,3) = 10*i + i + 1   ! 1st band above the diagonal
+  IF (i < n-1) a(i,4) = 10*i + i + 2   ! 2nd band above the diagonal
+END DO
+x = (/ 12.0_dp, -2.0_dp, 2.0_dp, -2.0_dp, 2.0_dp, -2.0_dp, -77.0_dp, -1.0_dp /)
+CALL dbslv(0, a, ka, n, ml, mu, x, ind)
+WRITE(*, *) 'IND =', ind
+WRITE(*, *) 'Solution:'
+WRITE(*, '(8f9.5)') x
+WRITE(*, *) 'On exit, matrix A contains:'
+DO i = 1, ka
+  WRITE(*, '(5f10.5)') a(i,1:5)
+END DO
+STOP
+END PROGRAM t_dbslv
+bvls.f90:
+PROGRAM Test_BVLS
+IMPLICIT NONE
+INTEGER, PARAMETER  :: dp = SELECTED_REAL_KIND(12, 60)
+INTEGER, PARAMETER  :: ncases = 100, ncols = 10
+REAL (dp)           :: a(ncases,ncols), y(ncases), bl(ncols), bu(ncols),  &
+                       beta(ncols), x(ncols), e
+INTEGER             :: case, istate(ncols+1), j, key, loopa
+CALL RANDOM_NUMBER(beta)
+beta = 4.0*(beta - 0.5)
+CALL RANDOM_NUMBER(a)
+DO case = 1, ncases
+  CALL RANDOM_NUMBER(e)
+  y(case) = DOT_PRODUCT( a(case, :), beta ) + 0.1*(e - 0.5)
+END DO
+key = 0
+bl = 0.0_dp
+bu = 1.0_dp
+CALL bvls(key, ncases, ncols, a, y, bl, bu, x, istate, loopa)
+WRITE(*, *) ' Column   Original beta   Solution'
+DO j = 1, ncols
+  WRITE(*, '(i5, 2f14.3)') j, beta(j), x(j)
+END DO
+WRITE(*, '(a, i4)') ' No. of iterations = ', loopa
+WRITE(*, *)
+STOP
+END PROGRAM Test_BVLS
+cacm125.f90:
+PROGRAM main
+IMPLICIT NONE
+INTEGER, PARAMETER    :: nm = 100
+REAL (dp), PARAMETER  :: zero=0.0D0, one=1.0D0, two=2.0D0, three=3.0D0
+REAL (dp)  :: a, b, eps, exact, s
+INTEGER    :: i, n, p
+REAL (dp) :: e(nm), q(nm), w(nm), x(nm)
+10 WRITE (6, FMT=*) ' Enter n, eps: '
+READ (5, FMT=*, END=20) n, eps
+IF (eps <= zero) eps = 1.D-15
+IF (n >= nm-1) STOP
+WRITE (6, FMT=*) 'n=', n, ' eps=', eps
+DO i = 2,nm
+  q(i) = two*i*i/ (two*i* (two*i-one))
+  e(i) = two*i*i/ (two*i* (two*i+one))
+END DO
+q(1) = one
+e(1) = one/three
+CALL weightc(n, q, e, eps, w, x)
+DO i = 1, n
+  w(i) = two*w(i)
+  x(i) = x(i) - one
+END DO
+DO i = 1, MIN(n,10)
+  WRITE (6, FMT=9000) w(i), x(i)
+END DO
+p = 4
+a = -one
+b = one
+exact = (b** (p+1)-a** (p+1))/ (p+1)
+s = zero
+DO i = 1, n
+  s = s + w(i)*x(i)**p
+END DO
+WRITE (6, FMT=9010) p, exact, s, exact - s
+GO TO 10
+20 STOP
+9000 FORMAT (f20.16, '  ', f20.16)
+9010 FORMAT (i3, ' Exact=', f20.16, ' Quadrature=', f20.16, ' Error=', e14.7)
+END PROGRAM main
+cacm395.f90:
+cacm396.f90:
+cbnd_slv.f90:
+PROGRAM t_cbslv
+IMPLICIT NONE
+COMPLEX (dp)  :: a(8,5), x(8)
+INTEGER       :: i, ind, ka = 8, n = 8, ml = 1, mu = 2
+a = (0.0_dp, 0.0_dp)
+DO i = 1, ka
+  IF (i > 1)   a(i,1) = 10*i + i - 1   ! Below the diagonal
+               a(i,2) = 10*i + i       ! On the diagonal
+  IF (i < n)   a(i,3) = 10*i + i + 1   ! 1st band above the diagonal
+  IF (i < n-1) a(i,4) = 10*i + i + 2   ! 2nd band above the diagonal
+END DO
+x = (/ (12.0_dp,0.0_dp), (-2.0_dp,0.0_dp), (2.0_dp,0.0_dp), (-2.0_dp,0.0_dp), &
+       (2.0_dp,0.0_dp), (-2.0_dp,0.0_dp), (-77.0_dp,0.0_dp), (-1.0_dp,0.0_dp) /)
+CALL cbslv(0, a, ka, n, ml, mu, x, ind)
+WRITE(*, *) 'IND =', ind
+WRITE(*, *) 'Solution:'
+WRITE(*, '(4(" ",2f9.5," "))') x
+WRITE(*, *) 'On exit, matrix A contains:'
+DO i = 1, ka
+  WRITE(*, '(5("  ",2f7.4))') a(i,1:5)
+END DO
+STOP
+END PROGRAM t_cbslv
+cbsslj.f90:
+cexpli.f90:
+cgamma.f90:
+chirp.f90:
+chi_sq.f90:
+PROGRAM test_chi_squared
+IMPLICIT NONE
+INTEGER, PARAMETER  :: dp = SELECTED_REAL_KIND(15, 60)
+INTEGER             :: ndf
+REAL (dp)           :: chi2
+cobyla.f90:
+PROGRAM test_cobyla
+IMPLICIT NONE
+INTEGER, PARAMETER :: nn = 10
+REAL (dp) :: rhobeg, rhoend, temp, tempa, tempb, tempc, tempd, x(nn),  &
+             xopt(nn)
+INTEGER   :: i, icase, iprint, m, maxfun, n
+DO nprob=1,10
+  IF (nprob == 1) THEN
+    WRITE(*, 10)
+    10 FORMAT (/'       Output from test problem 1 (Simple quadratic)')
+    n = 2
+    m = 0
+    xopt(1) = -1.0_dp
+    xopt(2) = 0.0_dp
+  ELSE IF (nprob == 2) THEN
+    WRITE(*, 20)
+    20 FORMAT (/'       Output from test problem 2 (2D unit circle calculation)')
+    n = 2
+    m = 1
+    xopt(1) = SQRT(0.5_dp)
+    xopt(2) = -xopt(1)
+  ELSE IF (nprob == 3) THEN
+    WRITE(*, 30)
+    30 FORMAT (/'       Output from test problem 3 (3D ellipsoid calculation)')
+    n = 3
+    m = 1
+    xopt(1) = 1.0_dp/SQRT(3.0_dp)
+    xopt(2) = 1.0_dp/SQRT(6.0_dp)
+    xopt(3) = -1.0_dp/3.0_dp
+  ELSE IF (nprob == 4) THEN
+    WRITE(*, 40)
+    40 FORMAT (/'       Output from test problem 4 (Weak Rosenbrock)')
+    n = 2
+    m = 0
+    xopt(1) = -1.0_dp
+    xopt(2) = 1.0_dp
+  ELSE IF (nprob == 5) THEN
+    WRITE(*, 50)
+    50 FORMAT (/'       Output from test problem 5 (Intermediate Rosenbrock)')
+    n = 2
+    m = 0
+    xopt(1) = -1.0_dp
+    xopt(2) = 1.0_dp
+  ELSE IF (nprob == 6) THEN
+    WRITE(*, 60)
+    60 FORMAT (/'       Output from test problem 6 (Equation ',  &
+               '(9.1.15) in Fletcher)')
+    n = 2
+    m = 2
+    xopt(1) = SQRT(0.5_dp)
+    xopt(2) = xopt(1)
+  ELSE IF (nprob == 7) THEN
+    WRITE(*, 70)
+    70 FORMAT (/'       Output from test problem 7 (Equation ',  &
+               '(14.4.2) in Fletcher)')
+    n = 3
+    m = 3
+    xopt(1) = 0.0_dp
+    xopt(2) = -3.0_dp
+    xopt(3) = -3.0_dp
+  ELSE IF (nprob == 8) THEN
+    WRITE(*, 80)
+    80 FORMAT (/'       Output from test problem 8 (Rosen-Suzuki)')
+    n=4
+    m=3
+    xopt(1) = 0.0_dp
+    xopt(2) = 1.0_dp
+    xopt(3) = 2.0_dp
+    xopt(4) = -1.0_dp
+  ELSE IF (nprob == 9) THEN
+    WRITE(*, 90)
+    90 FORMAT (/'       Output from test problem 9 (Hock and Schittkowski 100)')
+    n = 7
+    m = 4
+    xopt(1) = 2.330499_dp
+    xopt(2) = 1.951372_dp
+    xopt(3) = -0.4775414_dp
+    xopt(4) = 4.365726_dp
+    xopt(5) = -0.624487_dp
+    xopt(6) = 1.038131_dp
+    xopt(7) = 1.594227_dp
+  ELSE IF (nprob == 10) THEN
+    WRITE(*, 100)
+    100 FORMAT (/'       Output from test problem 10 (Hexagon area)')
+    n = 9
+    m = 14
+  END IF
+  DO icase = 1,2
+    x(1:n) = 1.0_dp
+    rhobeg = 0.5_dp
+    rhoend = 1.d-6
+    IF (icase == 2) rhoend = 1.d-8
+    iprint = 1
+    maxfun = 3500
+    CALL cobyla (n, m, x, rhobeg, rhoend, iprint, maxfun)
+    IF (nprob == 10) THEN
+      tempa = x(1) + x(3) + x(5) + x(7)
+      tempb = x(2) + x(4) + x(6) + x(8)
+      tempc = 0.5_dp/SQRT(tempa*tempa + tempb*tempb)
+      tempd = tempc*SQRT(3.0_dp)
+      xopt(1) = tempd*tempa + tempc*tempb
+      xopt(2) = tempd*tempb - tempc*tempa
+      xopt(3) = tempd*tempa - tempc*tempb
+      xopt(4) = tempd*tempb + tempc*tempa
+      DO i=1,4
+        xopt(i+4) = xopt(i)
+      END DO
+    END IF
+    temp = 0.0_dp
+    DO i=1,n
+      temp = temp + (x(i) - xopt(i))**2
+    END DO
+    WRITE(*, 150) SQRT(temp)
+    150 FORMAT (/'     Least squares error in variables = ', G16.6)
+  END DO
+  WRITE(*, 170)
+  170 FORMAT ('  ----------------------------------------------',  &
+              '--------------------')
+END DO
+STOP
+END PROGRAM test_cobyla
+constant.f90:
+datesub.f90:
+PROGRAM test_datesub
+dcerf.f90:
+dcosint.f90:
+dcuhre.f90:
+diehard.f90:
+PROGRAM diehard
+dli.f90:
+PROGRAM Test_DLI
+dmexp.f90:
+dopt.f90:
+dple.f90:
+PROGRAM Test_DPLE
+IMPLICIT NONE
+INTEGER, PARAMETER  :: dp = SELECTED_REAL_KIND(14, 60)
+REAL (dp)  :: a(100), x(100), b(100), error, temp, soln(100)
+INTEGER    :: i, ierr, row
+CALL RANDOM_NUMBER(x)
+DO row = 1, 100
+  CALL rowk(100, row, a)
+  b(row) = DOT_PRODUCT(a, x)
+END DO
+CALL dple(rowk, 100, b, soln, ierr)
+IF (ierr == 0) THEN
+  temp = 0.0
+  DO i = 1, 100
+    error = ABS(soln(i) - x(i))
+    temp = MAX(temp, error)
+  END DO
+  WRITE(*, '(a, g13.5)') ' Max. error = ', temp
+ELSE
+  WRITE(*, *) ' Error = ', ierr
+END IF
+STOP
+END PROGRAM Test_DPLE
+dprand.f90:
+dsinint.f90:
+dspslv.f90:
+dsvdc.f90:
+dtest1.f90:
+PROGRAM dtest1
+IMPLICIT NONE
+INTEGER            :: key, n, mincls, maxcls, ifail, neval, nsub
+INTEGER, PARAMETER :: ndim = 5, nf = ndim+1
+REAL (dp)          :: a(ndim), b(ndim)
+REAL (dp)          :: absest(nf), finest(nf), absreq, relreq
+DO n = 1,ndim
+  a(n) = 0
+  b(n) = 1
+END DO
+mincls = 0
+maxcls = 10000
+key = 0
+absreq = 0
+relreq = 1.D-3
+CALL dcuhre(ndim, nf, a, b, mincls, maxcls, ftest, absreq, relreq,  &
+            key, 0, finest, absest, neval, ifail, nsub)
+WRITE(*,9999) neval, ifail
+9999 FORMAT ('        DCUHRE TEST RESULTS' // '     FTEST CALLS = ', i4,  &
+	     ', IFAIL = ', i2 / '    N   ESTIMATED ERROR    INTEGRAL')
+DO n = 1, nf
+  WRITE(*, 9998) n, absest(n), finest(n)
+  9998 FORMAT ("   ", i2, 2F15.6)
+END DO
+WRITE(*, '(a, i6)') ' No. of subregions generated = ', nsub
+STOP
+END PROGRAM dtest1
+easter.f90:
+PROGRAM test_Easter
+IMPLICIT NONE
+INTEGER            :: day(1980:2024), month(1980:2024), year, y2, y3
+CHARACTER (LEN=5)  :: mon(3:4) = (/ 'March', 'April' /)
+DO year = 1980, 2024
+  CALL Easter(year, day(year), month(year))
+END DO
+DO year = 1980, 1994
+  y2 = year + 15
+  y3 = y2 + 15
+  WRITE(*, '(3("  ", i4, "  ", a5, i3, "      "))')  &
+           year, mon(month(year)), day(year),  &
+           y2, mon(month(y2)), day(y2),  &
+           y3, mon(month(y3)), day(y3)
+END DO
+STOP
+END PROGRAM test_Easter
+erf.f90:
+ewma.f90:
+PROGRAM test_EWMA
+find_sub.f90:
+foldat73.f90:
+PROGRAM Fold_at_column73
+IMPLICIT NONE
+CHARACTER (LEN=50)  :: infile, outfile
+INTEGER             :: iostatus, pos
+CHARACTER (LEN=132) :: text
+WRITE(*, '(a)', ADVANCE='NO') ' Enter name of input file: '
+READ(*, *) infile
+OPEN(8, FILE=infile, STATUS='OLD', IOSTAT=iostatus)
+IF (iostatus /= 0) THEN
+  WRITE(*, '(a)') ' ** Unable to open file: ' // TRIM(infile)
+  STOP
+END IF
+pos = INDEX(TRIM(infile), '.')
+IF (pos == 0) THEN
+  outfile = TRIM(infile) // '.STD'
+ELSE
+  outfile = infile(:pos-1) // '.STD'
+END IF
+OPEN(9, FILE=outfile)
+DO
+  READ(8, '(a)', IOSTAT=iostatus) text
+  IF (iostatus /= 0) EXIT
+  IF (LEN_TRIM(text) <= 72) THEN
+    WRITE(9, '(a)') TRIM(text)
+  ELSE
+    IF (INDEX(text(7:20), 'FORMAT') > 0 .OR.  &
+        INDEX(text(7:20), 'format') > 0) THEN
+      WRITE(9, '(a)') text(1:72)
+      WRITE(9, '(a)') '     +' // TRIM(text(73:))
+    ELSE
+      pos = SCAN(text(65:72), ' ,', BACK=.TRUE.)
+      IF (pos == 0) THEN
+        pos = 73
+      ELSE
+        pos = pos + 65
+      END IF
+        WRITE(9, '(a)') text(1:pos-1)
+        WRITE(9, '(a)') '     +' // TRIM(text(pos:))
+    END IF
+  END IF
+END DO
+STOP
+END PROGRAM Fold_at_column73
+freq2d.f90:
+PROGRAM freq2d
+IMPLICIT NONE
+INTEGER              :: i, j, k, l, lower, ndf, nrows, ncols, upper
+REAL                 :: x(2), aver, stdev, chisq
+INTEGER, ALLOCATABLE :: freq(:,:), seed(:)
+CHARACTER (LEN=200)  :: text
+WRITE(*, *) 'Enter number of rows & columns (e.g. 24  64): '
+READ(*, *) nrows, ncols
+ALLOCATE( freq(0:nrows-1,0:ncols-1) )
+CALL RANDOM_SEED(size=k)
+ALLOCATE (seed(k))
+CALL RANDOM_SEED(get=seed)
+WRITE(*, *)'Old random number seeds: ', seed
+WRITE(*, '(a, i4, a)') ' Enter ', k, ' integers as random number seeds: '
+READ(*, *) seed
+CALL RANDOM_SEED(put=seed)
+freq = 0
+DO i = 1, 4096
+  DO j = 1, 4096
+    CALL RANDOM_NUMBER(x)
+    k = nrows * x(1)
+    l = ncols * x(2)
+    freq(k,l) = freq(k,l) + 1
+  END DO
+END DO
+aver = 4096. * 4096. / (nrows * ncols)
+stdev = SQRT(aver)
+upper = aver + 3.*stdev + 0.5
+lower = aver - 3.*stdev + 0.5
+chisq = 0.0
+DO k = 0, nrows-1
+  text = ' '
+  DO l = 0, ncols-1
+    IF (freq(k,l) >= lower .AND. freq(k,l) <= upper) THEN
+      text(l+3:l+3) = '+'
+    ELSE IF (freq(k,l) > upper) THEN
+      text(l+3:l+3) = CHAR(219)
+    END IF
+    chisq = chisq + (freq(k,l) - aver)**2
+  END DO
+  WRITE(*, '(a)') TRIM(text)
+END DO
+WRITE(*, *) '  If most of the cells are NOT pluses, its a bad generator'
+chisq = chisq / aver
+ndf = nrows * ncols - 1
+WRITE(*, '(a, f10.1, a, i6, a)')  &
+         ' Chi-squared =', chisq, ' with', ndf, ' deg. of freedom'
+chisq = ndf + 2.0*SQRT(2.0*ndf)
+WRITE(*, '(a, f10.1)') ' Chi-squared should be less than', chisq
+STOP
+END PROGRAM freq2d
+fr_fac23.f90:
+PROGRAM driver
+IMPLICIT NONE
+INTEGER, ALLOCATABLE   :: picked(:), blksiz(:), in(:), design(:), ind(:), &
+                          seed(:)
+INTEGER                :: p, q, nfact, nblock, n, kin, kfull, nrbar,  &
+                          ncand, ifault, point, i, j, pos, nrep, i1, i2
+REAL, ALLOCATABLE      :: x(:,:)
+REAL (dp), ALLOCATABLE :: d(:), rbar(:), xx(:), tol(:), wk(:), zpz(:,:)
+REAL (dp)              :: dbest, zero = 0.D0, stdet, lndet
+LOGICAL                :: rstart = .true.
+CHARACTER (LEN = 1)    :: bel
+WRITE(*, *)'   +++  Driver program for DOPT program  +++'
+WRITE(*, *)
+bel = CHAR(7)
+10 WRITE(*, *)'Enter no. of factors with 2 levels: '
+READ(*, *) p
+IF (p < 0) THEN
+  WRITE(*, 900) bel
+  900 FORMAT(' ', a, '  **  Number must be positive or zero **')
+  GO TO 10
+END IF
+WRITE(*, *)'Enter no. of factors with 3 levels: '
+READ(*, *) q
+IF (q < 0) THEN
+  WRITE(*, 900) bel
+  GO TO 10
+END IF
+nfact = p + q
+IF (nfact <= 0) THEN
+  WRITE(*, *) bel, '  **  No. of factors must be > 0 **'
+  GO TO 10
+END IF
+WRITE(*, *) 'Enter no. of blocks: '
+READ(*, *) nblock
+IF (nblock < 0) THEN
+  WRITE(*, *) bel, '  ** Negative no. of blocks **'
+  GO TO 10
+END IF
+nblock = MAX(1, nblock)
+ALLOCATE( blksiz(nblock), in(nblock) )
+in = 0
+IF (nblock == 1) THEN
+  WRITE(*, *)'Enter size of the experiment: '
+ELSE
+  WRITE(*, *)'Enter size of each block: '
+END IF
+READ(*, *) blksiz(1:nblock)
+n = SUM( blksiz(1:nblock) )
+kin = nfact + q + nfact*(nfact-1)/2
+kfull = kin + nblock
+WRITE(*, 980) kfull
+980 FORMAT(' No. of parameters in model = ', i5)
+IF (n < kfull) THEN
+  WRITE(*, *) bel, '** Design too small to fit model **'
+  DEALLOCATE( blksiz, in )
+  GO TO 10
+END IF
+nrbar = kfull * (kfull - 1) / 2
+ncand = (2**p) * (3**q)
+WRITE(*, *) 'No. of candidate points = ', ncand
+WRITE(*, *) 'How many tries?: '
+READ(*, *) nrep
+CALL RANDOM_SEED(size=i)
+ALLOCATE( seed(i) )
+WRITE(*, *)'Enter', i, ' integers for random no. seeds: '
+READ(*, *) seed
+CALL RANDOM_SEED(put=seed)
+OPEN(10, FILE='DESIGN.OPT')
+WRITE(10, 1000) p, q
+1000 FORMAT('Output from DOPT for fractional factorial'/   &
+            i2, ' factors at 2 levels, and', i3, ' factors at 3 levels')
+IF (nblock .GT. 1) THEN
+  WRITE(10, '(a, 10i4)') 'Block sizes: ', blksiz
+ELSE
+  WRITE(10, '(a, i5)') 'No. of experimental runs = ', n
+END IF
+WRITE(10, 1020) kfull, ncand, nrep, seed
+1020 FORMAT('No. of parameters in full model incl. blocks = ', i4/ &
+            'No. of candidate points = ', i6/                      &
+            'No. of tries to find optimum design = ', i5/          &
+            ('Starting random number seeds = ', 7I10) )
+DEALLOCATE( seed )
+point = 1
+ALLOCATE( ind(nfact), x(ncand,kfull) )
+ind = -1
+60 x(point, 1:nfact) = ind(1:nfact)
+pos = nfact
+DO i = 1, q
+  x(point, pos+i) = ind(i+p)**2
+END DO
+pos = pos + q
+DO i = 1, nfact-1
+  DO j = i+1, nfact
+    pos = pos + 1
+    x(point, pos) = x(point, i) * x(point, j)
+  END DO
+END DO
+i = 1
+120 IF (i <= p) THEN
+  ind(i) = - ind(i)                        ! 2-level factor
+  IF (ind(i) == -1) THEN
+    i = i + 1
+    GO TO 120
+  END IF
+ELSE
+  ind(i) = ind(i) + 1                      ! 3-level factor
+  IF (ind(i) > 1) THEN
+    ind(i) = -1
+    i = i + 1
+    IF (i > nfact) GO TO 150
+    GO TO 120
+  END IF
+END IF
+point = point + 1
+GO TO 60
+150 DEALLOCATE( ind )
+ALLOCATE( d(kfull), rbar(nrbar), picked(n), xx(kfull), tol(kfull),         &
+          zpz(ncand,nblock), wk(kfull), design(n) )
+dbest = zero
+DO i = 1, nrep
+  CALL dopt(x, ncand, ncand, kin, n, nblock, in, blksiz, kfull, rstart,    &
+            nrbar, d, rbar, picked, lndet, xx, tol, zpz, wk, ifault)
+  IF (ifault /= 0) THEN
+    WRITE(*, *) bel, 'IFAULT = ', ifault
+  ELSE
+    WRITE(*, 950) i, lndet
+    WRITE(10, 950) i, lndet
+    950 FORMAT(' Try no. ', i4, '     Log of determinant = ', f9.3)
+  END IF
+  IF (lndet > dbest) THEN
+    design = picked
+    dbest = lndet
+  END IF
+END DO
+WRITE(*, *)
+WRITE(10, *)
+stdet = EXP(dbest - kfull*LOG(REAL(n)))
+WRITE(*, 990) dbest, stdet
+WRITE(10, 990) dbest, stdet
+990 FORMAT(' Max. log det. = ', g13.5, '     Std. det = ', g13.5/    &
+           ' Design:')
+i2 = 0
+DO i = 1, nblock
+  i1 = i2 + 1
+  i2 = i2 + blksiz(i)
+  WRITE(*, 960) i, (j, j=1,nfact)
+  WRITE(10, 960) i, (j, j=1,nfact)
+  960 FORMAT(' BLOCK', i5 / t15, 'F A C T O R' / '   ', 15I5)
+  DO j = i1, i2
+    WRITE(*, 970) x(design(j), 1:nfact)
+    WRITE(10, 970) x(design(j), 1:nfact)
+    970 FORMAT('    ', 15F5.0)
+  END DO
+END DO
+WRITE(*, *)
+STOP
+END PROGRAM driver
+genz2d3d.f90:
+global.f90:
+hartly2d.f90:
+hash.f90:
+hashord.f90:
+PROGRAM hashord
+IMPLICIT NONE
+INTEGER :: i, ncell, nentry, nprobe, npts, nstat, nswap, rndseq(10000),  &
+           tswap, tprobe, tfound
+nentry = 450
+ncell = 499
+npts = 10000
+CALL irand(rndseq, 10000, -30000, 30000)
+tfound = 0
+tprobe = 0
+tswap = 0
+DO  i = 1, nentry
+  CALL orhash(ncell, rndseq(i), 2, nstat, nprobe, nswap)
+  IF (nstat /= 3) tfound = tfound + 1
+  tswap = tswap + nswap
+  tprobe = tprobe + nprobe
+END DO
+WRITE(6,600) nentry, tfound, tprobe, tswap
+tfound = 0
+tprobe = 0
+tswap = 0
+DO  i = 1, npts
+  CALL orhash(ncell, rndseq(i), 1, nstat, nprobe, nswap)
+  IF (nstat /= 3) tfound = tfound + 1
+  tswap = tswap + nswap
+  tprobe = tprobe + nprobe
+END DO
+WRITE(6,600) npts, tfound, tprobe, tswap
+STOP
+600 FORMAT(' N=', i10, '     NFOUND =', i10, '     TPROBES =', i10,  &
+           '     TSWAPS =', i10)
+CONTAINS
+END PROGRAM hashord
+hbrd.f90:
+hermite.f90:
+hero.f90:
+PROGRAM hero
+IMPLICIT NONE
+TYPE (quad)          :: f(60), g(60), h(3, 3), hi, xx(40), x, x1, x2, xd, &
+                        xw(40)
+REAL (dp), PARAMETER :: zero = 0.0_dp, half = 0.5_dp, one = 1.0_dp
+INTEGER              :: i, i1, i1j, il1, j, j1, k, l, m, n1
+OPEN(8, FILE='absciss.dat')
+OPEN(9, FILE='weights.dat')
+i1 = 60
+j1 = 40
+n1 = 20
+DO i = 1,60
+  f(i) = quad(zero, zero)
+  g(i) = quad(zero, zero)
+END DO
+DO j = 1, j1
+  i1j = i1-j
+  DO i = 2,i1j
+    hi = quad(DBLE(i-1), zero)
+    f(i) = hi/DBLE(6) + f(i)*(g(i)*(g(i-1)-g(i)) + half +  &
+           f(i)-f(i+1)) / (3.d0*f(i) - 1.5D0*hi)
+    g(i-1) = SQRT(hi - half - f(i) - f(i-1))
+  END DO
+END DO
+il1 = i1-1
+DO i = 2, il1
+  f(i) = SQRT(f(i))
+END DO
+DO j = 1, n1
+  x = quad(zero, zero)
+  x1 = quad(zero, zero)
+  DO k = 1, j
+    l = 0
+    DO
+      h(2,1) = quad(one, zero)
+      h(2,2) = quad(zero, zero)
+      h(3,2) = quad(zero, zero)
+      h(3,1) = quad(zero, zero)
+      DO m = 1, j
+        DO i = 2, 3
+          h(i,3) = h(i,2)
+          h(i,2) = h(i,1)
+          h(i,1) = (h(i,2)*(g(m)-x) - h(i,3)*f(m) - (i-2)*h(i-1,2))/f(m+1)
+        END DO
+      END DO
+      xd = -h(2,1)/h(3,1)
+      x = x+xd
+      IF(ABS(xd%hi) > 1.d-12) CYCLE
+      l = l+1
+      IF(l > 1) EXIT
+    END DO
+    xw(k) = - quad(half, zero) / (h(2,2)*h(3,1)*g(1)*f(j+1))
+    xx(k) = x
+    x2 = x1
+    x1 = SQRT(x)
+    x = x1 + x1 - x2
+    x = x*x
+  END DO
+  WRITE(8,10) j, xx(1:j)%hi
+  WRITE(9,10) j, xw(1:j)%hi
+END DO
+STOP
+10 FORMAT(i3, "  ", 3(e21.15, ", ") / ("     ", 3(e21.15, ", ")) )
+END PROGRAM hero
+hh.f90:
+hilbert.f90:
+PROGRAM hilbert
+IMPLICIT NONE
+TYPE (quad) :: a(55), total, exact_start, exact, relerr
+REAL (dp)   :: det, scale_factor = 14549535.d0
+INTEGER     :: i, j, nrows = 10, ier, ipos, ik, k, kj, kjstart
+ipos = 1
+DO i = 1, nrows
+  DO j = 1, i
+    a(ipos) = quad(scale_factor/(i+j-1), 0._dp)
+    ipos = ipos + 1
+  END DO
+END DO
+CALL qchol(a, nrows, ier)
+IF (ier /= 0) THEN
+  WRITE(*, *) 'Error in qchol, number:', ier
+  STOP
+END IF
+ipos = 1
+det = 1.d0
+DO i = 1, nrows
+  det = det * a(ipos)%hi
+  ipos = ipos + i + 1
+END DO
+det = det * det / scale_factor**nrows
+WRITE(*, 900) det
+900 FORMAT(' Determinant = ', g20.12/)
+ipos = 1
+DO i = 1, nrows
+  kjstart = 1
+  DO j = 1, i
+    kj = kjstart
+    ik = ipos
+    IF (j < i) THEN
+      total = quad(0._dp, 0._dp)
+      DO k = j, i-1
+        total = total - a(ik) * a(kj)
+        ik = ik + 1
+        kj = kj + k
+      END DO
+      a(ipos) = total / a(ik)
+      ipos = ipos + 1
+    ELSE
+      a(ipos) = quad(1._dp, 0._dp) / a(ipos)
+      ipos = ipos + 1
+    END IF
+    kjstart = kjstart + j + 1
+  END DO
+END DO
+ipos = 1
+kjstart = 1
+DO i = 1, nrows
+  DO j = 1, i
+    ik = ipos
+    total = quad(0._dp, 0._dp)
+    kj = kjstart
+    DO k = i, nrows
+      total = total + a(ik) * a(kj)
+      ik = ik + k
+      kj = kj + k
+    END DO
+    a(ipos) = total * scale_factor
+    ipos = ipos + 1
+  END DO
+  kjstart = kjstart + i + 1
+END DO
+WRITE(*, 910)
+910 FORMAT(' row col         calculated           exact        Rel. error')
+ipos = 1
+exact_start = quad(100._dp, 0._dp)
+DO i = 1, nrows
+  exact = exact_start
+  DO j = 1, i
+    relerr = (a(ipos) - exact) / exact
+    WRITE(*, 920) i, j, a(ipos)%hi, exact%hi, relerr%hi
+    920 FORMAT(2I4, 2F20.4, g14.5)
+    exact = -exact * (10+j)*(10-j)*(i+j-1) / REAL((i+j)*j*j)
+    ipos = ipos + 1
+  END DO
+  exact_start = -exact_start * (10+i)*(10-i) / REAL((i+1)*i)
+END DO
+STOP
+END PROGRAM hilbert
+ibquad.f90:
+PROGRAM ibquad
+IMPLICIT NONE
+INTEGER, PARAMETER :: maxf=6, maxb=10, maxcol=maxf*(maxf+3)/2, &
+                      kmax=maxcol+maxb, nrmax=kmax*(kmax-1)/2, &
+                      mxcand=3**maxf, nmax=100
+INTEGER            :: nfact, nblock, blksiz(maxb), n, kin, kfull, nrbar, &
+                      ncand, picked(nmax), ifault, point, i, j, ind(maxcol), &
+                      pos, nrep, design(nmax), i1, i2
+REAL (dp)          :: d(kmax), rbar(nrmax), lndet, xx(kmax), &
+                      tol(kmax), zpz(mxcand,maxb), wk(kmax), dbest, stdet
+REAL               :: x(mxcand,maxcol)
+LOGICAL, PARAMETER :: rstart = .TRUE.
+INTEGER, PARAMETER :: in(maxb) = (/ (0,i=1,maxb) /)
+INTEGER, ALLOCATABLE :: seed(:)
+CHARACTER (LEN=1)    :: bel
+REAL (dp), PARAMETER :: zero = 0.0_dp
+WRITE(*, *)'   +++   Incomplete blocks for quad. surfaces   +++'
+bel = CHAR(7)
+10 WRITE(*, *) 'Enter no. of factors: '
+READ(*, *) nfact
+IF (nfact > maxf .OR. nfact < 2) THEN
+  WRITE(*, 900) bel
+  900   FORMAT(' ', a, '** Illegal value entered **')
+  GO TO 10
+END IF
+WRITE(*, *) 'Enter no. of blocks: '
+READ(*, *) nblock
+IF (nblock > maxb .OR. nblock < 0) THEN
+  WRITE(*, 900) bel
+  GO TO 10
+END IF
+WRITE(*, *)'Enter size of each block: '
+READ(*, *) blksiz(1:nblock)
+n = SUM( blksiz(1:nblock) )
+IF (n > nmax) THEN
+  WRITE(*, *) bel, '** Sorry, design is too large **'
+  GO TO 10
+END IF
+WRITE(*, *)'How many tries?: '
+READ(*, *) nrep
+CALL RANDOM_SEED(size=i)
+ALLOCATE( seed(i) )
+WRITE(*, *)'Enter', i, ' integers for random no. seeds: '
+READ(*, *) seed
+CALL RANDOM_SEED(put=seed)
+kin = nfact * (nfact + 3) / 2
+kfull = kin + nblock
+IF (n < kfull) THEN
+  WRITE(*, *) bel, '** Design too small to fit model **'
+  GO TO 10
+END IF
+nrbar = kfull * (kfull - 1) / 2
+ncand = 3**nfact
+OPEN(10, FILE='DESIGN.OPT')
+WRITE(10, 1000) nfact
+1000 FORMAT('Output from DOPT for fitting quadratic surfaces'/   &
+            i2, ' factors at 2 levels')
+IF (nblock .GT. 1) THEN
+  WRITE(10, '(a, 10i4)') 'Block sizes: ', blksiz
+ELSE
+  WRITE(10, '(a, i5)') 'No. of experimental runs = ', n
+END IF
+point = 1
+ind(1:nfact) = -1
+GO TO 55
+30 i = 1
+40 ind(i) = ind(i) + 1
+IF (ind(i) > 1) THEN
+  IF (i == nfact) GO TO 90
+  ind(1:i) = -1
+  i = i + 1
+  GO TO 40
+END IF
+55 x(point,1:nfact) = ind(1:nfact)
+pos = nfact + 1
+DO i = 1, nfact
+  DO j = 1, i
+    x(point,pos) = ind(i) * ind(j)
+    pos = pos + 1
+  END DO
+END DO
+point = point + 1
+GO TO 30
+90 dbest = zero
+DO i = 1, nrep
+  CALL dopt(x, mxcand, ncand, kin, n, nblock, in, blksiz, kfull, &
+            rstart, nrbar, d, rbar, picked, lndet, xx, tol, zpz, wk, &
+  ifault)
+  IF (ifault /= 0) THEN
+    WRITE(*, *) bel, 'IFAULT = ', ifault
+    ELSE
+    WRITE(*, *) i, ' Log Det. = ', lndet
+  END IF
+  IF (lndet > dbest) THEN
+    design(1:n) = picked(1:n)
+    dbest = lndet
+  END IF
+END DO
+WRITE(*, *)
+stdet = EXP(dbest - kfull*LOG(REAL(n, KIND=dp)))
+WRITE(*, *) 'Max. log det. = ', dbest, '   Std. det = ', stdet
+WRITE(*, *) 'Design:'
+WRITE(10, *) 'Max. log det. = ', dbest, '   Std. det = ', stdet
+WRITE(10, *) 'Design:'
+i2 = 0
+DO i = 1, nblock
+  i1 = i2 + 1
+  i2 = i2 + blksiz(i)
+  WRITE(*, 960) i, (j, j=1,nfact)
+  WRITE(10, 960) i, (j, j=1,nfact)
+  960 FORMAT(' BLOCK', i5 / t15, 'F A C T O R' / '   ', 15I5)
+  DO j = i1, i2
+    WRITE(*, 970) x(design(j), 1:nfact)
+    WRITE(10, 970) x(design(j), 1:nfact)
+    970 FORMAT('    ', 15F5.0)
+  END DO
+END DO
+WRITE(*, *)
+GO TO 10
+STOP
+END PROGRAM ibquad
+ignpoi.f90:
+inc_gam.f90:
+ives.f90:
+kaiser.f90:
+ks2.f90:
+lanczos.f90:
+lfsr113.f90:
+PROGRAM t_lfsr113
+locpt.f90:
+logistic.f90:
+long_gj.f90:
+lsq_demo.f90:
+PROGRAM demo
+IMPLICIT NONE
+INTEGER, PARAMETER :: maxcases = 500, maxvar = 30,                            &
+                      max_cdim = maxvar*(maxvar+1)/2, lout = 6
+INTEGER            :: case, nvar, iostatus, nreq, ifault, i, list(maxvar), j, &
+                      in, i1, i2
+REAL (dp)          :: xx(0:maxvar), yy, wt, one = 1.D0, beta(0:maxvar),       &
+                      var, covmat(max_cdim), sterr(0:maxvar), hii,            &
+                      cormat(max_cdim), ycorr(maxvar)
+REAL (KIND(0.E0))  :: x(maxcases, maxvar), y(maxcases), t(0:maxvar), tmin,    &
+                      r2, resid(maxcases), std_resid(maxcases), std_err_pred, &
+                      fitted, stdev_res
+CHARACTER (LEN=80) :: heading, output
+CHARACTER (LEN= 2) :: state(50)
+CHARACTER (LEN= 8) :: vname(0:maxvar), y_name
+LOGICAL            :: fit_const, lindep(0:maxvar)
+WRITE(*, *)'The data on fuel consumption are from:'
+WRITE(*, *)'Sanford Weisberg "Applied Linear Regression", 2nd edition, 1985,'
+WRITE(*, *)'pages 35-36.   Publisher: Wiley   ISBN: 0-471-87957-6'
+WRITE(*, *)
+OPEN(8, file='fuelcons.dat', status='old')
+READ(8, '(a)') heading
+vname(0) = 'Constant'
+CALL separate_text(heading, vname, nvar)
+nvar = nvar - 2              ! nvar is the number of variables.
+vname(1:nvar) = vname(2:nvar+1)
+y_name = vname(nvar+2)
+WRITE(*, *)'No. of variables =', nvar
+WRITE(*, *)'Predictor variables are:'
+WRITE(*, '(" ", 9a9)') vname(1:nvar)
+WRITE(*, *)'Dependent variable is: ', y_name
+fit_const = .true.           ! Change to .false. if fitting a model without
+CALL startup(nvar, fit_const)          ! Initializes the QR-factorization
+wt = one
+case = 1
+DO
+  READ(8, *, IOSTAT=iostatus) state(case), x(case, 1:nvar), y(case)
+  IF (iostatus > 0) CYCLE              ! Error in data
+  IF (iostatus < 0) EXIT               ! End of file
+  xx(0) = one                          ! A one is inserted as the first
+  xx(1:nvar) = x(case, 1:nvar)         ! New variables and transformed variables
+  yy = y(case)
+  CALL includ(wt, xx, yy)
+  case = case + 1
+END DO
+WRITE(*, *)'No. of observations =', nobs
+CALL sing(lindep, ifault)              ! Checks for singularities
+IF (ifault == 0) THEN
+  WRITE(*, *)'QR-factorization is not singular'
+ELSE
+  DO i = 1, nvar
+    IF (lindep(i)) THEN
+      WRITE(*, *) vname(i), ' is exactly linearly related to earlier variables'
+    END IF
+  END DO ! i = 1, nvar
+END IF ! (ifault == 0)
+WRITE(*, *)
+in = 1
+CALL partial_corr(in, cormat, max_cdim, ycorr, ifault)
+CALL printc(in, cormat, max_cdim, ycorr, vname, y_name, 1, lout, ifault)
+WRITE(*, *)
+WRITE(*, *)'Press ENTER to continue'
+READ(*, *)
+list(1:4) = (/ 2, 4, 5, 7/)
+CALL reordr(list, 4, 2, ifault)        ! Re-order so that the first 4 variables
+WRITE(*, 910) (vname(vorder(1:ncol)))
+910 FORMAT(' Current order of variables:'/' ', 8a9/)
+CALL tolset()                          ! Calculate tolerances before calling
+nreq = 5                               ! i.e. Const, TAX, INC, ROAD, DLIC
+CALL regcf(beta, nreq, ifault)
+CALL ss()                              ! Calculate residual sums of squares
+var = rss(nreq) / (nobs - nreq)
+CALL cov(nreq, var, covmat, max_cdim, sterr, ifault)
+t(0:nreq-1) = beta(0:nreq-1) / sterr(0:nreq-1)
+WRITE(*, *)
+WRITE(*, *)'Variable   Regn.coeff.   Std.error  t-value   Res.sum of sq.'
+DO i = 0, nreq-1
+  WRITE(*, 900) vname(vorder(i+1)), beta(i), sterr(i), t(i), rss(i+1)
+  900 FORMAT(' ', a8, '  ', g12.4, '  ', g11.4, ' ', f7.2, '  ', g14.6)
+END DO
+WRITE(*, *)
+WRITE(*, *) 'Covariances of parameter estimates'
+i2 = nreq
+DO i = 1, nreq-1
+  i1 = i2 + 1
+  i2 = i2 + nreq - i
+  WRITE(output, '(" ", a8)') vname(vorder(i+1))
+  WRITE(output(10*i:), '(7f10.3)') covmat(i1:i2)
+  WRITE(*, '(a)') output
+END DO
+WRITE(*, *)
+j = 1
+tmin = ABS(t(1))
+DO i = 2, nreq-1
+  IF (ABS(t(i)) < tmin) THEN
+    j = i
+    tmin = ABS(t(i))
+  END IF
+END DO
+j = j + 1                    ! Add 1 as the t-array started at subscript 0
+WRITE(*, *)'Removing variable in position', j
+CALL vmove(j, nreq, ifault)
+nreq = nreq - 1
+CALL regcf(beta, nreq, ifault)
+CALL ss()
+CALL cov(nreq, var, covmat, max_cdim, sterr, ifault)
+t(0:nreq-1) = beta(0:nreq-1) / sterr(0:nreq-1)
+WRITE(*, *)
+WRITE(*, *)'Variable   Regn.coeff.   Std.error  t-value   Res.sum of sq.'
+DO i = 0, nreq-1
+  WRITE(*, 900) vname(vorder(i+1)), beta(i), sterr(i), t(i), rss(i+1)
+END DO
+WRITE(*, *)
+var = rss(nreq)/(nobs - nreq)
+stdev_res = SQRT( var )
+r2 = one - rss(nreq) / rss(1)          ! RSS(1) is the rss if only the constant
+WRITE(*, '(" R^2 =", f8.4, "     Std. devn. of residuals =", g12.4/)')      &
+      r2, stdev_res
+WRITE(*, *)'N.B. Some statistical packages wrongly call the standard deviation'
+WRITE(*, *)'     of the residuals the standard error of prediction'
+WRITE(*, *)
+WRITE(*, *)'Press ENTER to continue'
+READ(*, *)
+WRITE(*, *)'State     Actual    Fitted  Residual  Std.resid.  SE(prediction)'
+DO i = 1, nobs
+  xx(0) = one
+  DO j = 1, nreq-1
+    xx(j) = x(i, vorder(j+1))          ! N.B. Regression coefficient j is for
+  END DO
+  fitted = DOT_PRODUCT( beta(0:nreq-1), xx(0:nreq-1) )
+  resid(i) = y(i) - fitted
+  CALL hdiag(xx, nreq, hii, ifault)
+  std_resid(i) = resid(i) / SQRT(var*(one - hii))
+  std_err_pred = sqrt( varprd(xx, nreq) )
+  WRITE(*, 920) state(i), y(i), fitted, resid(i), std_resid(i), std_err_pred
+  920 FORMAT('   ', a2, '  ', 3f10.1, f9.2, '     ', f10.0)
+  IF (i .EQ. 24) THEN
+    WRITE(*, *)'Press ENTER to continue'
+    READ(*, *)
+    WRITE(*, *)'State     Actual    Fitted  Residual  Std.resid.  SE(prediction)'
+  END IF
+END DO ! i = 1, nobs
+STOP
+END PROGRAM demo
+lsq.f90:
+luxtst.f90:
+PROGRAM luxtst
+IMPLICIT NONE
+REAL    :: rvec(1000)
+INTEGER :: i1, i2, i3, i4, li
+WRITE (6,'(/A)') '  CALL RANLUX(RVEC,100)'
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX default numbers   1-  5:', rvec(1:5)
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX default numbers 101-105:', rvec(1:5)
+WRITE (6,'(/A)') ' CALL RLUXGO(0,0,0,0)'
+CALL rluxgo(0,0,0,0)
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX luxury level 0,   1-  5:', rvec(1:5)
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX luxury level 0, 101-105:', rvec(1:5)
+WRITE (6,'(/A)') '   CALL RLUXGO(389,1,0,0)'
+CALL rluxgo(389,1,0,0)
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX luxury p=389,   1-  5:', rvec(1:5)
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX luxury p=389, 101-105:', rvec(1:5)
+WRITE (6,'(/A)') '  CALL RLUXGO(75,0,0,0)'
+CALL rluxgo(75,0,0,0)
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX luxury p= 75,   1-  5:', rvec(1:5)
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX luxury p= 75, 101-105:', rvec(1:5)
+WRITE (6,'(/A)') '  test restarting from the full vector'
+CALL rluxut
+WRITE (6,'(/A/(1X,5I14))') '  current RANLUX status saved:', isdext
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX numbers 1- 5:', rvec(1:5)
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX numbers 101-105:', rvec(1:5)
+WRITE (6,'(/A)') '   previous RANLUX status will be restored'
+CALL rluxin
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX numbers 1- 5:', rvec(1:5)
+CALL ranlux(rvec,100)
+WRITE (6,'(A/9X,5F12.8)') ' RANLUX numbers 101-105:', rvec(1:5)
+WRITE (6,'(/A)') '     test the restarting by skipping'
+CALL rluxgo(4,7674985,0,0)
+CALL rluxat(i1,i2,i3,i4)
+WRITE (6,'(A,4I10)') '  RLUXAT values =', i1, i2, i3, i4
+DO li = 1, 10
+  CALL ranlux(rvec,1000)
+END DO
+CALL rluxat(i1,i2,i3,i4)
+WRITE (6,'(A,4I10)') '  RLUXAT values =', i1, i2, i3, i4
+CALL ranlux(rvec,200)
+WRITE (6,'(A,2F10.6)') '  Next and 200th numbers are:', rvec(1), rvec(200)
+CALL rluxgo(i1,i2,i3,i4)
+CALL ranlux(rvec,200)
+WRITE (6,'(A,2F10.6)') '  Next and 200th numbers are:', rvec(1), rvec(200)
+WRITE (6,'(/A)') ' The following should provoke an error message'
+CALL rluxgo(4,11111,31,0)
+STOP
+END PROGRAM luxtst
+luxury.f90:
+mace.f90:
+median.f90:
+PROGRAM t_median
+IMPLICIT NONE
+INTEGER           :: n
+REAL, ALLOCATABLE :: x(:)
+REAL              :: xmed
+DO
+  WRITE(*, *)'Enter n: '
+  READ(*, *) n
+  ALLOCATE( x(n) )
+  CALL RANDOM_NUMBER(x)
+  CALL median(x, n, xmed)
+  WRITE(*, 900) x(1), x(n), xmed
+  900 FORMAT(' First & last = ', 2f10.4, '    Median = ', f10.4/)
+  DEALLOCATE( x )
+END DO
+STOP
+END PROGRAM t_median
+minim.f90:
+mt19937.f90:
+PROGRAM main
+mvnpack.f90:
+ncr.f90:
+PROGRAM test_nCr
+nnls.f90:
+p_intcpt.f90:
+polyarea.f90:
+primefac.f90:
+PROGRAM find_prime_factors
+IMPLICIT NONE
+INTEGER  :: iexp(10), iopt, iprm(10), nprm, NUMBER
+DO
+  iopt = 1
+  WRITE(*, '(a)', ADVANCE='NO') ' Enter number to be factored: '
+  READ(*, *) NUMBER
+  CALL prmfac (NUMBER, iopt, nprm, iprm, iexp)
+  WRITE(*, *)
+END DO
+STOP
+END PROGRAM find_prime_factors
+prtconst.f90:
+PROGRAM print_constants
+IMPLICIT NONE
+CHARACTER (LEN=36)      :: string
+INTEGER                 :: ier
+TYPE (quad), PARAMETER  :: pt1 = quad( 0.1_dp, -0.5551115123125784E-17_dp)
+REAL (dp)               :: error
+CALL quad_string(pi, string, ier)
+WRITE(*, '(a, t15, a)') ' PI = ', string
+CALL quad_string(rad2deg, string, ier)
+WRITE(*, '(a, t15, a)') ' rad2deg = ', string
+CALL quad_string(ln10, string, ier)
+WRITE(*, '(a, t15, a)') ' ln10 = ', string
+CALL quad_string(ln2, string, ier)
+WRITE(*, '(a, t15, a)') ' ln2 = ', string
+CALL quad_string(log10e, string, ier)
+WRITE(*, '(a, t15, a)') ' log10e = ', string
+CALL quad_string(e, string, ier)
+WRITE(*, '(a, t15, a)') ' e = ', string
+CALL quad_string(euler, string, ier)
+WRITE(*, '(a, t15, a)') ' euler = ', string
+CALL quad_string(sqrt2, string, ier)
+WRITE(*, '(a, t15, a)') ' sqrt2 = ', string
+CALL quad_string(sqrt10, string, ier)
+WRITE(*, '(a, t15, a)') ' sqrt10 = ', string
+WRITE(*, *)
+CALL quad_string(pt1, string, ier)
+WRITE(*, '(a, t15, a)') ' pt1 = ', string
+error = pt1 - 1.0_dp / quad( 10.0_dp, 0.0_dp )
+WRITE(*, '(a, g13.5)') ' Error = ', error
+STOP
+END PROGRAM print_constants
+pzeros.f90:
+qagi.f90:
+qcomplex.f90:
+q_cpoly.f90:
+PROGRAM cpolydr
+q_erf.f90:
+PROGRAM test_q_erf
+IMPLICIT NONE
+TYPE (quad) :: x, h, arg, erf_2, erf_1, erf1, erf2, erfc, av_erfc,  &
+               d_est, deriv, error
+TYPE (quad), PARAMETER :: qone = quad(1._dp, 0._dp)
+DO
+  WRITE(*, '(a)', ADVANCE='NO') ' Enter x: '
+  READ(*, *) x%hi
+  x%lo = 0._dp
+  h = SCALE(qone, -24)
+  IF (ABS(x%hi) < 0.477_dp) THEN       ! Use erf if erf(x) > 0.5
+    arg = x - 2._dp * h
+    CALL q_erf(arg, erf_2, av_erfc)
+    arg = x - h
+    CALL q_erf(arg, erf_1, erfc)
+    av_erfc = av_erfc + erfc
+    arg = x + h
+    CALL q_erf(arg, erf1, erfc)
+    av_erfc = av_erfc + erfc
+    arg = x + 2._dp * h
+    CALL q_erf(arg, erf2, erfc)
+    av_erfc = (av_erfc + erfc) / 4._dp
+    d_est = (erf_2 - erf2 + SCALE( erf1 - erf_1, 3)) / (12._dp * h)
+  ELSE                                 ! Else use erfc(x)
+    arg = x - 2._dp * h
+    CALL q_erf(arg, erfc=av_erfc)
+    erf_2 = av_erfc
+    arg = x - h
+    CALL q_erf(arg, erfc=erf_1)
+    av_erfc = av_erfc + erf_1
+    arg = x + h
+    CALL q_erf(arg, erfc=erf1)
+    av_erfc = av_erfc + erf1
+    arg = x + 2._dp * h
+    CALL q_erf(arg, erfc=erf2)
+    av_erfc = (av_erfc + erf2) / 4._dp
+    d_est = (erf2 - erf_2 + SCALE( erf_1 - erf1, 3)) / (12._dp * h)
+  END IF
+  deriv = two_on_rtpi * EXP(-x*x)
+  error = d_est - deriv
+  WRITE(*, '(a)') '      Estimate        Derivative         Error          erfc'
+  WRITE(*, '(2f20.16, g12.4, f20.16)') d_est%hi, deriv%hi, error%hi, av_erfc%hi
+END DO
+STOP
+END PROGRAM test_q_erf
+q_lngam.f90:
+PROGRAM test_q_lngm
+q_pzeros.f90:
+quad_df.f90:
+quad.f90:
+quadsurf.f90:
+PROGRAM quad_surf
+IMPLICIT NONE
+INTEGER              :: iostatus, n, ier, row, col
+INTEGER, PARAMETER   :: nmax = 100
+REAL (dp), PARAMETER :: wt = 1.0_dp
+REAL (dp)            :: rh, temp, yval, x(nmax,5), y(nmax), xrow(0:5), b(0:5), &
+                        yfit(3)
+OPEN(UNIT=8, FILE='dry_bulb.dat', STATUS='OLD')
+n = 0
+CALL startup(5, .TRUE.)
+DO
+  READ(8, *, IOSTAT=iostatus) rh, temp, yval
+  IF (iostatus < 0) EXIT
+  IF (iostatus > 0) CYCLE
+  n = n + 1
+  rh = rh - 70._dp
+  temp = temp - 95._dp
+  y(n) = yval
+  x(n,1) = rh
+  x(n,2) = temp
+  x(n,3) = rh**2
+  x(n,4) = rh*temp
+  x(n,5) = temp**2
+  xrow(1:5) = x(n,:)
+  xrow(0) = 1.0_dp
+  CALL includ(wt, xrow, y(n))
+END DO
+CALL regcf(b, 6, ier)
+WRITE(*, *) 'Fitted quadratic surface:'
+WRITE(*, '(a, 2f8.3, a, f8.4, a, f8.4, a, f8.4, a, f8.4, a)')  &
+         ' Y = ', b(0), b(1), '*X1 ', b(2), '*X2 ', b(3), '*X1^2 ',  &
+         b(4), '*X1*X2 ', b(5), '*X2^2'
+WRITE(*, *)
+WRITE(*, *) 'Fitted values:'
+WRITE(*, *) '   %RH          90       95      100'
+WRITE(*, *) '-------------------------------------'
+DO row = 1, 4
+  xrow(0) = 1.0_dp
+  xrow(1) = 20.0 - 10.0*row
+  xrow(3) = xrow(1)**2
+  DO col = 1, 3
+    xrow(2) = -10.0 + 5.0*col
+    xrow(4) = xrow(1)*xrow(2)
+    xrow(5) = xrow(2)**2
+    yfit(col) = DOT_PRODUCT( b, xrow )
+  END DO
+  WRITE(*, '(f8.0, "   ", 3f9.1)') xrow(1) + 70., yfit
+END DO
+STOP
+END PROGRAM quad_surf
+qxgs.f90:
+rand3.f90:
+PROGRAM main
+IMPLICIT NONE
+INTEGER  :: a(2009), i
+REAL     :: u(1000), aver, dev, sumsq, stdev
+CALL rnstrt(310952)
+DO  i=1,2010
+  CALL rnarry(a, 1009)
+END DO
+WRITE(*, '(I15)') a(1)
+CALL rnstrt(310952)
+DO  i=1,1010
+  CALL rnarry(a, 2009)
+END DO
+WRITE(*, '(I15)') a(1)
+CALL rand(u, 1000)
+aver = 0.0
+sumsq = 0.0
+DO i = 1, 1000
+  dev = u(i) - aver
+  aver = aver + dev/i
+  sumsq = sumsq + dev*(u(i) - aver)
+END DO
+stdev = SQRT(sumsq/998.5)
+WRITE(*, '(a, f9.4, a, f9.4)') ' Mean = ', aver, '  Std. devn. = ', stdev
+WRITE(*, '(a, f6.1, "  ", f9.4)')  &
+         ' Values above should be close to ', 0.5, SQRT(1./12.)
+STOP
+END PROGRAM main
+random.f90:
+ran_norm.f90:
+PROGRAM time_random_normal
+IMPLICIT NONE
+r_gamma.f90:
+PROGRAM demo_gamma
+rgamma.f90:
+PROGRAM test_rgamma
+rhohat.f90:
+PROGRAM drive
+IMPLICIT NONE
+INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(15, 60)
+REAL (dp)          :: y, rho, tol = 1.D-04
+DO
+  WRITE(*, '(a)', ADVANCE='NO') ' Enter value of y: '
+  READ(*, *) y
+  CALL rhohat(rho, y, tol)
+  WRITE(*, '(a, f10.6)') ' RHO = ', rho
+  WRITE(*, *)
+END DO
+STOP
+END PROGRAM drive
+r_hyperg.f90:
+PROGRAM test_random_hyperg
+rnorm.f90:
+rpoly.f90:
+PROGRAM test_rpoly
+IMPLICIT NONE
+REAL (dp)  :: p(50), zr(50), zi(50)
+INTEGER    :: degree, i
+LOGICAL    :: fail
+WRITE(*, 5000)
+degree = 10
+p(1) = 1._dp
+p(2) = -55._dp
+p(3) = 1320._dp
+p(4) = -18150._dp
+p(5) = 157773._dp
+p(6) = -902055._dp
+p(7) = 3416930._dp
+p(8) = -8409500._dp
+p(9) = 12753576._dp
+p(10) = -10628640._dp
+p(11) = 3628800._dp
+CALL rpoly(p, degree, zr, zi, fail)
+IF (fail) THEN
+  WRITE(*, *) ' ** Failure by RPOLY **'
+ELSE
+  WRITE(*, '(a/ (2g23.15))') ' Real part           Imaginary part',  &
+                             (zr(i), zi(i), i=1,degree)
+END IF
+WRITE(*, *)
+WRITE(*, *) "Now try case where 1 is an obvious root"
+degree = 5
+p(1) = 8.D0
+p(2) = -8.D0
+p(3) = 16.D0
+p(4) = -16.D0
+p(5) = 8.D0
+p(6) = -8.D0
+CALL rpoly(p, degree, zr, zi, fail)
+IF (fail) THEN
+  WRITE(*, *) ' ** Failure by RPOLY **'
+ELSE
+  WRITE(*, *) ' Real part           Imaginary part'
+  WRITE(*, '(2g23.15)') (zr(i), zi(i), i=1,degree)
+END IF
+STOP
+5000 FORMAT (' EXAMPLE 1. POLYNOMIAL WITH ZEROS 1,2,...,10.')
+END PROGRAM test_rpoly
+r_zeta.f90:
+PROGRAM Test_Riemann_zeta
+se_lgstc.f90:
+PROGRAM se_logistic
+IMPLICIT NONE
+REAL (dp)  :: chisq, devnce, beta(0:1), se_beta(0:1), p, z(10), dev,  &
+              aver(0:1) = 0.0_dp, sumbb(0:1) = 0.0_dp, aver_se(0:1) = 0.0_dp
+INTEGER    :: k, i, case, n(5), s(5), ngroups = 5, ndf, ier
+INTEGER, ALLOCATABLE  :: seed(:)
+REAL (dp), PARAMETER  :: x(5,1) = RESHAPE(  &
+                                  (/ -2.1972_dp, -0.8473_dp, 0.0_dp,  &
+                                      0.8473_dp,  2.1972_dp /), (/ 5, 1 /) )
+CALL RANDOM_SEED(SIZE=k)
+ALLOCATE( seed(k) )
+WRITE(*, '(a, i2, a)')' Enter ', k, ' integers for random no. seeds: '
+READ(*, *) seed
+WRITE(*, '(a, (7i10))') ' Random no. seeds: ', seed
+CALL RANDOM_SEED(PUT=seed)
+n = 10
+DO case = 1, 10000
+  DO i = 1, 5
+    p = 0.1_dp * (2*i - 1)
+    CALL RANDOM_NUMBER( z )
+    s(i) = COUNT( z < p )
+  END DO
+  CALL logistic(ngroups, x, 1, s, n, chisq, devnce, ndf, beta, se_beta, ier)
+  dev = beta(0) - aver(0)
+  aver(0) = aver(0) + dev/case
+  sumbb(0) = sumbb(0) + dev*(beta(0) - aver(0))
+  dev = beta(1) - aver(1)
+  aver(1) = aver(1) + dev/case
+  sumbb(1) = sumbb(1) + dev*(beta(1) - aver(1))
+  aver_se = aver_se + (se_beta - aver_se) / case
+END DO
+sumbb = SQRT( sumbb / 9999. )
+WRITE(*, '(a, 2f9.5)') ' Average estimates of beta = ', aver
+WRITE(*, '(a, 2f9.5)') ' Std. devn. of sample beta = ', sumbb
+WRITE(*, '(a, 2f9.5)') ' Average se_beta           = ', aver_se
+STOP
+END PROGRAM se_logistic
+simann.f90:
+PROGRAM simann
+singlton.f90:
+smplx.f90:
+sortchar.f90:
+strassen.f90:
+program strassen_test
+subset.f90:
+PROGRAM subset
+IMPLICIT NONE
+CHARACTER (LEN = 40) :: fname_dat, fname_red, fname_rpt
+CHARACTER (LEN = 1)  :: ans, bel = CHAR(7), yesno
+CHARACTER (LEN = 10) :: string
+INTEGER              :: nvar, nvar_max, first, last, ier, i, nsize, pos, j,  &
+                        ypos, in, dimc, nv, i0, best_size, line1, nrepl,    &
+                        search_method, criterion, iostatus, rank_deficit, ndf
+INTEGER, ALLOCATABLE :: list(:), seed(:), order_copy(:)
+LOGICAL, ALLOCATABLE :: lindep(:)
+REAL (dp)            :: one = 1.0, fin, fout, total_sumsq, r2, msep, press, &
+                        y, e, h
+REAL (dp), ALLOCATABLE  :: cormat(:), ycorr(:), beta(:), x(:), xcopy(:)
+CHARACTER (LEN = 8), ALLOCATABLE :: vname(:)
+CHARACTER (LEN = 8)  :: yname
+CHARACTER (LEN = 42) :: version = 'Subset version 1.11, date 9 May 2001'
+CHARACTER (LEN = 32) :: method(4) = (/ 'Stepwise (Efroymson)            ',  &
+                                       'Sequential replacement          ',  &
+                                       '2-at-a-time replacement         ',  &
+                                       'Best subsets (exhaustive search)' /)
+CHARACTER (LEN = 14) :: crit_name(5) = (/ 'AIC (Akaike)  ', 'BIC (Bayesian)',&
+                                          'Mallows Cp    ', 'Hannan-Quinn  ',&
+                                          'F-ratio = 4.0 ' /)
+LOGICAL              :: fit_const, lsel = .false., OK
+REAL                 :: var, Cp, Cp_last, fmax, f1, f5, f10, zero = 0.0
+CALL start()                 ! Read in data and form QR reduction, if necessary
+WRITE(*, *)'Enter maximum size of subset to be considered: '
+READ(*, *) nvar_max
+IF (nvar_max > nvar) THEN
+  WRITE(*, *)'Sorry, too many.   Reset to ', nvar
+  nvar_max = nvar
+END IF
+WRITE(11, *)'Max. subset size = ', nvar_max
+WRITE(*, *)'How many subsets of each size do you want recorded?: '
+READ(*, *) nbest
+WRITE(11, *)'No. of best subsets = ', nbest
+WRITE(11, 950) (i, vname(i), i=1, nvar)
+CALL init_subsets(nvar_max, fit_const)
+IF (fit_const) THEN
+  i0 = 1
+  total_sumsq = rss(1)
+ELSE
+  i0 = 0
+  total_sumsq = rss(1) + d(1)*rhs(1)**2
+END IF
+DO
+  WRITE(*, *)
+  WRITE(*, '(30x, a)') 'Subset selection menu'
+  WRITE(*, *) 'C Correlations & partial correlations    F Forward selection'
+  WRITE(*, *) 'E Efroymson stepwise regression          B Backward elimination'
+  WRITE(*, *) 'R Replacement sequentially               X Exhaustive search'
+  WRITE(*, *) '2 Two-at-a-time replacement              D Display best found'
+  WRITE(*, *) 'I Force variables IN                     O Force variables OUT'
+  WRITE(*, *) 'L Least-squares regression coeffs.       V Show variable names'
+  WRITE(*, *) 'M Mallows Cp for best subsets            P PRESS statistic'
+  WRITE(*, *) 'S Stochastic + replacement of pairs      Q Quit this menu'
+  WRITE(*, *)
+  WRITE(*, *) 'N.B. Exhaustive search can be very slow.'
+  WRITE(*, *) 'Use E, F, B, R and/or 2 first to establish good bounds'
+  WRITE(*, *)
+  WRITE(*, *) 'Enter your choice (upper or lower case OK): '
+  READ(*, *) ans
+  SELECT CASE (ans)
+    CASE ('c', 'C')          ! Correlations & partial correlations
+      IF (fit_const) THEN
+        in = 1
+      ELSE
+        in = 0
+      END IF
+      nv = 0
+      WRITE(*, *)'Do you want partial correlations? (Y/N): '
+      READ(*, *) yesno
+      IF (yesno .EQ. 'y' .OR. yesno .EQ. 'Y') THEN
+        WRITE(*, *)'How many variables are to be forced in?: '
+        READ(*, *) nv
+        IF (nv > 0) THEN
+          WRITE(*, 950) (i, vname(i), i=1, nvar)
+          ALLOCATE(list(nv))
+          WRITE(*, *)'Enter numbers of variables to be forced in: '
+          READ(*, *) list
+          CALL reordr(list, nv, in+1, ier)
+          in = in + nv
+        END IF
+      END IF
+      dimc = (last-in)*(last-in-1)/2
+      ALLOCATE(cormat(dimc), ycorr(last))
+      CALL partial_corr(in, cormat, dimc, ycorr, ier)
+      CALL print_correlations()
+      IF (nv > 0) DEALLOCATE(list)
+      DEALLOCATE(cormat, ycorr)
+    CASE ('f', 'F')          ! Forward selection
+      CALL forwrd(first, last, ier)
+      WRITE(*, *) 'Forward selection:'
+      WRITE(11, *) 'Forward selection:'
+      IF (fit_const) THEN
+        WRITE(*, 900) (i, vname(vorder(i+1)), rss(i+1), i=0,nvar_max)
+        WRITE(11, 900) (i, vname(vorder(i+1)), rss(i+1), i=0,nvar_max)
+        900 FORMAT('     Order  Variable  Resid.sum of sq.'/      &
+                   ('       ', i3, '  ', a8, ' ', g15.7))
+      ELSE
+        WRITE(*, 900) (i, vname(vorder(i)), rss(i), i=1,nvar_max)
+        WRITE(11, 900) (i, vname(vorder(i)), rss(i), i=1,nvar_max)
+      END IF
+    CASE ('e', 'E')          ! Efroymson stepwise regression
+      WRITE(*, *)'Enter F-to-add value (default = 4.0): '
+      READ(*, '(a)') string
+      IF (LEN_TRIM(string) .EQ. 0) THEN
+        fin = 4.0
+      ELSE
+        READ(string, *) fin
+      END IF
+      WRITE(*, *)'Enter F-to-remove value (default = 4.0): '
+      READ(*, '(a)') string
+      IF (LEN_TRIM(string) .EQ. 0) THEN
+        fout = 4.0
+      ELSE
+        READ(string, *) fout
+      END IF
+      WRITE(*, 910) fin, fout
+      WRITE(11, 910) fin, fout
+      910 FORMAT(' Efroymson stepwise regression algorithm'/        &
+                 '     F-to-add = ', f8.2, '   F-to-remove = ', f8.2)
+      CALL efroym(first, last, fin, fout, nsize, ier, 11)
+      WRITE(*, *) 'Size =', nsize
+      WRITE(*, 920) vname(vorder(1:nsize))
+      WRITE(11, 920) vname(vorder(1:nsize))
+      920 FORMAT(' Selected variables'/ (' ', 8a9))
+      WRITE(*, 930) rss(nsize)
+      WRITE(11, 930) rss(nsize)
+      930 FORMAT(' Residual sum of squares for this model = ', g15.7/)
+    CASE ('b', 'B')          ! Backward elimination
+      CALL bakwrd(first, last, ier)
+      WRITE(*, *) 'Backward elimination:'
+      WRITE(11, *) 'Backward elimination:'
+      IF (fit_const) THEN
+        WRITE(*, 900) (i, vname(vorder(i+1)), rss(i+1), i=0,nvar)
+        WRITE(11, 900) (i, vname(vorder(i+1)), rss(i+1), i=0,nvar)
+      ELSE
+        WRITE(*, 900) (i, vname(vorder(i)), rss(i), i=1,nvar)
+        WRITE(11, 900) (i, vname(vorder(i)), rss(i), i=1,nvar)
+      END IF
+    CASE ('r', 'R')          ! Replacement sequentially
+      CALL seqrep(first, last, ier)
+      WRITE(*, *) 'Sequential replacement:'
+      WRITE(11, *) 'Sequential replacement:'
+      WRITE(*, 920) vname(vorder(1:max_size))
+      WRITE(11, 920) vname(vorder(1:max_size))
+      WRITE(*, 930) rss(max_size)
+      WRITE(11, 930) rss(max_size)
+    CASE ('x', 'X')          ! Exhaustive search
+      CALL xhaust(first, last, ier)
+      WRITE(*, *) 'Exhaustive search:'
+      WRITE(11, *) 'Exhaustive search:'
+      j = max_size*(max_size-1)/2 + 1
+      WRITE(*, 920) vname(lopt(j:j+max_size-1, 1))
+      WRITE(11, 920) vname(lopt(j:j+max_size-1, 1))
+      WRITE(*, 930) ress(max_size,1)
+      WRITE(11, 930) ress(max_size,1)
+    CASE ('2')               ! Two-at-a-time replacement
+      CALL seq2(first, last, ier)
+      WRITE(*, *) 'Two-at-a-time sequential replacement:'
+      WRITE(11, *) 'Two-at-a-time sequential replacement:'
+      WRITE(*, 920) vname(vorder(1:max_size))
+      WRITE(11, 920) vname(vorder(1:max_size))
+      WRITE(*, 930) rss(max_size)
+      WRITE(11, 930) rss(max_size)
+    CASE ('s', 'S')          ! Stochastic + replacement of pairs
+      WRITE(*, *) 'Random start, two-at-a-time replacement:'
+      WRITE(11, *) 'Random start, two-at-a-time replacement:'
+      CALL set_seed()
+      WRITE(*, '(a)', ADVANCE='NO') ' How many variables in subset? '
+      READ(*, *) nv
+      WRITE(11, *) 'No. of variables (excl. constant) = ', nv
+      WRITE(*, '(a)', ADVANCE='NO') ' How many replications? '
+      READ(*, *) nrepl
+      WRITE(11, *) 'No. of replicates = ', nrepl
+      DO i = 1, nrepl
+        IF (i == 1) THEN
+          WRITE(*, '(" ", a, i6)') 'Replicate number ', i
+        ELSE
+          WRITE(*, '("+", a, i6, a, g14.6)')  &
+                'Replicate number ', i, '  last RSS =', rss(nv+i0)
+        END IF
+        CALL random_pick(first, last, nv+i0)
+        CALL replace2(first, last, nv+i0)
+        WRITE(11, '(a, i4, a, g14.6)')  &
+                  'Replicate ', nrepl, '  RSS = ', rss(nv+i0)
+      END DO
+    CASE ('d', 'D')          ! Display best found
+      DO i = first, max_size
+        WRITE(*, '(" ", a, i3, a)') 'Best subsets found of', i-i0, ' variables'
+        WRITE(11, '(" ", a, i3, a)') 'Best subsets found of', i-i0, ' variables'
+        WRITE(*, *) '   R.S.S.     Variable numbers'
+        WRITE(11, *) '   R.S.S.     Variable numbers'
+        pos = (i-1)*i/2 + 1
+        DO j = 1, nbest
+          WRITE(*, 940) ress(i,j), lopt(pos:pos+i-1, j)
+          WRITE(11, 940) ress(i,j), lopt(pos:pos+i-1, j)
+          940 FORMAT(' ', g13.5, '  ', 15i4: (/ 16(' '), 15i4))
+        END DO
+      END DO
+    CASE ('i', 'I')          ! Force variables IN
+      CALL current_status()
+      ALLOCATE( list(nvar) )
+      CALL get_numbers(list, nv)
+      ier = 0
+      IF (nv > 0) THEN
+        DO i = last+1, ncol
+          IF (ANY(list(1:nv) == vorder(i))) THEN
+            WRITE(*, '(a, i4, a)') ' Variable ', vorder(i),  &
+                                   ' is currently forced OUT'
+            nv = 0
+            EXIT
+          END IF
+        END DO
+        IF (fit_const) THEN
+          CALL reordr(list, nv, 2, ier)
+        ELSE
+          CALL reordr(list, nv, 1, ier)
+        END IF
+      END IF
+      IF (ier > 0 .AND. ier /= 4) THEN
+        WRITE(*, *)'** Error in list of variable numbers **'
+        WRITE(*, *)'** Variable not found or on list twice **'
+      ELSE
+        first = nv + 1
+        IF (fit_const) first = nv + 2
+        WRITE(11, *)
+        WRITE(11, '(75a1)') ('-', i=1,75)
+        WRITE(11, '(a, i4)') 'No. of variables to be forced in = ', nv
+        IF (nv > 0) THEN
+          WRITE(11, *) 'Variables:'
+          WRITE(11, '(5(i4, 1x, a8, 2x))') (list(i), vname(list(i)), i=1,nv)
+        END IF
+        CALL init_subsets(nvar_max, fit_const)
+      END IF
+      DEALLOCATE( list )
+    CASE ('o', 'O')          ! Force variables OUT
+      CALL current_status()
+      ALLOCATE( list(nvar) )
+      CALL get_numbers(list, nv)
+      ier = 0
+      IF (nv > 0) THEN
+        DO i = 1, first-1
+          IF (ANY(list(1:nv) == vorder(i))) THEN
+            WRITE(*, '(a, i4, a)') ' Variable ', vorder(i),  &
+                                   ' is currently forced IN'
+            nv = 0
+            EXIT
+          END IF
+        END DO
+        DO i = 1, nv                   ! Lower variable to end positions
+          DO j = first, ncol-i
+            IF (vorder(j) == list(i)) THEN
+              CALL vmove(j, ncol+1-i, ier)
+              EXIT
+            END IF
+          END DO
+        END DO
+      END IF
+      IF (ier > 0 .AND. ier /= 4) THEN
+        WRITE(*, *)'** Error in list of variable numbers **'
+        WRITE(*, *)'** Variable not found or on list twice **'
+      ELSE
+        last = ncol - nv
+        WRITE(11, *)
+        WRITE(11, '(75a1)') ('-', i=1,75)
+        WRITE(11, '(a, i4)') 'No. of variables to be forced out = ', nv
+        IF (nv > 0) THEN
+          WRITE(11, *) 'Variables:'
+          WRITE(11, '(5(i4, 1x, a8, 2x))') (list(i), vname(list(i)), i=1,nv)
+        END IF
+        CALL init_subsets(nvar_max, fit_const)
+      END IF
+      DEALLOCATE( list )
+    CASE ('l', 'L')          ! Least-squares regression coeffs. and R^2
+      WRITE(*, *)'WARNING: These estimates may be seriously biassed'
+      WRITE(11, *)'WARNING: These estimates may be seriously biassed'
+      CALL current_status()
+      ALLOCATE( list(nvar) )
+      CALL get_numbers(list, nv)
+      IF (nv > 0) THEN
+        ALLOCATE( order_copy(ncol) )
+        order_copy = vorder
+        CALL reordr(list, nv, i0+1, ier)
+        IF (ier == 0) THEN
+          IF (fit_const) THEN
+            ALLOCATE( beta(0:nv) )
+          ELSE
+            ALLOCATE( beta(1:nv) )
+          END IF
+          CALL regcf(beta, nv+i0, ier)
+          IF (ier == 0) THEN
+            WRITE(*, *)'LS regression coefficients'
+            WRITE(11, *)'LS regression coefficients'
+            WRITE(*, '(3(1x, a8, 1x, g13.5, " | "))')   &
+                          (vname(vorder(i+i0)), beta(i), i=1-i0, nv)
+            WRITE(11, '(3(a8, 1x, g13.5, " |  "))')      &
+                          (vname(vorder(i+i0)), beta(i), i=1-i0, nv)
+            r2 = one - rss(nv+i0) / total_sumsq
+            WRITE(*, '(1x, a, f8.4)') 'R^2 for this model = ', r2
+            WRITE(11, '(1x, a, f8.4)') 'R^2 for this model = ', r2
+          END IF
+          DEALLOCATE( beta )
+        END IF
+        IF (first > i0+1) CALL reordr(order_copy, first-1, 1, ier)
+        IF (last < ncol) CALL reordr(order_copy, last, 1, ier)
+        DEALLOCATE( order_copy )
+      END IF
+      DEALLOCATE( list )
+    CASE ('v', 'V')          ! Show variable names
+      WRITE(*, 950) (i, vname(i), i=1, nvar)
+      950 FORMAT(6(' ', i3, ' ', a8))
+    CASE ('m', 'M')          ! Mallows Cp for best subsets
+      IF (ncol >= nobs) THEN
+        WRITE(*, *) 'No degrees of freedom available for residual variance'
+        CYCLE
+      END IF
+      var = sserr / (nobs - ncol)
+      best_size = 1
+      WRITE(*, *) 'Mallows Cp - with Gilmours correction'
+      WRITE(11, *) 'Mallows Cp - with Gilmours correction'
+      IF (fit_const) THEN
+        WRITE(*, *) 'N.B. The no. of variables INCLUDES the constant term'
+        WRITE(11, *) 'N.B. The no. of variables INCLUDES the constant term'
+      END IF
+      DO i = first, max_size
+        Cp = ress(i,1)/var - nobs + 2*i - 2*(ncol-1)/DBLE(nobs-ncol-2)
+        WRITE(*, '(" ", i6, "     ", f10.2)') i, Cp
+        WRITE(11, '(i6, "     ", f10.2)') i, Cp
+        IF (i > first) THEN
+          fmax = Cp_last - Cp + 2*(nobs-ncol-1)/DBLE(nobs-ncol-2)
+          IF (fmax > zero) THEN
+            CALL f1max(nobs-ncol, ncol+1-i, f1, f5, f10, ier)
+            IF (fmax > f1) THEN
+              WRITE(*, '(20x, a)') 'Reduction significant at the 1% level'
+              WRITE(11, '(20x, a)') 'Reduction significant at the 1% level'
+              best_size = i
+            ELSE IF (fmax > f5) THEN
+              WRITE(*, '(20(" "), a)') 'Reduction significant at the 5% level'
+              WRITE(11, '(20(" "), a)') 'Reduction significant at the 5% level'
+              best_size = i
+            ELSE IF (fmax > f10) THEN
+              WRITE(*, '(20(" "), a)') 'Reduction significant at the 10% level'
+              WRITE(11, '(20(" "), a)') 'Reduction significant at the 10% level'
+            ELSE
+              WRITE(*, '(20(" "), a)') 'Reduction is not significant'
+              WRITE(11, '(20(" "), a)') 'Reduction is not significant'
+            END IF
+          END IF
+        END IF
+        Cp_last = Cp
+      END DO
+      pos = best_size * (best_size - 1) / 2
+      WRITE(*, *) 'A good subset for prediction appears to be:'
+      WRITE(*, '(5(1x, i3, 1x, a8, " |"))')  &
+                   (lopt(pos+i,1), vname(lopt(pos+i,1)), i=1, best_size)
+      WRITE(11, *) 'A good subset for prediction appears to be:'
+      WRITE(11, '(5(1x, i3, 1x, a8, " |"))')  &
+                    (lopt(pos+i,1), vname(lopt(pos+i,1)), i=1, best_size)
+      WRITE(11, *)
+    CASE ('p', 'P')          ! Calculate the PRESS statistic for best subsets
+      WRITE(*, *) 'PRESS statistic for best-fitting subsets'
+      WRITE(11, *) 'PRESS statistic for best-fitting subsets'
+      WRITE(*, *) 'Size  PRESS statistic  Mean sq. error  Variable nos.'
+      WRITE(11, *) 'Size  PRESS statistic  Mean sq. error  Variable nos.'
+      INQUIRE(10, OPENED=OK)
+      IF (.NOT. OK) OPEN(10, FILE=fname_dat, STATUS='OLD')
+      ALLOCATE( x(0:nvar), beta(ncol), xcopy(ncol) )
+      x(0) = one
+      DO i = first, max_size
+        pos = i*(i-1)/2 + 1
+        CALL reordr(lopt(pos:,1), i, 1, ier)
+        CALL regcf(beta, i, ier)
+        REWIND (10)
+        DO j = 1, line1-1              ! Skip to line1 in data file
+          READ(10, *)
+        END DO
+        press = zero
+        DO
+          IF (ypos > nvar) THEN
+            READ(10, *, IOSTAT=iostatus) x(1:nvar), y
+          ELSE IF (ypos .EQ. 1) THEN
+            READ(10, *, IOSTAT=iostatus) y, x(1:nvar)
+          ELSE
+            READ(10, *, IOSTAT=iostatus) x(1:ypos-1), y, x(ypos:nvar)
+          END IF
+          IF (iostatus > 0) CYCLE                   ! Error in data
+          IF (iostatus < 0) EXIT                    ! End of file
+          e = y
+          DO j = 1, i
+            xcopy(j) = x(vorder(j))
+            e = e - beta(j) * xcopy(j)
+          END DO
+          CALL hdiag(xcopy, i, h, ier)
+          press = press + (e/(one - h))**2
+        END DO
+        WRITE(*, '(i4, 4x, 2g14.6, 2x, 10i4/ (38x, 10i4))')    &
+                                   i-i0, press, press/nobs, vorder(1:i)
+        WRITE(11, '(i4, 4x, 2g14.6, 2x, 10i4/ (38x, 10i4))')    &
+                                   i-i0, press, press/nobs, vorder(1:i)
+      END DO
+      DEALLOCATE( x, beta, xcopy )
+    CASE ('q', 'Q')          ! Quit this menu
+      EXIT
+    CASE DEFAULT
+      WRITE(*, *) bel, '** Unknown option - ', ans, '  Try again! **'
+  END SELECT
+END DO
+WRITE(*, *) 'Do you want to use cross-validation? (Y/N): '
+READ(*, '(a)') ans
+IF (ans == 'Y' .OR. ans == 'y') THEN
+  DO
+    WRITE(*, *) 'Choose search method'
+    WRITE(*, *) '1. Stepwise (Efroymson)      2. Sequential replacement'
+    WRITE(*, *) '3. 2-at-a-time replacement   4. Best subsets (exhaustive search)'
+    WRITE(*, *) 'Enter number of your choice: '
+    READ(*, *) search_method
+    IF (search_method < 1 .OR. search_method > 4) THEN
+      CYCLE
+    ELSE
+      EXIT
+    END IF
+  END DO
+  IF (search_method > 1) THEN
+    DO
+      WRITE(*, *) 'Choose criterion for deciding size of subset'
+      WRITE(*, *) '1. AIC (Akaike)           2. BIC (Bayesian)'
+      WRITE(*, *) '3. Mallows Cp             4. Hannan-Quinn'
+      WRITE(*, *) '5. F-ratio = 4.0'
+      WRITE(*, *) 'Enter number of your choice: '
+      READ(*, *) criterion
+      IF (criterion < 1 .OR. criterion > 5) THEN
+        CYCLE
+      ELSE
+        EXIT
+      END IF
+    END DO
+  ELSE
+    criterion = 5
+  END IF
+  WRITE(*, *) 'How many complete sets of 10 x 10% cross-validations: '
+  READ(*, *) nrepl
+  CALL RANDOM_SEED(size=i)
+  WRITE(*, '(1x, a, i4, a)') 'Enter ', i, ' integers as random number seed(s): '
+  ALLOCATE( seed(i) )
+  READ(*, *) seed
+  INQUIRE(10, OPENED=OK)
+  IF (.NOT. OK) OPEN(10, FILE=fname_dat, STATUS='OLD')
+  WRITE(11, '(/ a)') 'Using 10% cross-validation'
+  WRITE(11, '("Search method ", a, "  Stopping criterion ", a/)')   &
+                      method(search_method), crit_name(criterion)
+  WRITE(11, *) 'Random number seeds: ', seed
+  CALL cross_validation(10, line1, ypos, fit_const, nvar, first, last,      &
+                        search_method, criterion, nrepl, seed, 11, msep, ier)
+END IF   ! Want cross-validation?
+STOP
+CONTAINS
+END PROGRAM subset
+sym_band.f90:
+PROGRAM Test_Eigen_symmetric_banded
+sym_eig.f90:
+PROGRAM symmetric_eigen
+IMPLICIT NONE
+TYPE (quad)       :: a(44,44)
+REAL (dp)         :: eigenv(44), trace, sume
+INTEGER           :: i, j, nrows, ier
+REAL              :: tstart, tend
+CHARACTER (LEN=1) :: ch
+DO i = 1, 30
+  DO j = 1, 30
+    a(i,j)%lo = 0._dp
+    IF (i == j) THEN
+      a(i,i)%hi = (33-i)/3
+    ELSE IF (ABS(i-j) == 3) THEN
+      a(i,j)%hi = 1._dp
+    ELSE
+      a(i,j)%hi = 0._dp
+    END IF
+  END DO
+END DO
+a(1,2)%hi = 1._dp
+a(1,3)%hi = 1._dp
+a(2,1)%hi = 1._dp
+a(3,1)%hi = 1._dp
+nrows = 30
+CALL time_now(tstart)
+CALL qkaiser(a, 44, nrows, eigenv, trace, sume, ier)
+IF (ier == 0) THEN
+  WRITE(*, 900) eigenv(1:nrows)
+  900 FORMAT(' Eigenvalues:-', 11(/ 4F19.14))
+  WRITE(*, *)
+  WRITE(*, '(a, 2F19.14)') ' Trace & sum of eigenvalues = ', trace, sume
+  WRITE(*, *) 'Trace = sum if all eigenvalues +ve'
+ELSE
+  WRITE(*, '(a, i4)') ' *** qkaiser error no. ', ier
+END IF
+CALL time_now(tend)
+WRITE(*, '(a, f8.2, a)') ' Time taken = ', tend-tstart, 'secs.'
+WRITE(*, *)
+WRITE(*, *) 'Press RETURN to continue'
+READ(*, '(a)') ch
+WRITE(*, '(a)') ' ' // ch
+DO i = 1, 44
+  DO j = 1, 44
+    a(i,j)%lo = 0._dp
+    IF (i == j) THEN
+      a(i,i)%hi = 6._dp
+    ELSE IF (ABS(i-j) == 1) THEN
+      a(i,j)%hi = 3._dp
+    ELSE IF (ABS(i-j) <= 3) THEN
+      a(i,j)%hi = 1._dp
+    ELSE
+      a(i,j)%hi = 0._dp
+    END IF
+  END DO
+END DO
+a(1,1)%hi   = 5._dp
+a(1,2)%hi   = 2._dp
+a(2,1)%hi   = 2._dp
+a(44,44)%hi = 5._dp
+a(44,43)%hi = 2._dp
+a(43,44)%hi = 2._dp
+nrows = 44
+CALL time_now(tstart)
+CALL qkaiser(a, 44, nrows, eigenv, trace, sume, ier)
+IF (ier == 0) THEN
+  WRITE(*, 900) eigenv(1:nrows)
+  WRITE(*, *)
+  WRITE(*, '(a, 2F19.14)') ' Trace & sum of eigenvalues = ', trace, sume
+  WRITE(*, *) 'Trace = sum if all eigenvalues +ve'
+ELSE
+  WRITE(*, '(a, i4)') ' *** qkaiser error no. ', ier
+END IF
+CALL time_now(tend)
+WRITE(*, '(a, f8.2, a)') ' Time taken = ', tend-tstart, 'secs.'
+STOP
+CONTAINS
+END PROGRAM symmetric_eigen
+t_as282.f90:
+PROGRAM test_as282
+IMPLICIT NONE
+REAL (dp)          :: x(300,20), y(300), coeffs(20,100), eprmin(100),  &
+                      resid(300,100), cvemin(100), robdsq(300,100), scalf
+INTEGER            :: i, j, ncas, npre, ioptn, caseno,  &
+                      int, nvar, maxtry, nclow, nchigh, ifault, ii
+LOGICAL            :: mve, lms, exh, isint, case
+CHARACTER (LEN=60) :: infile,outfile
+WRITE(*,*) 'Input data file name?'
+READ(*,10) infile
+10 FORMAT(a)
+WRITE(*,*) 'Does the data include a case number? Yes (T) or No',' (F)'
+READ(*,*) case
+OPEN (20,FILE=infile)
+WRITE(*,*) 'Output file name?'
+READ(*,10) outfile
+OPEN(30,FILE=outfile)
+WRITE(*,*) 'Sample size?'
+READ(*,*) ncas
+WRITE(*,*) '# predictors?'
+READ(*,*) npre
+WRITE(*,*) 'Enter scaling factor'
+READ(*,*) scalf
+ioptn = 0
+WRITE(*,*) 'Do LMS? enter T or F'
+READ(*,*) lms
+IF (.NOT. lms) ioptn = ioptn + 1
+WRITE(*,*) 'Do MVE? enter T or F'
+READ(*,*) mve
+IF (.NOT. mve) ioptn = ioptn + 2
+WRITE(*,*) 'Intercept (constant) term? enter T or F'
+READ(*,*) isint
+IF (isint) THEN
+  int=1
+ELSE
+  int=0
+  ioptn = ioptn + 4
+END IF
+nvar=npre+int
+WRITE(*,*) 'Exhaustive search? enter T or F'
+READ(*,*) exh
+IF (.NOT.exh) THEN
+  ioptn = ioptn + 8
+  WRITE(*,*) 'Max number of subsamples to check?'
+  READ(*,*) maxtry
+END IF
+WRITE(*,*) 'Low, high coverages to check?'
+READ(*,*) nclow,nchigh
+DO i=1, ncas
+  y(i) = 0
+  IF (case) THEN
+    IF (lms) THEN
+      READ(20,*) caseno, (x(i,j),j=1,npre),y(i)
+    ELSE
+      READ(20,*) caseno, (x(i,j),j=1,npre)
+    END IF
+  ELSE
+    IF (lms) THEN
+      READ(20,*) (x(i,j),j=1,npre), y(i)
+    ELSE
+      READ(20,*) (x(i,j),j=1,npre)
+    END IF
+  END IF
+  y(i) = y(i) * scalf
+  x(i,1:npre) = scalf * x(i,1:npre)
+END DO
+IF (case) WRITE(*, *) 'Last case number was: ', caseno
+CALL mvelms (x, y, ncas, npre, ioptn, maxtry, nclow, nchigh, coeffs,  &
+             eprmin, resid, robdsq, cvemin, ifault)
+WRITE(30,*) 'Fault parameter ', ifault
+DO i=1, nchigh-nclow+1
+  WRITE(30,*) 'Coverage level ', i+nclow-1
+  IF (lms) THEN
+    WRITE(30,*) 'LMS results'
+    WRITE(30,*) 'Coefficients of LMS'
+    WRITE(30,101) (coeffs(j,i),j=1,nvar)
+    WRITE(30,*) 'Criterion ',eprmin(i)
+    WRITE(30,*) 'Data, residuals'
+    DO ii=1, ncas
+      WRITE(30,103) ii, (x(ii,j),j=1,npre), y(ii), resid(ii,i)
+    END DO
+  END IF
+  IF (mve) THEN
+    WRITE(30,*) 'MVE results'
+    WRITE(30,*) 'Criterion ', cvemin(i)
+    WRITE(30,*) 'Data, robust d-squareds'
+    DO ii=1, ncas
+      WRITE(30,103) ii, (x(ii,j),j=1,npre), robdsq(ii,i)
+    END DO
+  END IF
+END DO
+101 FORMAT(5G15.6)
+103 FORMAT(i3, (t5, 5G15.6))
+STOP
+END PROGRAM test_as282
+taus88.f90:
+PROGRAM t_taus88
+t_cst.f90:
+PROGRAM test_cst
+IMPLICIT NONE
+TYPE (quad)          :: x, twox, sine, cosine, tangent, lhs, rhs, diff
+REAL (dp)            :: half = 0.5_dp, small = EPSILON(half), r
+INTEGER, ALLOCATABLE :: seed(:)
+INTEGER              :: k, i
+CALL RANDOM_SEED(size=k)
+ALLOCATE (seed(k))
+CALL RANDOM_SEED(get=seed)
+WRITE(*, *)'Old random number seeds: ', seed
+WRITE(*, '(1x, a, i4, a)') 'Enter ', k, ' integers as random number seeds: '
+READ(*, *) seed
+CALL RANDOM_SEED(put=seed)
+DO i = 1, 100
+  CALL RANDOM_NUMBER(x%hi)
+  CALL RANDOM_NUMBER(r)
+  x%hi = (x%hi - half) / r
+  x%lo = x%hi * small
+  twox = 2._dp * x
+  lhs = SIN(twox)
+  sine = SIN(x)
+  cosine = COS(x)
+  rhs = sine * cosine
+  rhs = 2._dp * rhs
+  diff = lhs - rhs
+  WRITE(*, '(" sin(2x)   lhs =", g13.5, "  Diff. =", g12.4)') lhs%hi, diff%hi
+  lhs = COS(twox)
+  rhs = (cosine + sine) * (cosine - sine)
+  diff = lhs - rhs
+  WRITE(*, '(" cos(2x)   lhs =", g13.5, "  Diff. =", g12.4)') lhs%hi, diff%hi
+  diff%hi = 1._dp
+  diff%lo = 0._dp
+  lhs = diff / cosine
+  lhs = lhs * lhs
+  tangent = TAN(x)
+  rhs = diff + tangent * tangent
+  diff = lhs - rhs
+  WRITE(*, '(" sec(x)^2  lhs =", g13.5, "  Diff. =", g12.4)') lhs%hi, diff%hi
+END DO
+STOP
+END PROGRAM test_cst
+t_cubert.f90:
+PROGRAM test_cube_root
+IMPLICIT NONE
+TYPE (quad)          :: x, lhs, rhs, diff
+REAL (dp)            :: half = 0.5_dp, small = EPSILON(half), r
+INTEGER, ALLOCATABLE :: seed(:)
+INTEGER              :: k, i
+CALL RANDOM_SEED(size=k)
+ALLOCATE (seed(k))
+CALL RANDOM_SEED(get=seed)
+WRITE(*, *)'Old random number seeds: ', seed
+WRITE(*, '(1x, a, i4, a)') 'Enter ', k, ' integers as random number seeds: '
+READ(*, *) seed
+CALL RANDOM_SEED(put=seed)
+DO i = 1, 20
+  CALL RANDOM_NUMBER(x%hi)
+  CALL RANDOM_NUMBER(r)
+  x%hi = (x%hi - half) / r
+  x%lo = x%hi * small
+  lhs = cube_root(x)
+  IF (x%hi >= 0._dp) THEN
+    rhs = EXP( LOG(x) / 3._dp)
+  ELSE
+    rhs = - EXP( LOG(- x) / 3._dp)
+  END IF
+  diff = lhs - rhs
+  WRITE(*, '(" lhs =", g13.5, "  Diff. =", g12.4)') lhs%hi, diff%hi
+END DO
+STOP
+CONTAINS
+test615.f90:
+PROGRAM subl1
+IMPLICIT NONE
+INTEGER   :: i, idex(210), ifault, istat(20), iter, j, jmin, k, l,  &
+             minin, mmax, n, nmax, nprob
+REAL (dp) :: bval(210), popt, x(300,20), y(300), zl(20)
+INTEGER   :: unitgo, unitin
+CHARACTER (LEN=72) :: imt
+CHARACTER (LEN=40) :: name
+unitin = 5
+unitgo = 6
+nmax = 300
+mmax = 30
+nprob = 0
+10 READ (unitin, 70, END=60) k, name
+WRITE (unitgo, 70) k, name
+IF (k == 0) STOP
+WRITE (unitgo, 80) name
+READ (unitin, 140) n, minin, popt
+20   FORMAT ('    Number of observation =', i5/,  &
+             '    Number of parameters =', i5/  &
+             '    Minimum number of parameters considered =', i5/  &
+             '    Percentage deviation from optimality allowed =', f6.2/  &
+             '        ** best subset lav program')
+WRITE (unitgo, 20) n, k, minin, popt
+READ (unitin, 150) imt
+DO i = 1, n
+  READ (unitin, FMT=imt) y(i), (x(i,j),j=1,k)
+END DO
+READ (unitin, 90) istat(1:k)
+iter = 0
+CALL kbest (x, y, k, n, iter, ifault, popt, minin, nmax, mmax,  &
+            bval, idex, istat, zl)
+WRITE (unitgo, 100) ifault
+j = k*(k+1)/2
+jmin = (minin-1)*(minin)/2
+j = j - jmin
+DO i = minin,k
+  WRITE (unitgo, 130) i
+  WRITE (unitgo, 120) zl(i)
+  DO l = 1,i
+    WRITE (unitgo, 110) idex(j), bval(j)
+    j = j - 1
+  END DO
+END DO
+nprob = nprob + 1
+WRITE (unitgo,160) iter
+GO TO 10
+60 STOP
+70   FORMAT (i5, A)
+80   FORMAT ('        ','problem title ', '  ', A)
+90   FORMAT (10I2)
+100  FORMAT (' ifault=', i3)
+110  FORMAT (/' beta(', i3, ')', f15.3)
+120  FORMAT ('    ', 14('*'), 'sum of absolute values = ', f15.3)
+130  FORMAT (//'   best results for lav subset of size = ', i3)
+140  FORMAT (i5, i2, f6.2)
+150  FORMAT (A)
+160  FORMAT (//'     iteration count = ', i7)
+END PROGRAM subl1
+test760.f90:
+PROGRAM tprg3p
+IMPLICIT NONE
+INTEGER, PARAMETER  :: newpg = 210000000
+INTEGER, PARAMETER  :: nxd = 9, nyd = 11, nxi = 19, nyi = 23
+REAL, PARAMETER     :: ximn = -0.5, ximx = 8.5, yimn = -0.5, yimx = 10.5
+REAL     :: anxim1, anyim1, dxi, dyi
+INTEGER  :: ier, isec, ixd, ixi, iximn, iximx, iyd, iydr, iyi, iyir, md, nydo2
+CHARACTER (LEN=6)  :: nmpr = 'TPRG3P', nmwf = 'WFRG3P'
+REAL     :: dzi(nxi,nyi), xi(nxi), yi(nyi), zi(nxi,nyi)
+CHARACTER (LEN=6)   :: nmsr(2) = (/ 'RGBI3P', 'RGSF3P' /)
+CHARACTER (LEN=20)  :: lbl(2) = (/ 'Calculated ZI Values',  &
+                                   'Differences         ' /)
+REAL  :: xd(nxd) = (/ 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0 /)
+REAL  :: yd(nyd) = (/ 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 /)
+REAL  :: zd(nxd,nyd) = RESHAPE(  &
+                    (/ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   &
+                       0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   &
+                       0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   &
+                       3.2, 0.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   &
+                        7.4,  4.8,  1.4,  0.1,  0.0, 0.0, 0.0, 0.0, 0.0,   &
+                       12.0,  8.0,  5.3,  2.9,  0.6, 0.0, 0.0, 0.0, 0.0,   &
+                       16.8, 14.4,  8.1,  6.9,  6.2,  0.6,  0.1, 0.0,  0.0, &
+                       21.8, 20.5, 12.8, 17.6,  5.8,  7.6,  0.8,  0.6,  0.6, &
+                       22.4, 22.5, 14.6, 22.5,  4.7,  7.2,  1.8,  2.1,  2.1, &
+                       37.2, 40.0, 27.0, 41.3, 14.1, 24.5, 17.3, 20.2, 20.8, &
+                       58.2, 61.5, 47.9, 62.3, 34.6, 45.5, 38.2, 41.2, 41.7 /), &
+                       (/ 9, 11 /) )
+REAL  :: zie(nxi,23) = RESHAPE(  &
+ (/ -.847, -.533, -.274, -.117, -.031, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   &
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,  &
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, .401, .250, .119,   &
+  .043, .011, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   &
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,  &
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -.665, -.376, -.143, -.033, -.007, 0.0, 0.0,  &
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,  &
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,  &
+  0.0, 2.449, 1.368, .537, .149, .025, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   &
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.083, 3.200, 1.642, .700, .187, 0.0,  &
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 6.588,   &
+  5.234, 3.878, 2.542, 1.188, .253, .026, .026, .007, 0.0, 0.0, 0.0, 0.0,   &
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 8.017, 7.400, 6.400, 4.800, 2.963, 1.400,   &
+  .457, .100, .027, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 11.055, &
+  9.670, 8.083, 6.305, 4.786, 3.421, 2.043, 1.112, .565, .131, -.019, 0.0,  &
+  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 14.492, 12.000, 9.746, 8.000, 6.594,   &
+  5.300, 4.081, 2.900, 1.697, .600, .059, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,  &
+  0.0, 15.999, 14.376, 12.657, 10.774, 8.620, 6.659, 5.291, 4.392, 3.926,   &
+  3.005, 1.223, .139, .051, .025, .009, 0.0, 0.0, 0.0, -.005, 15.525, 16.800, &
+  16.749, 14.400, 10.956, 8.100, 6.735, 6.900, 7.298, 6.200, 3.010, .600,   &
+  .248, .100, .024, 0.0, .006, 0.0, -.025, 15.876, 19.280, 20.563, 17.856,   &
+  13.242, 10.219, 10.577, 11.999, 10.170, 7.053, 5.198, 3.543, 1.831, .350,  &
+  -.130, .168, .408, .168, -.224, 17.700, 21.800, 23.531, 20.500, 15.087,   &
+  12.800, 15.817, 17.600, 11.477, 5.800, 6.988, 7.600, 4.410, .800, -.392,  &
+  .600, 1.261, .600, -.417, 17.913, 22.788, 24.944, 21.881, 16.302, 14.382,  &
+  18.557, 20.807, 11.916, 4.561, 7.327, 8.518, 5.133, 1.284, -.013, 1.201,   &
+  1.998, 1.200, -.065, 16.383, 22.400, 25.330, 22.500, 16.796, 14.600,   &
+  19.172, 22.500, 13.159, 4.700, 6.689, 7.200, 4.392, 1.800, 1.150, 2.100,   &
+  2.734, 2.100, 1.025, 18.109, 26.756, 31.311, 28.143, 21.004, 18.237,   &
+  24.236, 28.979, 17.970, 7.469, 10.467, 11.985, 9.022, 6.833, 6.901, 8.292,  &
+  9.186, 8.524, 7.101, 24.667, 37.200, 44.007, 40.000, 30.508, 27.000,   &
+  34.974, 41.300, 27.136, 14.100, 20.473, 24.500, 20.557, 17.300, 17.639,  &
+  20.200, 21.826, 20.800, 18.458, 33.414, 48.009, 56.017, 51.561, 40.817,  &
+  36.922, 45.856, 52.860, 37.376, 23.200, 30.839, 36.192, 31.969, 28.037,  &
+  28.437, 31.604, 33.579, 32.332, 29.561, 44.842, 58.200, 65.537, 61.500,  &
+  51.657, 47.900, 55.899, 62.300, 47.891, 34.600, 41.239, 45.500, 41.479,  &
+  38.200, 38.591, 41.200, 42.823, 41.700, 39.192, 58.284, 68.917, 74.644,  &
+  71.333, 63.413, 60.125, 66.293, 71.400, 59.129, 47.725, 52.451, 54.592,  &
+  50.842, 48.483, 48.639, 50.142, 51.089, 50.200, 48.268 /), (/ 19, 23 /) )
+OPEN (6,FILE=nmwf)
+nydo2 = nyd / 2
+WRITE (6,FMT=5000) nmpr
+WRITE (6,FMT=5100) xd
+DO  iydr = 1, nyd
+  IF (MOD(iydr-1,nydo2) <= 1) WRITE (6,FMT='(1X)')
+  iyd = nyd + 1 - iydr
+  WRITE (6,FMT=5200) yd(iyd), (zd(ixd,iyd),ixd = 1,nxd)
+END DO
+dxi = ximx - ximn
+anxim1 = nxi - 1
+DO  ixi = 1, nxi
+  xi(ixi) = ximn + dxi*REAL(ixi-1) / anxim1
+END DO
+dyi = yimx - yimn
+anyim1 = nyi - 1
+DO  iyi = 1, nyi
+  yi(iyi) = yimn + dyi*REAL(iyi-1) / anyim1
+END DO
+DO  iyi = 1, nyi
+  DO  ixi = 1, nxi
+    IF (ixi == 1.AND.iyi == 1) THEN
+      md = 1
+    ELSE
+      md = 2
+    END IF
+    CALL rgbi3p(md, nxd, nyd, xd, yd, zd, 1, xi(ixi), yi(iyi), zi(ixi,iyi), ier)
+    IF (ier > 0) STOP
+    dzi(ixi,iyi) = zi(ixi,iyi) - zie(ixi,iyi)
+  END DO
+END DO
+WRITE (6,FMT=5300) newpg, nmpr, nmsr(1), lbl(1)
+DO  isec = 1, 2
+  IF (isec == 1) THEN
+    iximn = 1
+    iximx = 11
+  ELSE
+    iximn = 9
+    iximx = nxi
+  END IF
+  WRITE (6,FMT=5400) (xi(ixi),ixi = iximn,iximx)
+  DO  iyir = 1, nyi
+    iyi = nyi + 1 - iyir
+    WRITE (6,FMT=5500) yi(iyi), (zi(ixi,iyi),ixi = iximn,iximx)
+  END DO
+END DO
+WRITE (6,FMT=5300) newpg, nmpr, nmsr(1), lbl(2)
+DO  isec = 1, 2
+  IF (isec == 1) THEN
+    iximn = 1
+    iximx = 11
+  ELSE
+    iximn = 9
+    iximx = nxi
+  END IF
+  WRITE (6,FMT=5600) (xi(ixi),ixi = iximn,iximx)
+  DO  iyir = 1, nyi
+    iyi = nyi + 1 - iyir
+    WRITE (6,FMT=5500) yi(iyi), (dzi(ixi,iyi),ixi = iximn,iximx)
+  END DO
+END DO
+md = 1
+CALL rgsf3p(md, nxd, nyd, xd, yd, zd, nxi, xi, nyi, yi, zi, ier)
+IF (ier > 0) STOP
+DO  iyi = 1, nyi
+  DO  ixi = 1, nxi
+    dzi(ixi,iyi) = zi(ixi,iyi) - zie(ixi,iyi)
+  END DO
+END DO
+WRITE (6,FMT=5300) newpg, nmpr, nmsr(2), lbl(1)
+DO  isec = 1, 2
+  IF (isec == 1) THEN
+    iximn = 1
+    iximx = 11
+  ELSE
+    iximn = 9
+    iximx = nxi
+  END IF
+  WRITE (6,FMT=5400) (xi(ixi),ixi = iximn,iximx)
+  DO  iyir = 1, nyi
+    iyi = nyi + 1 - iyir
+    WRITE (6,FMT=5500) yi(iyi), (zi(ixi,iyi),ixi = iximn,iximx)
+  END DO
+END DO
+WRITE (6,FMT=5300) newpg, nmpr, nmsr(2), lbl(2)
+DO  isec = 1, 2
+  IF (isec == 1) THEN
+    iximn = 1
+    iximx = 11
+  ELSE
+    iximn = 9
+    iximx = nxi
+  END IF
+  WRITE (6,FMT=5600) (xi(ixi),ixi = iximn,iximx)
+  DO  iyir = 1, nyi
+    iyi = nyi + 1 - iyir
+    WRITE (6,FMT=5500) yi(iyi), (dzi(ixi,iyi),ixi = iximn,iximx)
+  END DO
+END DO
+STOP
+5000 FORMAT (a6, t17, 'Original Data'//// t36, 'ZD(XD,YD)')
+5100 FORMAT ('    YD    XD='/ t8, f8.1, 2(' ', 3F6.1, f7.1),/)
+5200 FORMAT (' ', f6.1, f8.1, 2(' ', 3F6.1, f7.1))
+5300 FORMAT (a1, a6, t14, 'Program Check for ', a6, t43, a20)
+5400 FORMAT (/t39, 'ZI(XI,YI)'/ '  YI   XI='/ t6, 3F7.2, 2F6.2, 2f7.2,  &
+             2F6.2, 2F7.2/)
+5500 FORMAT (f5.2, 3F7.2, 2F6.2, 2F7.2, 2F6.2, 2F7.2)
+5600 FORMAT (/t39, 'DZI(XI,YI)'/ '  YI   XI='/ t6, 3F7.2, 2F6.2,  &
+             2F7.2, 2F6.2, 2F7.2,/)
+END PROGRAM tprg3p
+testfunc.f90:
+PROGRAM testfunktionen
+IMPLICIT NONE
+INTEGER, PARAMETER    :: dp = SELECTED_REAL_KIND(12, 60)
+INTEGER, ALLOCATABLE  :: seed(:)       ! For the random number generator
+INTEGER, PARAMETER    :: ipr = 9
+REAL (dp)             :: amin(30), amax(30), x0(30,20), f00(20)
+INTEGER               :: i, k, nparm, m, nsampl, ng, nsig, nc
+CHARACTER (LEN=30)    :: heading
+OPEN(UNIT=ipr, FILE='testfunc.out')
+CALL RANDOM_SEED(size=k)
+ALLOCATE (seed(k))
+WRITE(*, '(1x, a, i4, a)') 'Enter ', k, ' integers as random number seeds: '
+READ(*, *) seed
+CALL RANDOM_SEED(put=seed)
+WRITE(ipr, '(a / (7i11) )') ' Random number seed(s): ', seed
+WRITE(ipr, * )
+DO m = 1, 30
+  CALL start_values()
+  WRITE(ipr, '(/" ", a)') 'Test problem: ' // heading
+  nsampl = MIN(100*nparm, 1000)
+  ng = 5
+  nsig = 6
+  CALL global(amin, amax, nparm, m, nsampl, ng, ipr, nsig, x0, nc, f00)
+  DO i = 1, nc
+tfunc.f90:
+t_kemp_b.f90:
+PROGRAM test_kemp_binomial
+IMPLICIT NONE
+INTEGER :: n, nrep, i, ix
+REAL    :: p, mean = 0.0, sumsq = 0.0, stdev = 0.0, dev
+LOGICAL :: first
+t_lgstc1.f90:
+PROGRAM t_logistic
+IMPLICIT NONE
+CHARACTER (LEN= 6)  :: vname(0:10) = (/  &
+                       'Const.', 'Age   ', 'LWT   ', 'Race_2', 'Race_3', &
+                       'Smoke?', 'PTL   ', 'HT    ', 'UI    ', 'FTV   ', &
+                       'BWT   ' /)
+INTEGER    :: iostatus, id, low, age, lwt, race, smoke, ptl, ht, ui, ftv,  &
+              bwt, ncases, n(200), s(200), ndf, ier, i
+REAL (dp)  :: x(200, 9), chisq, devnce, beta(0:9), se_beta(0:9), tail_prob
+OPEN(UNIT=8, FILE='birthwt.dat', STATUS='OLD')
+ncases = 0
+DO
+  READ(8, *, IOSTAT=iostatus) id, low, age, lwt, race, smoke, ptl, ht, ui,  &
+                              ftv, bwt
+  IF (iostatus < 0) EXIT
+  IF (iostatus > 0) CYCLE
+  ncases = ncases + 1
+  n(ncases) = 1
+  s(ncases) = low
+  x(ncases, 1) = age
+  x(ncases, 2) = lwt
+  x(ncases, 3:4) = 0.0_dp
+  IF (race > 1) x(ncases, race+1) = 1.0_dp
+  x(ncases, 5) = smoke
+  x(ncases, 6) = ptl
+  x(ncases, 7) = ht
+  x(ncases, 8) = ui
+  x(ncases, 9) = ftv
+END DO
+WRITE(*, *) 'NCASES = ', ncases
+WRITE(*, *)
+CALL logistic(ncases, x, 9, s, n, chisq, devnce, ndf, beta, se_beta, ier)
+IF (ier /= 0) THEN
+  WRITE(*, *) 'Error number', ier
+ELSE
+  WRITE(*, '(a, f9.3, a, f9.3, a, i4, a)')  &
+        ' Deviance = ', devnce, '   Chi-squared = ', chisq,   &
+        ' with ', ndf, ' deg. of freedom'
+  tail_prob = 1.0_dp - chi_squared(ndf, chisq)
+  IF (tail_prob < 0.01_dp) THEN
+    WRITE(*, *) '*** Significantly bad fit at the 1% level ***'
+  END IF
+  WRITE(*, '(a, g12.4/)') ' Chi-squared tail prob. = ', tail_prob
+  WRITE(*, *) '        Coefficient   Std.error'
+  DO i = 0, 9
+    WRITE(*, '(" ", a6, "  ", 2g13.5)') vname(i), beta(i), se_beta(i)
+  END DO
+END IF
+WRITE(*, *)
+CALL logistic(ncases, x, 8, s, n, chisq, devnce, ndf, beta, se_beta, ier)
+IF (ier /= 0) THEN
+  WRITE(*, *) 'Error number', ier
+ELSE
+  WRITE(*, '(a, f9.3, a, f9.3, a, i4, a)')  &
+        ' Deviance = ', devnce, '   Chi-squared = ', chisq,   &
+        ' with ', ndf, ' deg. of freedom'
+  tail_prob = 1.0_dp - chi_squared(ndf, chisq)
+  IF (tail_prob < 0.01_dp) THEN
+    WRITE(*, *) '*** Significantly bad fit at the 1% level ***'
+  END IF
+  WRITE(*, '(a, g12.4/)') ' Chi-squared tail prob. = ', tail_prob
+  WRITE(*, *) '        Coefficient   Std.error'
+  DO i = 0, 8
+    WRITE(*, '(" ", a6, "  ", 2g13.5)') vname(i), beta(i), se_beta(i)
+  END DO
+END IF
+x(:,1:7) = x(:,2:8)
+vname(1:7) = vname(2:8)
+WRITE(*, *)
+CALL logistic(ncases, x, 7, s, n, chisq, devnce, ndf, beta, se_beta, ier)
+IF (ier /= 0) THEN
+  WRITE(*, *) 'Error number', ier
+ELSE
+  WRITE(*, '(a, f9.3, a, f9.3, a, i4, a)')  &
+        ' Deviance = ', devnce, '   Chi-squared = ', chisq,   &
+        ' with ', ndf, ' deg. of freedom'
+  tail_prob = 1.0_dp - chi_squared(ndf, chisq)
+  IF (tail_prob < 0.01_dp) THEN
+    WRITE(*, *) '*** Significantly bad fit at the 1% level ***'
+  END IF
+  WRITE(*, '(a, g12.4/)') ' Chi-squared tail prob. = ', tail_prob
+  WRITE(*, *) '        Coefficient   Std.error'
+  DO i = 0, 7
+    WRITE(*, '(" ", a6, "  ", 2g13.5)') vname(i), beta(i), se_beta(i)
+  END DO
+END IF
+STOP
+END PROGRAM t_logistic
+t_lgstc2.f90:
+PROGRAM t_logistic
+IMPLICIT NONE
+INTEGER             :: ngroups = 40, n(40), s(40), count, i, pos, ndf, ier
+REAL (dp)           :: x(40,3), chisq, devnce, beta(0:3), se_beta(0:3),  &
+                       p(40), stdres(40), tail_prob
+CHARACTER (LEN=80)  :: text
+CHARACTER (LEN=40)  :: head
+CHARACTER (LEN= 5)  :: age
+CHARACTER (LEN= 1)  :: sex
+CHARACTER (LEN= 6)  :: vname(0:3) = (/ 'Const.', 'Area  ', 'Age   ', 'Sex   ' /)
+OPEN(UNIT=8, FILE='surgical.dat', STATUS='OLD')
+count = 0
+DO
+  READ(8, '(a)') text
+  IF (LEN_TRIM(text) == 0) CYCLE
+  IF (text(1:1) == '!') THEN
+    WRITE(*, '(" ",a)') TRIM(text)
+  ELSE IF (text(1:1) == 'A') THEN
+    head = TRIM(text)
+  ELSE
+    count = count + 1
+    BACKSPACE(8)
+    READ(8, '(f2.0, a7, a4, i9, i8)') x(count,1), age, sex, n(count), s(count)
+    pos = INDEX(age, '-')
+    READ(age(pos+1:pos+2), '(i2)') i
+    IF (i == 0) THEN
+      x(count,2) = 88.0_dp
+    ELSE IF (i == 4) THEN
+      x(count,2) = 2.0_dp
+    ELSE
+      x(count,2) = i - 4
+    END IF
+    IF (sex == 'M') THEN
+      x(count,3) = 0
+    ELSE
+      x(count,3) = 1
+    END IF
+  END IF
+  IF (count == 40) EXIT
+END DO
+WRITE(*, *)
+CALL logistic(ngroups, x, 3, s, n, chisq, devnce, ndf, beta, se_beta, ier)
+WRITE(*, *) '*** IER =', ier
+WRITE(*, *)
+WRITE(*, *) 'Data being corrected'
+s(39) = 50
+WRITE(*, *)
+CALL logistic(ngroups, x, 3, s, n, chisq, devnce, ndf, beta, se_beta, ier,  &
+              fit=p, stdres=stdres)
+IF (ier /= 0) THEN
+  WRITE(*, *) 'Error number', ier
+ELSE
+  WRITE(*, '(a, f9.3, a, f9.3, a, i4, a)')  &
+        ' Deviance = ', devnce, '   Chi-squared = ', chisq,   &
+        ' with ', ndf, ' deg. of freedom'
+  tail_prob = 1.0_dp - chi_squared(ndf, chisq)
+  IF (tail_prob < 0.01_dp) THEN
+    WRITE(*, *) '*** Significantly bad fit at the 1% level ***'
+  END IF
+  WRITE(*, '(a, g12.4/)') ' Chi-squared tail prob. = ', tail_prob
+  WRITE(*, *) '        Coefficient   Std.error'
+  DO i = 0, 3
+    WRITE(*, '(" ", a6, "  ", 2g13.5)') vname(i), beta(i), se_beta(i)
+  END DO
+  WRITE(*, '(/a)') ' Area  Age  Sex  Patients  Died   Fitted  Std.Resid.'
+  DO i = 1, ngroups
+    WRITE(*, '(3f5.0, 2i8, 2f9.1)') x(i,1:3), n(i), s(i), n(i)*p(i), stdres(i)
+  END DO
+END IF
+WRITE(*, *)
+WRITE(*, *) 'From the standardized residuals, the model obviously does not'
+WRITE(*, *) 'well for the youngest age group.'
+WRITE(*, *)
+WRITE(*, *) 'Leaving out the first age group'
+WRITE(*, *)
+x(1:18,:) = x(3:20,:)
+n(1:18) = n(3:20)
+s(1:18) = s(3:20)
+x(19:36,:) = x(23:40,:)
+n(19:36) = n(23:40)
+s(19:36) = s(23:40)
+ngroups = ngroups - 4
+CALL logistic(ngroups, x, 3, s, n, chisq, devnce, ndf, beta, se_beta, ier,  &
+              fit=p, stdres=stdres)
+IF (ier /= 0) THEN
+  WRITE(*, *) 'Error number', ier
+ELSE
+  WRITE(*, '(a, f9.3, a, f9.3, a, i4, a)')  &
+        ' Deviance = ', devnce, '   Chi-squared = ', chisq,   &
+        ' with ', ndf, ' deg. of freedom'
+  tail_prob = 1.0_dp - chi_squared(ndf, chisq)
+  IF (tail_prob < 0.01_dp) THEN
+    WRITE(*, *) '*** Significantly bad fit at the 1% level ***'
+  END IF
+  WRITE(*, '(a, g12.4/)') ' Chi-squared tail prob. = ', tail_prob
+  WRITE(*, *) '        Coefficient   Std.error'
+  DO i = 0, 3
+    WRITE(*, '(" ", a6, "  ", 2g13.5)') vname(i), beta(i), se_beta(i)
+  END DO
+  WRITE(*, '(/a)') ' Area  Age  Sex  Patients  Died   Fitted  Std.Resid.'
+  DO i = 1, ngroups
+    WRITE(*, '(3f5.0, 2i8, 2f9.1)') x(i,1:3), n(i), s(i), n(i)*p(i), stdres(i)
+  END DO
+END IF
+WRITE(*, *)
+WRITE(*, *) 'The model still does not fit well, though it fits better now.'
+WRITE(*, *) 'There appears to be no difference between areas, but the'
+WRITE(*, *) 'difference between sexes is significant'
+STOP
+END PROGRAM t_logistic
+t_lgstc3.f90:
+PROGRAM t_logistic
+IMPLICIT NONE
+REAL (dp)  :: x(16,2), chisq, devnce, beta(0:2), se_beta(0:2), scale
+INTEGER    :: n(16), s(16), i, iostatus, ndf, ier
+OPEN(UNIT=8, FILE='clearcut.dat', STATUS='OLD')
+i = 1
+DO
+  READ(8, *, IOSTAT=iostatus) x(i,1), x(i,2), s(i), n(i)
+  IF (iostatus < 0) EXIT
+  IF (iostatus > 0) CYCLE
+  i = i + 1
+  IF (i > 16) EXIT
+END DO
+CALL logistic(16, x, 2, s, n, chisq, devnce, ndf, beta, se_beta, ier)
+WRITE(*, *) 'IER =', ier
+WRITE(*, *)
+WRITE(*, *) 'If IER = 7, it means that there is a linear boundary'
+WRITE(*, *) 'between cases in which s = 0 and s = 1'
+IF (ier == 0) WRITE(*, '(a, f8.3, a, f8.3, a, i3, a)')  &
+                       ' Deviance = ', devnce, '  Chi-square = ', chisq,  &
+                       '  with ', ndf, ' deg. of freedom'
+WRITE(*, *)
+WRITE(*, *) '   Coefficient'
+DO i = 0, 2
+  WRITE(*, '(i3, g12.4)') i, beta(i)
+END DO
+WRITE(*, *)
+scale = SQRT(ABS(beta(1))*ABS(beta(2)))
+beta = beta / scale
+WRITE(*, *) 'Boundary is approx:'
+WRITE(*, '(f9.4, a, f9.4, a, f9.4, a)')  &
+         beta(0), ' + ', beta(1), ' * X1 + ', beta(2), ' * X2 = 0.0'
+STOP
+END PROGRAM t_logistic
+t_logexp.f90:
+PROGRAM test_longlog_longexp
+IMPLICIT NONE
+TYPE (quad)          :: x, lhs, rhs, diff
+INTEGER, ALLOCATABLE :: seed(:)
+INTEGER              :: k, i
+REAL (dp)            :: half = 0.5_dp, small = 1.e-16_dp
+CALL RANDOM_SEED(size=k)
+ALLOCATE (seed(k))
+CALL RANDOM_SEED(get=seed)
+WRITE(*, *)'Old random number seeds: ', seed
+WRITE(*, '(1x, a, i4, a)') 'Enter ', k, ' integers as random number seeds: '
+READ(*, *) seed
+CALL RANDOM_SEED(put=seed)
+DO i = 1, 10
+  CALL RANDOM_NUMBER(x%hi)
+  x%hi = (x%hi - half) / x%hi
+  x%lo = x%hi * small
+  lhs = LOG(x * x)
+  IF (x%hi > 0._dp) THEN
+    rhs = LOG(x)
+  ELSE
+    rhs = LOG(-x)
+  END IF
+  rhs = 2._dp * rhs
+  diff = lhs - rhs
+  WRITE(*, '(" lhs =", g13.5, "  Diff. =", g12.4)') lhs%hi, diff%hi
+  lhs = 2._dp * x
+  lhs = EXP(lhs)
+  rhs = EXP(x)
+  rhs = rhs * rhs
+  diff = lhs - rhs
+  WRITE(*, '(" lhs =", g13.5, "  Diff. =", g12.4)') lhs%hi, diff%hi
+END DO
+STOP
+END PROGRAM test_longlog_longexp
+t_minim.f90:
+PROGRAM tminim
+IMPLICIT NONE
+INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(14, 60)
+REAL (dp)          :: object, p(3), simp, step(3), stopcr, var(3)
+INTEGER            :: ier, iprint, iquad, maxf, nloop, nop
+LOGICAL            :: first
+p(1) = 0._dp
+p(2) = 1._dp
+p(3) = 2._dp
+step = 0.4_dp
+nop = 3
+maxf = 250
+iprint = 10
+stopcr = 1.d-04
+nloop = 6
+iquad = 1
+simp = 1.d-6
+first = .true.
+DO
+  CALL minim(p, step, nop, object, maxf, iprint, stopcr, nloop,   &
+             iquad, simp, var, objfun, ier)
+  IF (ier == 0) EXIT
+  IF (.NOT. first) STOP
+  first = .false.
+  maxf = 100
+END DO
+WRITE(*, 900) object, p
+toeplitz.f90:
+to_f90.f90:
+PROGRAM to_f90
+toms513.f90:
+toms519.f90:
+toms530.f90:
+PROGRAM driver
+IMPLICIT NONE
+REAL (dp)  :: a(6,6), z(6,6), e(6)
+REAL (dp)  :: con
+INTEGER    :: i, j, n, im1, jp1, ierr
+LOGICAL    :: matz, skew
+matz = .true.
+WRITE (6,5000)
+n = 5
+skew = .true.
+WRITE (6,5100)
+DO  i = 1, n
+  READ (5,5200) a(i,1:n)
+  WRITE (6,5200) a(i,1:n)
+END DO
+CALL trizd(n, a, e)
+CALL imzd(n, e, matz, skew, z, ierr)
+IF (ierr /= 0) WRITE (6,5300) ierr
+CALL tbakzd(n, a, n, z)
+WRITE (6,5400)
+j = 0
+20 j = j + 1
+WRITE (6,5500)
+IF (e(j) /= 0.d0) THEN
+  jp1 = j + 1
+  WRITE (6,5600) e(j), z(1,j), z(1,jp1)
+  WRITE (6,5700) (z(i,j), z(i,jp1), i = 2,n)
+  WRITE (6,5500)
+  con = -z(1,jp1)
+  WRITE (6,5600) e(jp1), z(1,j), con
+  DO  i = 2, n
+    con = -z(i,jp1)
+    WRITE (6,5700) z(i,j), con
+  END DO
+  j = j + 1
+ELSE
+  WRITE (6,5800) e(j), z(1,j)
+  WRITE (6,5900) z(2:n,j)
+END IF
+IF (j < n) GO TO 20
+WRITE (6,6000)
+n = 6
+skew = .false.
+DO  i = 1, n
+  e(i) = 1.
+  DO  j = 1, n
+    a(i,j) = 0.
+  END DO
+END DO
+DO  i = 2, n
+  im1 = i - 1
+  a(i,im1) = e(i)
+  a(im1,i) = e(i)
+END DO
+WRITE (6,6100)
+DO  i = 1, n
+  WRITE (6,5200) a(i,1:n)
+END DO
+CALL imzd(n, e, matz, skew, z, ierr)
+IF (ierr /= 0) WRITE (6,5300) ierr
+WRITE (6,6200)
+DO  j = 1, n
+  WRITE (6,5500)
+  WRITE (6,5800) e(j), z(1,j)
+  WRITE (6,5900) z(2:n,j)
+END DO
+STOP
+5000 FORMAT ('1', 'EIGENSYSTEM COMPUTATION OF SKEW-SYMMETRIC TEST CASE'//)
+5100 FORMAT ('0', '         TEST MATRIX'/)
+5200 FORMAT (6F6.0)
+5300 FORMAT ('0'/'0', 'IMZD IERR =', i5)
+5400 FORMAT ('0'/'0', '  EIGENVALUES', t40, 'EIGENVECTORS')
+5500 FORMAT (/)
+5600 FORMAT (' ', e15.8, ' * I     ', e15.8, '  +  ', e15.8, ' * I')
+5700 FORMAT (t26, e15.8, '  +  ', e15.8, ' * I')
+5800 FORMAT (' ', e15.8, t26, e15.8)
+5900 FORMAT (t26, e15.8)
+6000 FORMAT ('1', 'EIGENSYSTEM COMPUTATION OF TRIDIAGONAL, SYMMETRIC,',  &
+             ' ZERO DIAGONAL TEST CASE'//)
+6100 FORMAT ('0', t14, 'TEST MATRIX'/)
+6200 FORMAT ('0'/'0', '  EIGENVALUES             EIGENVECTORS')
+END PROGRAM driver
+toms615.f90:
+toms660.f90:
+PROGRAM qs2test
+toms661.f90:
+PROGRAM qs3test
+toms667.f90:
+toms683.f90:
+PROGRAM cqccex
+toms703.f90:
+toms760.f90:
+toms780.f90:
+t_quad.f90:
+PROGRAM test_quad
+IMPLICIT NONE
+TYPE (quad)          :: a, b, lhs, rhs, diff
+REAL (dp)            :: half = 0.5_dp, small = EPSILON(half)
+INTEGER, ALLOCATABLE :: seed(:)
+INTEGER              :: k, i
+CALL RANDOM_SEED(size=k)
+ALLOCATE (seed(k))
+CALL RANDOM_SEED(get=seed)
+WRITE(*, *)'Old random number seeds: ', seed
+WRITE(*, '(1x, a, i4, a)') 'Enter ', k, ' integers as random number seeds: '
+READ(*, *) seed
+CALL RANDOM_SEED(put=seed)
+DO i = 1, 10
+  CALL RANDOM_NUMBER(a%hi)
+  a%hi = (a%hi - half) / a%hi
+  a%lo = a%hi * small
+  CALL RANDOM_NUMBER(b%hi)
+  b%hi = (b%hi - half) / b%hi
+  b%lo = b%hi * small
+  lhs = (a + b) * (a + b)
+  rhs = a * b
+  rhs = 4._dp * rhs
+  rhs = (a - b) * (a - b) + rhs
+  diff = lhs - rhs
+  WRITE(*, '(" lhs =", g13.5, "  Diff. =", g12.4)') lhs%hi, diff%hi
+  lhs = (a*a - b*b) / (a - b)
+  rhs = a + b
+  diff = lhs - rhs
+  WRITE(*, '(" lhs =", g13.5, "  Diff. =", g12.4)') lhs%hi, diff%hi
+  lhs = a * b
+  lhs = 2._dp * lhs
+  lhs = SQRT(a*a + lhs + b*b)
+  IF (rhs%hi < 0._dp) THEN             ! Force +ve square root
+    rhs = -rhs
+  END IF
+  diff = lhs - rhs
+  WRITE(*, '(" lhs =", g13.5, "  Diff. =", g12.4)') lhs%hi, diff%hi
+END DO
+STOP
+END PROGRAM test_quad
+t_random.f90:
+PROGRAM t_random
+IMPLICIT NONE
+CHARACTER (LEN = 2)   :: option
+INTEGER, ALLOCATABLE  :: ix(:), seed(:)
+REAL, ALLOCATABLE     :: x(:), xmean(:), cov(:), chol_f(:)
+INTEGER               :: i, n, ndf, n_binom, k, ier, pos1, pos2, which
+REAL                  :: average, stdvn, shape, a, b, mu, p, pop_mean, pop_sd,   &
+                         one = 1.0, zero = 0.0, sk, two = 2.0, pcntile(9), &
+                         middle, xmax, xmin
+LOGICAL               :: first
+CALL RANDOM_SEED(size=k)
+ALLOCATE (seed(k))
+WRITE(*, '(1x, a, i4, a)') 'Enter ', k, ' integers as random number seeds: '
+READ(*, *) seed
+CALL RANDOM_SEED(put=seed)
+DO
+  WRITE(*, *)' 1.  Normal (Gaussian)                  2.  Gamma'
+  WRITE(*, *)' 3.  Exponential                        4.  Beta'
+  WRITE(*, *)' 5.  t                                  6.  Multivariate normal'
+  WRITE(*, *)' 7.  Generalized inverse Gaussian       8.  Poisson'
+  WRITE(*, *)' 9.  Binomial                          10.  Negative binomial'
+  WRITE(*, *)'11.  von Mises                         12.  Cauchy'
+  WRITE(*, *)'13.  Weibull                           14.  Chi-squared'
+  WRITE(*, *)'15.  Random order of integers'
+  WRITE(*, *)
+  WRITE(*, *)' Q   Quit'
+  WRITE(*, *)
+  WRITE(*, *)'            Enter your choice: '
+  READ(*, '(a)') option
+  option = ADJUSTL(option)
+  IF (option .EQ. 'q ' .OR. option .EQ. 'Q ') STOP
+  SELECT CASE (option)
+    CASE ('1 ')
+      WRITE(*, *) 'Distribution:  Normal (Gaussian)'
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      DO i = 1, n
+        x(i) = random_normal()
+      END DO
+      CALL statistics(x, n, average, middle, xmax, xmin, stdvn, pcntile)
+      WRITE(*, '(1x, a, f9.4, 2x, a, f9.4, 2x, a, f9.4)')                    &
+               'Mean = ', average, 'Median = ', middle, 'Sample st.dev. = ', stdvn
+      WRITE(*, '(1x, a, f9.4, 2x, a, f9.4)')                                 &
+               'Smallest x = ', xmin, 'Largest x = ', xmax
+      WRITE(*, 900) pcntile
+      900 FORMAT("     10%     20%     30%     40%     50%     60%     70%     80%     90% "/ &
+                 9f8.2)
+      WRITE(*, *)
+      DEALLOCATE (x)
+    CASE ('2 ')
+      WRITE(*, *) 'Distribution:  Gamma'
+      WRITE(*, *) 'Enter +ve value for shape parameter: '
+      READ(*, *) shape
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      first = .true.
+      DO i = 1, n
+        x(i) = random_gamma(shape, first)
+        first = .false.
+      END DO
+      CALL statistics(x, n, average, middle, stdev=stdvn)
+      DEALLOCATE (x)
+      WRITE(*, *)'Mean = ', average, '  Median = ', middle, '  Std.devn. = ', stdvn
+      pop_mean = shape
+      pop_sd = SQRT(shape)
+      WRITE(*, '(1x, a, 2g14.6)') 'Population mean & st.devn. = ', pop_mean,  &
+                                   pop_sd
+      WRITE(*, *)
+    CASE ('3 ')
+      WRITE(*, *) 'Distribution:  Exponential'
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      DO i = 1, n
+        x(i) = random_exponential()
+      END DO
+      CALL statistics(x, n, average, stdev=stdvn, percentile=pcntile)
+      DEALLOCATE (x)
+      WRITE(*, *)'Mean = ', average, '  Std.devn. = ', stdvn
+      pop_mean = one
+      pop_sd = one
+      WRITE(*, '(1x, a, 2g14.6)') 'Population mean & st.devn. = ', pop_mean,  &
+                                   pop_sd
+      WRITE(*, 900) pcntile
+      WRITE(*, *)
+    CASE ('4 ')
+      WRITE(*, *) 'Distribution:  Beta'
+      WRITE(*, *) 'Enter values of a, b: '
+      READ(*, *) a, b
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      first = .true.
+      DO i = 1, n
+        x(i) = random_beta(a, b, first)
+        first = .false.
+      END DO
+      CALL statistics(x, n, average, stdev=stdvn, percentile=pcntile)
+      DEALLOCATE (x)
+      WRITE(*, *)'Mean = ', average, '  Std.devn. = ', stdvn
+      pop_mean = a/(a+b)
+      pop_sd = SQRT(a*b/(a+b+1)) / (a+b)
+      WRITE(*, '(1x, a, 2g14.6)') 'Population mean & st.devn. = ', pop_mean,  &
+                                   pop_sd
+      WRITE(*, 900) pcntile
+      WRITE(*, *)
+    CASE ('5 ')
+      WRITE(*, *) 'Distribution:  t'
+      WRITE(*, *) 'How many degrees of freedom?: '
+      READ(*, *) ndf
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      DO i = 1, n
+        x(i) = random_t(ndf)
+      END DO
+      CALL statistics(x, n, average, stdev=stdvn, percentile=pcntile)
+      DEALLOCATE (x)
+      WRITE(*, *)'Mean = ', average, '  Std.devn. = ', stdvn
+      IF (ndf .GT. 2) THEN
+        pop_mean = zero
+        pop_sd = SQRT(ndf / REAL(ndf-2))
+        WRITE(*, '(a, 2g14.6)') ' Population mean & st.devn. = ', pop_mean, &
+                                pop_sd
+      END IF
+      WRITE(*, 900) pcntile
+      WRITE(*, *)
+    CASE ('6 ')
+      WRITE(*, *) 'Distribution:  Multivariate normal'
+      WRITE(*, *) 'Enter no. of variables: '
+      READ(*, *) k
+      n = k*(k+1)/2
+      ALLOCATE ( x(k), xmean(k), cov(n), chol_f(n) )
+      WRITE(*, *) 'Enter means of the variables: '
+      READ(*, *) xmean
+      WRITE(*, *) 'Enter the covariance matrix, row-by-row'
+      pos2 = 0
+      DO i = 1, k
+        pos1 = pos2 + 1
+        pos2 = pos2 + i
+        WRITE(*, '(1x, a, i2, a, i2, a, i2, a)') 'Row ', i, ' Columns ', 1,   &
+                                                 ' - ', i, ' : '
+        READ(*, *) cov(pos1:pos2)
+      END DO
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      first = .true.
+      DO i = 1, n
+        CALL random_mvnorm(k, xmean, cov, chol_f, first, x, ier)
+        IF (ier .NE. 0) THEN
+          WRITE(*, *) '** Covariance matrix is not +ve definite **'
+          EXIT
+        END IF
+        first = .false.
+        WRITE(*, '(1x, i5, 10f7.3/ (6x, 10f7.3))') i, x
+      END DO
+      DEALLOCATE (x, xmean, cov, chol_f)
+      WRITE(*, *)
+    CASE ('7 ')
+      WRITE(*, *) 'Distribution:  Generalized inverse Gaussian'
+      WRITE(*, *) 'Enter values of h, b: '
+      READ(*, *) a, b
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      first = .true.
+      DO i = 1, n
+        x(i) = random_inv_gauss(a, b, first)
+        first = .false.
+      END DO
+      CALL statistics(x, n, average, stdev=stdvn, percentile=pcntile)
+      DEALLOCATE (x)
+      WRITE(*, *)'Mean = ', average, '  Std.devn. = ', stdvn
+      WRITE(*, 900) pcntile
+      WRITE(*, *)
+    CASE ('8 ')
+      WRITE(*, *) 'Distribution:  Poisson'
+      WRITE(*, *) 'Enter +ve value for mean: '
+      READ(*, *) mu
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      first = .true.
+      DO i = 1, n
+        x(i) = random_Poisson(mu, first)
+        first = .false.
+      END DO
+      CALL statistics(x, n, average, middle, xmax, xmin, stdvn, pcntile)
+      DEALLOCATE (x)
+      WRITE(*, *)'Mean = ', average, '  Std.devn. = ', stdvn
+      pop_mean = mu
+      pop_sd = SQRT(mu)
+      WRITE(*, '(1x, a, 2g14.6)') 'Population mean & st.devn. = ', pop_mean,  &
+                                   pop_sd
+      WRITE(*, '(1x, a, f9.4, 2x, a, f9.4)')                                 &
+               'Smallest x = ', xmin, 'Largest x = ', xmax
+      WRITE(*, 900) pcntile
+      WRITE(*, *)
+    CASE ('9 ')
+      WRITE(*, *) 'Distribution:  Binomial'
+      DO
+        WRITE(*, *) 'Enter 1 or 2: '
+        READ(*, *) which
+        IF (which == 1 .OR. which == 2) EXIT
+      END DO
+      WRITE(*, *) 'Enter parameters N & p: '
+      READ(*, *) n_binom, p
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      first = .true.
+      IF (which == 1) THEN
+        DO i = 1, n
+          x(i) = random_binomial1(n_binom, p, first)
+          first = .false.
+        END DO
+      ELSE
+        DO i = 1, n
+          x(i) = random_binomial2(n_binom, p, first)
+          first = .false.
+        END DO
+      END IF
+      CALL statistics(x, n, average, middle, xmax, xmin, stdvn, pcntile)
+      DEALLOCATE (x)
+      WRITE(*, *)'Mean = ', average, '  Std.devn. = ', stdvn
+      pop_mean = n_binom * p
+      pop_sd = SQRT(pop_mean * (one-p))
+      WRITE(*, '(1x, a, 2g14.6)') 'Population mean & st.devn. = ', pop_mean,  &
+                                   pop_sd
+      WRITE(*, '(1x, a, f9.4, 2x, a, f9.4)')                                 &
+               'Smallest x = ', xmin, 'Largest x = ', xmax
+      WRITE(*, 900) pcntile
+      WRITE(*, *)
+    CASE ('10')
+      WRITE(*, *) 'Distribution:  Negative binomial'
+      WRITE(*, *) 'Enter parameters k & p: '
+      READ(*, *) sk, p
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      first = .true.
+      DO i = 1, n
+        x(i) = random_neg_binomial(sk, p)
+        first = .false.
+      END DO
+      CALL statistics(x, n, average, middle, xmax, xmin, stdvn, pcntile)
+      DEALLOCATE (x)
+      WRITE(*, *)'Mean = ', average, '  Std.devn. = ', stdvn
+      pop_mean = sk * p / (one-p)
+      pop_sd = SQRT(pop_mean / (one-p))
+      WRITE(*, '(1x, a, 2g14.6)') 'Population mean & st.devn. = ', pop_mean,  &
+                                   pop_sd
+      WRITE(*, '(1x, a, f9.4, 2x, a, f9.4)')                                 &
+               'Smallest x = ', xmin, 'Largest x = ', xmax
+      WRITE(*, 900) pcntile
+      WRITE(*, *)
+    CASE ('11')
+      WRITE(*, *) 'Distribution:  von Mises'
+      WRITE(*, *) 'Enter +ve value for scale parameter: '
+      READ(*, *) sk
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      first = .true.
+      DO i = 1, n
+        x(i) = random_von_Mises(sk, first)
+        first = .false.
+      END DO
+      CALL statistics(x, n, average, middle, xmax, xmin, stdvn, pcntile)
+      DEALLOCATE (x)
+      WRITE(*, '(1x, a, f9.4, 2x, a, f9.4, 2x, a, f9.4)')                    &
+               'Mean = ', average, 'Median = ', middle, 'Sample st.dev. = ', stdvn
+      WRITE(*, '(1x, a, f9.4, 2x, a, f9.4)')                                 &
+               'Smallest x = ', xmin, 'Largest x = ', xmax
+      WRITE(*, 900) pcntile
+      WRITE(*, *)
+    CASE ('12')
+      WRITE(*, *) 'Distribution: Cauchy'
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE ( x(n) )
+      DO i = 1, n
+        x(i) = random_Cauchy()
+      END DO
+      CALL statistics(x, n, average, middle, xmax, xmin, percentile=pcntile)
+      WRITE(*, '(1x, a, f9.4, 2x, a, f9.4)')                                 &
+               'Mean = ', average, 'Median = ', middle
+      WRITE(*, '(1x, a, f9.4, 2x, a, f9.4)')                                 &
+               'Smallest x = ', xmin, 'Largest x = ', xmax
+      WRITE(*, 900) pcntile
+      WRITE(*, *)
+      DEALLOCATE ( x )
+    CASE ('13')
+      WRITE(*, *) 'Distribution:  Weibull'
+      WRITE(*, *) 'Enter +ve value for scale parameter: '
+      READ(*, *) sk
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE (x(n))
+      DO i = 1, n
+        x(i) = random_Weibull(sk)
+      END DO
+      CALL statistics(x, n, average, middle, stdev=stdvn)
+      DEALLOCATE (x)
+      WRITE(*, *)'Mean = ', average, '  Median = ', middle, '  Std.devn. = ', stdvn
+      pop_mean = EXP( lngamma( DBLE(one/sk + one) ) )
+      pop_sd = SQRT( lngamma( DBLE(two/sk + one) - pop_mean**2) )
+      WRITE(*, '(1x, a, 2g14.6)') 'Population mean & st.devn. = ', pop_mean,  &
+                                   pop_sd
+      WRITE(*, *)
+    CASE ('14')
+      WRITE(*, *) 'Distribution: Chi-squared'
+      WRITE(*, *) 'Enter number of degrees of freedom (integer): '
+      READ(*, *) ndf
+      WRITE(*, *) 'How many random deviates?: '
+      READ(*, *) n
+      ALLOCATE ( x(n) )
+      first = .true.
+      DO i = 1, n
+        x(i) = random_chisq(ndf, first)
+        first = .false.
+      END DO
+      CALL statistics(x, n, average, middle, xmax, xmin, stdvn, pcntile)
+      WRITE(*, *)'Mean = ', average, '  Median = ', middle, '  Std.devn. = ', stdvn
+      pop_mean = ndf
+      pop_sd = SQRT(two * ndf)
+      WRITE(*, '(1x, a, 2g14.6)') 'Population mean & st.devn. = ', pop_mean,  &
+                                   pop_sd
+      WRITE(*, '(1x, a, f9.4, 2x, a, f9.4)')                                 &
+               'Smallest x = ', xmin, 'Largest x = ', xmax
+      WRITE(*, 900) pcntile
+      WRITE(*, *)
+      DEALLOCATE ( x )
+    CASE ('15')
+      WRITE(*, *) 'Random order of integers 1 .. N'
+      WRITE(*, *) 'Enter N: '
+      READ(*, *) n
+      ALLOCATE ( ix(n) )
+      CALL random_order(ix, n)
+      WRITE(*, '(1x, 15I5)') ix
+      WRITE(*, *)
+      DEALLOCATE ( ix )
+    CASE DEFAULT
+      WRITE(*, *) 'Option ', option, ' not allowed'
+  END SELECT
+END DO
+STOP
+END PROGRAM t_random
+t_smplx.f90:
+PROGRAM test_smplx
+IMPLICIT NONE
+INTEGER                :: n, pos, i, constr_type(9), m, ind, ibasis(9), iter, &
+                          mxiter = 25, numle, numge, j
+CHARACTER (LEN=79)     :: text, in_text
+REAL (dp)              :: a(9,9), b(9), c(9), x(9), z, temp(9), rerr
+REAL (dp), ALLOCATABLE :: bi(:,:)
+WRITE(*, *) 'How many variables? (<=9): '
+READ(*, *) n
+IF (n > 9) STOP 'Too many!'
+WRITE(*, *) 'Enter constraint coefficients incl. constr. type (<=, >= or =)'
+WRITE(*, *) 'Press ENTER again after the last constraint'
+text = ' '
+DO i = 1, n
+  pos = 8*i-6
+  WRITE(text(pos:pos+3), '("X(", i1, ")")') i
+END DO
+text(pos+4:pos+11) = 'Con.type'
+text(pos+13:pos+15) = 'RHS'
+WRITE(*, '(a)') text
+WRITE(*, *)
+numle = 0
+numge = 0
+DO i = 1, 9
+  READ(*, '(a)') in_text
+  IF (LEN_TRIM(in_text) == 0) EXIT
+  READ(in_text, *) a(i,1:n)
+  pos = INDEX(in_text, '=')
+  IF (pos == 0) THEN
+    STOP 'You must enter the constraint type (<=, >= or =)'
+  END IF
+  IF (in_text(pos-1:pos-1) == '<') THEN
+    constr_type(i) = 1
+    numle = numle + 1
+  ELSE IF (in_text(pos-1:pos-1) == '>') THEN
+    constr_type(i) = 2
+    numge = numge + 1
+  ELSE
+    constr_type(i) = 3
+  END IF
+  READ(in_text(pos+1:), *) b(i)
+END DO
+m = i - 1
+ALLOCATE( bi(m,m) )
+DO i = 1, numle
+  IF (constr_type(i) /= 1) THEN
+    DO j = numle+1, m
+      IF (constr_type(j) == 1) THEN
+        temp(1:n) = a(i, 1:n)
+        a(i, 1:n) = a(j, 1:n)
+        a(j, 1:n) = temp(1:n)
+        z = b(i)
+        b(i) = b(j)
+        b(j) = z
+        constr_type(j) = constr_type(i)
+        constr_type(i) = 1
+        EXIT
+      END IF
+    END DO
+  END IF
+END DO
+DO i = numle+1, numle+numge
+  IF (constr_type(i) /= 2) THEN
+    DO j = numle+numge+1, m
+      IF (constr_type(j) == 2) THEN
+        temp(1:n) = a(i, 1:n)
+        a(i, 1:n) = a(j, 1:n)
+        a(j, 1:n) = temp(1:n)
+        z = b(i)
+        b(i) = b(j)
+        b(j) = z
+        constr_type(j) = constr_type(i)
+        constr_type(i) = 2
+        EXIT
+      END IF
+    END DO
+  END IF
+END DO
+WRITE(*, *) 'Enter the coefficients (costs) in the objective to be maximized'
+pos = 8*n-2
+text(pos:) = ' '
+WRITE(*, '(a)') text
+WRITE(*, *)
+READ(*, '(a)') in_text
+READ(in_text, *) c(1:n)
+CALL smplx (a, b, c, 9, m, n, ind, ibasis, x, z, iter, mxiter,   &
+            numle, numge, bi, rerr)
+WRITE(*, '(a, i2, a, i3)') ' IND = ', ind, '  No. of iterations = ', iter
+IF (ind == 0 .OR. i== 6) THEN
+  WRITE(*, '(a, 9f7.2)') ' Solution: ', x(1:n)
+  WRITE(*, '(a, f8.2)') ' Value of objective = ', z
+  WRITE(*, *) 'The inverse matrix:'
+  DO i = 1, m
+    WRITE(*, '(9f8.3)') bi(i,1:m)
+  END DO
+END IF
+WRITE(*, '(a, g12.4)') ' Relative error = ', rerr
+STOP
+END PROGRAM test_smplx
+t_svd.f90:
+PROGRAM Test_SVD
+IMPLICIT NONE
+REAL (dp)  :: e(3), x(4,3), s(4), u(4,4), v(3,3), value
+INTEGER    :: info, row, col
+value = 1.0_dp
+DO row = 1, 4
+  DO col = 1, 3
+    x(row,col) = value
+    value = value + 1.0_dp
+  END DO
+END DO
+CALL dsvdc(x, 4, 3, s, e, u, v, 11, info)
+WRITE(*, 900) s(1:4)
+900 FORMAT(' The calculated singular values = ', 4f10.4/)
+WRITE(*, *) '     The U-matrix'
+DO row = 1, 4
+  WRITE(*, 910) u(row,1:4)
+  910 FORMAT(4f10.4)
+END DO
+WRITE(*, *)
+WRITE(*, *) '     The V-matrix'
+DO row = 1, 3
+  WRITE(*, 910) v(row,1:3)
+END DO
+STOP
+END PROGRAM Test_SVD
+t_taus88.f90:
+PROGRAM write_random
+IMPLICIT NONE
+CHARACTER (LEN=25)  :: fname
+INTEGER             :: b(4096), i, i1, i2, i3, j
+INTEGER, SAVE :: s1 = 1234, s2 = -4567, s3 = 7890
+WRITE(*, '(a)', ADVANCE='NO') ' Enter name for your binary file: '
+READ(*, *) fname
+OPEN (1, FILE=fname, FORM='unformatted', ACCESS='direct', RECL=16384)
+WRITE(*, '(a)', ADVANCE='NO') ' Enter 3 integers as random number seeds: '
+READ(*, *) i1, i2, i3
+CALL init_seeds(i1, i2, i3)
+DO i = 1, 700
+  DO j = 1, 4096
+    b(j) = taus88()
+  END DO
+  WRITE(1, REC=i) b
+END DO
+STOP
+CONTAINS
+t_uobyqa.f90:
+PROGRAM Test_uobyqa
+IMPLICIT NONE
+INTEGER, PARAMETER  :: dp = SELECTED_REAL_KIND(12, 60)
+REAL (dp)  :: rhobeg, rhoend, x(10)
+INTEGER    :: i, iprint, maxfun, n
+iprint=2
+maxfun=5000
+rhoend=1.0D-8
+DO  n=2,8,2
+  DO  i=1,n
+    x(i)=REAL(i)/REAL(n+1)
+  END DO
+  rhobeg=0.2D0*x(1)
+  WRITE(*, 20) n
+  20 FORMAT (//t6, '******************'/ t6, 'Results with N =', i2 / t6, '******************')
+  CALL uobyqa (n, x, rhobeg, rhoend, iprint, maxfun)
+END DO
+STOP
+END PROGRAM Test_uobyqa
+twodqd.f90:
+PROGRAM test_twodqd
+twoexp.f90:
+PROGRAM twoexp
+IMPLICIT NONE
+REAL (dp) :: y(50), t(50,1), alf(12), beta(8), a(50,13), w(50), eta
+INTEGER   :: i, ierr, im1, iprint, iv, j, l, lpnl, n, nl, nmax, p
+INTEGER, PARAMETER :: INPUT = 5, output = 6
+OPEN (INPUT, FILE='a.dat', STATUS='OLD')
+OPEN (output, FILE='b.out', STATUS='NEW')
+nmax = 50
+iprint = 1
+READ (INPUT,*) n, l, nl, p, iv
+WRITE (output,110) n, l, nl, p, iv
+DO  i=1,n
+  w(i) = 1.0_dp
+  READ (INPUT,*) t(i,1:iv), y(i)
+END DO
+DO  i=1,n
+  WRITE (output,210) i, t(i,1:iv), y(i)
+END DO
+READ (INPUT,120) alf(1:nl)
+WRITE (output,130) alf(1:nl)
+WRITE (output,140)
+CALL varpro (l, nl, n, nmax, l+p+2, iv, t, y, w, ada, a, iprint,  &
+             alf, beta, ierr)
+WRITE (6,30) ierr
+30 FORMAT (t16, 'IERR =', i7)
+IF (ierr <= -4) GO TO 90
+lpnl = l + nl
+WRITE (output,160)
+DO  i=1,lpnl
+  WRITE (output,170) a(i,1:i)
+  a(i,i) = SQRT(a(i,i))
+END DO
+WRITE (output,180)
+WRITE (output,170) (a(j,j),j=1,lpnl)
+IF (lpnl == 1) GO TO 60
+DO  i=2,lpnl
+  im1 = i-1
+  DO  j=1,im1
+    a(i,j) = a(i,j) / (a(i,i)*a(j,j))
+  END DO
+END DO
+60 WRITE (output,190)
+DO  i=1,lpnl
+  a(i,i) = 1.0_dp
+  WRITE (output,170) a(i,1:i)
+END DO
+WRITE (output,200)
+DO  i=1,n
+  eta = y(i) - a(i,lpnl+1) / SQRT(w(i))
+  WRITE (output,210) i, w(i), t(i,1:iv), y(i), eta, a(i,lpnl+1)
+END DO
+90 STOP
+110 FORMAT ('1   NON-LINEAR LEAST SQUARES PROBLEM'//  &
+    ' NUMBER OF OBSERVATIONS =',i5, '   NUMBER OF LINEAR PARAMETERS =',i4//  &
+    ' NUMBER OF NONLINEAR PARAMETERS =',i4,  &
+    ' NUMBER OF NONVANISHING PARTIAL DERIVATIVES =',i4//  &
+    ' NUMBER OF INDEPENDENT VARIABLES =',i4// '    I    T(I)            Y(I)'//)
+120 FORMAT (4E20.7)
+130 FORMAT ('0 INITIAL NONLINEAR PARAMETERS'//(4E20.7))
+140 FORMAT ('0',50('*'))
+160 FORMAT (/'       COVARIANCE MATRIX'/)
+170 FORMAT (8E15.7)
+180 FORMAT ('0    STANDARD DEVIATIONS OF PARAMETER ESTIMATES'/)
+190 FORMAT (/'       CORRELATION MATRIX'/)
+200 FORMAT (/'   I         W(I)            T(I)            Y(I)',  &
+    '     PREDICTED Y     WEIGHTED RESIDUAL'//)
+210 FORMAT (i5,7E16.7)
+END PROGRAM twoexp
+uobyqa.f90:
+update.f90:
+varpro.f90:
+xdlegf.f90:
+zeroin.f90:
+ziggurat.f90:
+PROGRAM test_ziggurat
+zipf.f90:
+PROGRAM t_random_Zipf
+IMPLICIT NONE
+INTEGER              :: r, i, nfreq, count, i1
+INTEGER, ALLOCATABLE :: freq(:)
+REAL, ALLOCATABLE    :: expctd(:)
+REAL                 :: a, total
+REAL, PARAMETER      :: one = 1.0
+LOGICAL              :: setup
+WRITE(*, *) 'Enter a (> 1.0): '
+READ(*, *) a
+setup = .TRUE.
+nfreq = NINT( (20.0/(a - one))**(one/(a-one)) )
+ALLOCATE( freq(nfreq), expctd(nfreq) )
+freq = 0
+DO i = 1, 1000
+  CALL random_Zipf(a, r, setup)
+  r = MIN(r, nfreq)
+  freq(r) = freq(r) + 1
+END DO
+total = 0.0
+DO i = 1, nfreq-1
+  expctd(i) = REAL(i)**(-a)
+  total = total + expctd(i)
+END DO
+expctd(nfreq) = one / ( (a-one)*(nfreq - 0.5)**(a-one) )
+total = total + expctd(nfreq)
+expctd = expctd * (1000. / total)
+WRITE(*, *) '    Range      Obs.freq.  Expctd.freq.'
+i = 1
+DO
+  count = 0
+  total = 0
+  i1 = i
+  DO
+    count = count + freq(i)
+    total = total + expctd(i)
+    IF (total > 25. .OR. i >= nfreq) EXIT
+    i = i + 1
+  END DO
+  IF (i == nfreq) i = 999999
+  WRITE(*, '(i6, " - ", i6, i7, "    ", f9.2)') i1, i, count, total
+  IF (i == 999999) EXIT
+  i = i + 1
+END DO
+STOP
+END PROGRAM t_random_Zipf
