@@ -33,7 +33,7 @@ Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v <col>)` fro
 
 - no flag outputs differences without additional formatting,
 - `-g` outputs only the first line in each error to a two-column table, and
-- `-v <col>` outputs errors in full to a two-column table with <col> columns, up to 256.
+- `-v <col>` outputs errors in full to a two-column table with `<col>` columns, up to 256.
 
 
 
