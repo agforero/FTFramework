@@ -17,7 +17,7 @@ def main():
         t.write("\n")
 
     flags = "-j -k -O --trace"
-    if os.popen("make -v").read().split()[2][0] != '4': # if we can't use -O (or need -t) because too antiquated Make
+    if os.popen("make -v").read().split()[2][0] != '4': # if we can't use -O (or need --trace) because too antiquated Make
         flags = flags[:-len(" -O --trace")]
 
     t.write(dedent(f"""\
