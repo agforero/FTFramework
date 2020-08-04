@@ -39,6 +39,7 @@ Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v <col>)` fro
 
 #### Other commands include: 
 - `./addMakefile.sh <directory>`: creates a generic Makefile. Runs automatically during `./run_test.sh` if no Makefile is present.
+- `./verify.sh`: checks all subdirectories of `/source/` for possible race conditions.
 - `./addEnv.sh <directory>`: adds `comm.env` to a subdirectory, allowing BATS to use necessary environmental commands before compiling, e.g. `module load`.
 - `./cleanup.sh <directory>`: helps delete and/or backup your .bats files. This is important for when you add or delete files from a source directory.
 - `./resetAll.sh`: deletes all instances of `tests.bats` across all directories -- that is, the BATS file generated during `./run_test.sh`.
