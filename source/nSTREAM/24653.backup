@@ -1,6 +1,0 @@
-
-# Generic Makefile test
-@test " make" {
-  make clean
-  make
-}
