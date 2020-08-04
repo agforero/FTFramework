@@ -1,7 +1,7 @@
-# Fortran Testing Framework #
-### A framework to help test Fortran compilers. Written by Agustin Forero for Argonne National Laboratory. ###
+# Fortran Testing Framework 
+### A framework to help test Fortran compilers. Written by Agustin Forero for Argonne National Laboratory. 
 
-#### A typical test might look like: ####
+#### A typical test might look like: 
 ```
 $ ./run_test.sh gfortran
 $ ./run_test.sh bleedingedgecompiler
@@ -10,19 +10,19 @@ $ ./compare.py gfortran bleedingedgecompiler
 
 
 
-#### Requirements: ####
+#### Requirements: 
 - [Bash Automated Testing System (BATS)](https://github.com/bats-core/bats-core)
 - [Python 3 or above](https://docs.python-guide.org/starting/install3/linux/)
 - [GNU Make 4 or above (see below)](http://ftp.gnu.org/gnu/make/)
 
 
 
-#### Important notice: ####
+#### Important notice: 
 To get the most out of this software, it is highly recommended to have the newest GNU Make version available. `./run_test.sh` can still automatically compile everything in `/source/` regardless of what Make version you have. However, `compare.py` requires at least version 4.0  to function. Without it, one can miss out on an easy way to cross-check for compiler bugs. To see all GNU Make versions available, check out their [list of versions](http://ftp.gnu.org/gnu/make/) available online. (The lack of 4.x might also cause your output to be jarbled, since all threads will be writing to `<compiler>.log` at once.)
 
 
 
-#### Summary: ####
+#### Summary: 
 This is a framework built to help test bleeding-edge FORTRAN compilers. By testing the compilation of a wide variety of FORTRAN programs, and cross-checking results with stable compilers like `gfortran`, one can find where a compiler might be going wrong.
 
 To add a directory containing FORTRAN programs to use for testing compilation, `cd` into `/main/`, and use `./addNew.sh <path-to-directory>`.
@@ -37,7 +37,7 @@ Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v <col>)` fro
 
 
 
-#### Other commands include: ####
+#### Other commands include: 
 - `./addMakefile.sh <directory>`: creates a generic Makefile. Runs automatically during `./run_test.sh` if no Makefile is present.
 - `./addEnv.sh <directory>`: adds `comm.env` to a subdirectory, allowing BATS to use necessary environmental commands before compiling, e.g. `module load`.
 - `./cleanup.sh <directory>`: helps delete and/or backup your .bats files. This is important for when you add or delete files from a source directory.
@@ -45,7 +45,7 @@ Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v <col>)` fro
 
 
 
-#### Scraping: ####
+#### Scraping: 
 Scrapers can be immensely helpful with gathering huge swathes of data at once. Within the `/scraping/` directory, one can find `scraper.py`, a Python program that can help pull multiple FORTRAN files from a single website. It will then save these files to a directory named from the website, at which point the user can use `./addNew.sh ../scraper/<directory>` in `/main/` to add the files. To use, type:
 
 `./scraper.py <website url> <path to files> <extension>`
@@ -68,7 +68,7 @@ Though not all of these need a scraper, other websites one might pull FORTRAN fi
 
 
 
-#### A warning against race conditions: ####
+#### A warning against race conditions: 
 For the files being compiled, it's helpful that all files involved would already `make` perfectly with the `-j` flag. If there's a problem with the code itself, both compilers will encounter it, which should be alright; but sometimes, race conditions present within directories can cause sporadic errors that do not occur every runtime, thereby rendering the testing inconsistent and therefore invalid. 
 
 For example, if a directory has multiple declarations of the same module across different files, multiple instances of `make` might try to write to `<modulename>.mod` at once during `make`, thereby allowing for a race condition. 
