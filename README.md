@@ -58,7 +58,7 @@ Scrapers can be immensely helpful with gathering huge swathes of data at once. W
 
 `./scraper.py <website url> <path to files> <extension>`
 - `<website url>`: the page on which links to each FORTRAN file are found.
-- `<path to files>`: URL path preceding each file link. Example below.
+- `<path to files>`: URL path preceding each file location. Example below.
 - `<extension>`: the desired extension to search for and download, e.g. `.f90`.
 
 Using the example of [Michel Olagnon's ORDERPACK 2.0](http://www.fortran-2000.com/rank/index.html), one might execute:
