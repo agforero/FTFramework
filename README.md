@@ -1,12 +1,19 @@
 # Fortran Testing Framework 
 ### A framework to help test Fortran compilers. Written by Agustin Forero for Argonne National Laboratory. 
 
+
+
 #### A typical test might look like: 
 ```
 $ ./run_test.sh gfortran
 $ ./run_test.sh bleedingedgecompiler
 $ ./compare.py gfortran bleedingedgecompiler
 ```
+
+
+
+#### A flowchart describing runtime:
+![Diagram](https://docs.google.com/drawings/d/e/2PACX-1vRsiWq6hmns9xMxgzui_GlJXo_F3Glt130am-J2Os0Dtb4hX1VsA9-vQ6hjQ3oMJJmnCq4-IKVzV0Zv/pub?w=1508&h=1110)
 
 
 
