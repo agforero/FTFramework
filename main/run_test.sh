@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# preparing logs
+mkdir -p ../logs
+
 # if they specify a compiler in the arg
 if [ $# -eq 1 ]; then
 	export FC="$1"
