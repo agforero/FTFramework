@@ -25,7 +25,7 @@ $ ./compare.py gfortran bleedingedgecompiler
 
 
 #### Important notice: 
-To get the most out of this software, it is highly recommended to have the newest GNU Make version available. `./run_test.sh` can still automatically compile everything in `/source/` regardless of what Make version you have. However, `compare.py` requires at least version 4.0  to function. Without it, one can miss out on an easy way to cross-check for compiler bugs. To see all GNU Make versions available, check out their [list of versions](http://ftp.gnu.org/gnu/make/) available online. (The lack of 4.x might also cause your output to be garbled, since all threads will be writing to `<compiler>.log` at once.)
+To get the most out of this software, it is highly recommended to have the newest GNU Make version available. `./run_test.sh` can still automatically compile everything in `/source/` regardless of what Make version you have. However, `compare.py` requires at least version 4.0  to function. Without it, one can miss out on an easy way to cross-check for compiler bugs. To see all GNU Make versions available, check out their [list of versions](http://ftp.gnu.org/gnu/make/) available online. (The lack of 4.x might also cause your output to be garbled, since all threads will be writing to `<compiler>.log` at once.) 
 
 
 
