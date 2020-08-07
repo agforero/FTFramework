@@ -3,7 +3,7 @@
 cd ../source
 for d in */ ; do
     cd $d 
-    echo "Resetting $(pwd)"
+    echo "deleting $(pwd)/tests.bats"
     rm -f tests.bats
     cd ../
 done

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys, os
-import linecache as lc 
 from textwrap import dedent
 
 def justTheName(st): # helps generate things like <filename>.exe
@@ -26,10 +25,10 @@ def errorDeclaration(line): # is the line make telling us that there's been an e
     if banana[0] == "#": banana = banana[1:] # shave off the pound sign if it's there
     if banana[0][:5] == "make:": # according to link above, this will always be true unless the Makefile itself is botched
         if banana[1] == "***": return True # should always be enough with my flags
-        elif banana[-2] == "Error": 
+        elif banana[-2] == "Error": # if not, see if "Error" is in the line
             try: 
                 int(banana[-1])
-                return True # if not, see if "Error" is in the line
+                return True 
             except: pass # suppress the error message, even though this case is weird
         elif "Segfault" in banana: return True # maybe it segfaulted? we could go on with elifs at this point
     return False
@@ -41,7 +40,7 @@ def buildDirectory(osarg):
         sys.exit(2)
 
     ret = {} 
-    f_compiler = lc.getline(f"../logs/{justTheName(sys.argv[osarg])}.log", 1).split()[2]
+    f_compiler = justTheName(sys.argv[osarg])
     currentDirectory = ""
     inError = False
     lines = f.readlines()
@@ -265,13 +264,23 @@ def main():
         sys.exit(1)
 
     master = {} # T R I P L E N E S T E D D I C T I O N A R Y M A N E U V E R
-    master[lc.getline(f"../logs/{justTheName(sys.argv[1])}.log", 1).split()[2]] = buildDirectory(1)
-    master[lc.getline(f"../logs/{justTheName(sys.argv[2])}.log", 1).split()[2]] = buildDirectory(2)
+    master[justTheName(sys.argv[1])] = buildDirectory(1)
+    master[justTheName(sys.argv[2])] = buildDirectory(2)
 
-    if len(sys.argv) == 3: rawOutput(master)
+    # check if there are no differences whatsoever
+    noDifferences = True
+    for dr in master[justTheName(sys.argv[1])].keys(): 
+        if getDifferences(master, dr)[:-1] != [[],[]]: noDifferences = False
+    if noDifferences:
+        print(f"No differences found between {justTheName(sys.argv[1])} and {justTheName(sys.argv[2])}.")
+        sys.exit(0)
+
+    elif len(sys.argv) == 3: rawOutput(master)
     elif len(sys.argv) >= 4:
         if sys.argv[3] == "-g": conciseTable(master)
         if sys.argv[3] == "-v": verboseTable(master)
+
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
