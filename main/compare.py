@@ -269,8 +269,9 @@ def main():
 
     # check if there are no differences whatsoever
     noDifferences = True
-    for dr in master[justTheName(sys.argv[1])].keys(): 
-        if getDifferences(master, dr)[:-1] != [[],[]]: noDifferences = False
+    if justTheName(sys.argv[1]) != justTheName(sys.argv[2]):
+        for dr in master[justTheName(sys.argv[1])].keys(): 
+            if getDifferences(master, dr)[:-1] != [[],[]]: noDifferences = False
     if noDifferences:
         print(f"No differences found between {justTheName(sys.argv[1])} and {justTheName(sys.argv[2])}.")
         sys.exit(0)
