@@ -161,6 +161,30 @@ def rawOutput(master):
                 print(f"ERROR: {e}")
                 print(master[compilers[1]][dr][e])
 
+def basicOutput(master):
+    compilers = list(master.keys())
+    for dr in master[compilers[0]].keys():
+        diffs = getDifferences(master, dr)
+        if len(diffs[0]) > 0 or len(diffs[1]) > 0: 
+            print(dedent(f"""\
+            {'=' * 64}
+            DIR: {dr}
+            DIFF_COUNT: {compilers[0]}: {len(diffs[0])} {compilers[1]}: {len(diffs[1])}
+            TOTAL_ERRORS: {compilers[0]}: {len(list(master[compilers[0]][dr].keys()))} {compilers[1]}: {len(list(master[compilers[1]][dr].keys()))}
+            """))
+
+        if len(diffs[0]) > 0:
+            print(f"COMPILER: {compilers[0]}\n")
+            for e in diffs[0]:
+                print(e)
+            print()
+
+        if len(diffs[1]) > 0:
+            print(f"COMPILER: {compilers[1]}\n")
+            for e in diffs[1]:
+                print(e)
+            print()
+
 def conciseTable(master):
     compilers = list(master.keys())
     diffs = []
@@ -245,7 +269,7 @@ def main():
         sys.exit(3)
 
     if len(sys.argv) >= 4:
-        if sys.argv[3] != "-g" and sys.argv[3] != "-v":
+        if sys.argv[3] != "-g" and sys.argv[3] != "-v" and sys.argv[3] != "-b":
             print(f"{sys.argv[3]}: invalid flag.")
             sys.exit(1)
         if sys.argv[3] == "-v":
@@ -280,6 +304,7 @@ def main():
     elif len(sys.argv) >= 4:
         if sys.argv[3] == "-g": conciseTable(master)
         if sys.argv[3] == "-v": verboseTable(master)
+        if sys.argv[3] == "-b": basicOutput(master)
 
     sys.exit(0)
 
