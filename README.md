@@ -72,8 +72,10 @@ Though not all of these need a scraper, other websites one might pull FORTRAN fi
 
 
 #### A warning against race conditions: 
-For the files being compiled, it's helpful that all files involved would already `make` perfectly with the `-j` flag. If there's a problem with the code itself, both compilers will encounter it, which should be alright; but sometimes, race conditions present within directories can cause sporadic errors that do not occur every runtime, thereby rendering the testing inconsistent and therefore invalid. Use `./verify.py` to help check for race conditions!
+Use `./verify.py` from `/main/` to check for possible race conditions!
 
-For example, if a directory has multiple declarations of the same module across different files, multiple instances of `make` might try to write to `<modulename>.mod` at once during `make`, thereby allowing for a race condition. 
+For the files being compiled, it's helpful that all files involved would already `make` perfectly with the `-j` flag. If there's a problem with the code itself, both compilers will encounter it, which should be alright; but sometimes, race conditions present within directories can cause sporadic errors that do not occur every runtime, thereby rendering the testing inconsistent and therefore invalid.
+
+For example, if a directory has multiple declarations of the same module across different files, multiple instances of `make` might try to write to `<modulename>.mod` at once during `make`, thereby allowing for a race condition. This mod will subsequently be corrupted when referenced later on.
 
 In short, [race conditions](https://www.youtube.com/watch?v=7aF0q7NfwfA) are bad.
