@@ -34,6 +34,7 @@ Then, use `./run_test.sh (compiler)` to compile all files found in the subdirect
 Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v <col>)` from the base directory outputs differences in errors between two given compilers, where:
 
 - no flag outputs differences without additional formatting,
+- `-b` outputs a very basic summary,
 - `-g` outputs only the first line in each error to a two-column table, and
 - `-v <col>` outputs errors in full to a two-column table with `<col>` columns on each side, up to 256.
 

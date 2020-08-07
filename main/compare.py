@@ -147,6 +147,7 @@ def rawOutput(master):
             {'/' * 128}
             DIR: {dr}
             DIFF_COUNT: {compilers[0]}: {len(diffs[0])} {compilers[1]}: {len(diffs[1])}
+            TOTAL_ERRORS: {compilers[0]}: {len(list(master[compilers[0]][dr].keys()))} {compilers[1]}: {len(list(master[compilers[1]][dr].keys()))}
             """))
         
         if len(diffs[0]) > 0:
@@ -257,7 +258,8 @@ def verboseTable(master):
 def printUsage():
     print(dedent(f"""\
     usage: ./compare.py <compiler1> <compiler2> (-g / -v <col>)
-    no flag outputs data with no additional formatting,
+    no flag outputs data with little additional formatting,
+    -b outputs a very basic summary,
     -g outputs a compact table of differences in error, and
     -v <col> displays full error messages to a table with <col> columns, up to 128.\
     """))
