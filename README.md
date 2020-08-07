@@ -1,5 +1,5 @@
 # Fortran Testing Framework 
-### A framework to help test Fortran compilers. Written by Agustin Forero for Argonne National Laboratory. 
+### A framework to help test FORTRAN compilers. Written by Agustin Forero for Argonne National Laboratory. 
 
 
 
@@ -20,12 +20,7 @@ $ ./compare.py gfortran bleedingedgecompiler
 #### Requirements: 
 - [Bash Automated Testing System (BATS)](https://github.com/bats-core/bats-core)
 - [Python 3 or above](https://docs.python-guide.org/starting/install3/linux/)
-- [GNU Make 4 or above (see below)](http://ftp.gnu.org/gnu/make/)
-
-
-
-#### Important notice: 
-To get the most out of this software, it is highly recommended to have the newest GNU Make version available. `./run_test.sh` can still automatically compile everything in `/source/` regardless of what Make version you have. However, `compare.py` requires at least version 4.0  to function. Without it, one can miss out on an easy way to cross-check for compiler bugs. To see all GNU Make versions available, check out their [list of versions](http://ftp.gnu.org/gnu/make/) available online. (The lack of 4.x might also cause your output to be garbled, since all threads will be writing to `<compiler>.log` at once.) 
+- [GNU Make 4 or above](http://ftp.gnu.org/gnu/make/)
 
 
 
@@ -77,8 +72,10 @@ Though not all of these need a scraper, other websites one might pull FORTRAN fi
 
 
 #### A warning against race conditions: 
-For the files being compiled, it's helpful that all files involved would already `make` perfectly with the `-j` flag. If there's a problem with the code itself, both compilers will encounter it, which should be alright; but sometimes, race conditions present within directories can cause sporadic errors that do not occur every runtime, thereby rendering the testing inconsistent and therefore invalid. Use `./verify.py` to help check for race conditions!
+Use `./verify.py` from `/main/` to check for possible race conditions!
 
-For example, if a directory has multiple declarations of the same module across different files, multiple instances of `make` might try to write to `<modulename>.mod` at once during `make`, thereby allowing for a race condition. 
+For the files being compiled, it's helpful that all files involved would already `make` perfectly with the `-j` flag. If there's a problem with the code itself, both compilers will encounter it, which should be alright; but sometimes, race conditions present within directories can cause sporadic errors that do not occur every runtime, thereby rendering the testing inconsistent and therefore invalid.
+
+For example, if a directory has multiple declarations of the same module across different files, multiple instances of `make` might try to write to `<modulename>.mod` at once during `make`, thereby allowing for a race condition. This mod will subsequently be corrupted when referenced later on.
 
 In short, [race conditions](https://www.youtube.com/watch?v=7aF0q7NfwfA) are bad.
