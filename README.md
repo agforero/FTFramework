@@ -31,7 +31,7 @@ To add a directory containing FORTRAN programs to use for testing compilation, `
 
 Then, use `./run_test.sh (compiler)` to compile all files found in the subdirectories of `/source/`. If no compiler is specified, it will use the current value of `$FC` (which is set to `f77` by default within the Makefile). Each time `./run_test.sh` is executed, the results will be saved to `/logs/` as `<compiler>.log`, where you can view all compilation errors encountered during runtime. 
 
-Additionally, running `./compare.py <compiler1> <compiler2> (-g / -v <col>)` from the base directory outputs differences in errors between two given compilers, where:
+Additionally, running `./compare.py <compiler1> <compiler2> (-b / -g / -v <col>)` from the base directory outputs differences in errors between two given compilers, where:
 
 - no flag outputs differences without additional formatting,
 - `-b` outputs a very basic summary,
