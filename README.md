@@ -21,6 +21,7 @@ $ ./compare.py gfortran bleedingedgecompiler
 - [Bash Automated Testing System (BATS)](https://github.com/bats-core/bats-core)
 - [Python 3 or above](https://docs.python-guide.org/starting/install3/linux/)
 - [GNU Make 4 or above](http://ftp.gnu.org/gnu/make/)
+- [beautifulsoup4 (for scraper)](https://pypi.org/project/beautifulsoup4/)
 
 
 
