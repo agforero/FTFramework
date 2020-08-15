@@ -18,19 +18,19 @@ def traceLine(line): # is the line the result of the make --trace flag?
 def enteredError(f_compiler, lines, i):
     return lines[i-1].split()[1] == f_compiler and lines[i].split()[1] != f_compiler and not traceLine(lines[i])
 
-def errorDeclaration(line): # is the line make telling us that there's been an error
+def errorDeclaration(line):                     # is the line make telling us that there's been an error
     # this function was made by referring to https://www.gnu.org/software/make/manual/html_node/Error-Messages.html
     banana = line.split()
-    if len(banana) < 2: return False # we need at least a make: and something after
-    if banana[0] == "#": banana = banana[1:] # shave off the pound sign if it's there
-    if banana[0][:5] == "make:": # according to link above, this will always be true unless the Makefile itself is botched
-        if banana[1] == "***": return True # should always be enough with my flags
-        elif banana[-2] == "Error": # if not, see if "Error" is in the line
+    if len(banana) < 2: return False            # we need at least a make: and something after
+    if banana[0] == "#": banana = banana[1:]    # shave off the pound sign if it's there
+    if banana[0][:5] == "make:":                # according to link above, this will always be true unless the Makefile itself is botched
+        if banana[1] == "***": return True      # should always be enough with my flags
+        elif banana[-2] == "Error":             # if not, see if "Error" is in the line
             try: 
-                int(banana[-1])
+                int(banana[-1])                 # see if you can convert string after "Error" into an integer
                 return True 
-            except: pass # suppress the error message, even though this case is weird
-        elif "Segfault" in banana: return True # maybe it segfaulted? we could go on with elifs at this point
+            except: pass                        # suppress the error message, even though this case is weird
+        elif "Segfault" in banana: return True  # maybe it segfaulted? we could go on with elifs at this point
     return False
 
 def buildDirectory(osarg):
