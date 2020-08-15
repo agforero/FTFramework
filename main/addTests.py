@@ -16,7 +16,7 @@ def main():
             t.write(line + "\n")
         t.write("\n")
 
-    flags = "-j $(nproc) -k -O --trace"
+    flags = "-j -k -O --trace"
     if os.popen("make -v").read().split()[2][0] != '4': # if we can't use -O (or need --trace) because too antiquated Make
         flags = flags[:-len(" -O --trace")]
 
