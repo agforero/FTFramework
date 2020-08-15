@@ -16,7 +16,7 @@ def errorDeclaration(line):                     # is the line make telling us th
         if banana[1] == "***": return True      # should always be enough with my flags
         elif banana[-2] == "Error":             # if not, see if "Error" is in the line
             try: 
-                int(banana[-1])
+                int(banana[-1])                 # see if you can convert string after "Error" into an integer
                 return True 
             except: pass                        # suppress the error message, even though this case is weird
         elif "Segfault" in banana: return True  # maybe it segfaulted? we could go on with elifs at this point
