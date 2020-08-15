@@ -4,7 +4,7 @@ In order to reduce margin of error with the compilation tests, it would be helpf
 Be careful not to submit any code with race conditions present. To check, add it to your fork, and use `./verify.py` from `/main/`.
 
 ### Another way to help:
-As of now, I have `compare.py` set to detect GNU Make errors whenever a string fulfills any of the following conditions in `errorDeclaration()`:
+As of now, I have [compare.py](https://github.com/agforero/FTFramework/blob/master/main/compare.py) set to detect GNU Make errors whenever a string fulfills any of the following conditions in `errorDeclaration()`:
 
 ```Python3
 def errorDeclaration(line):                     # is the line make telling us that there's been an error
