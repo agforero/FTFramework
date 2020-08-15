@@ -1,6 +1,7 @@
 *.exe
 *.mod
 *.o
+*.a
 *.log
 *.bats
 logs
