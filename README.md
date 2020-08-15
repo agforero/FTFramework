@@ -248,127 +248,128 @@ $ ./compare.py gfortran flang -g
 ```
 
 ```bash
-$ ./compare.py gfortran flang -v 64
-                                                        gfortran | flang                                                           
-0 ---------------------------------------------------------- /source/bu --------------------------------------------------------- 1
-                                                                 | real.o
-                                                                 | 
-                                                                 | # flang  -c real.f90
-                                                                 | # F90-S-0081-Illegal selector - KIND parameter has unknown va...
-                                                                 | # F90-S-0034-Syntax error at or near identifier q0 (real.f90:...
-                                                                 | #   0 inform,   0 warnings,   2 severes, 0 fatal for MAIN
-                                                                 | # make: *** [Makefile:151: real.o] Error 1
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 |                                                                 
-0 ------------------------------------------------------- /source/nasa_f ------------------------------------------------------- 10
-                                                                 | prcset.o
-                                                                 | 
-                                                                 | # flang  -c prcset.f
-                                                                 | # flang-7: error: unable to execute command: Segmentation fau...
-                                                                 | # flang-7: error: Fortran frontend to LLVM command failed due...
-                                                                 | # clang version 7.0.1 
-                                                                 | # Target: x86_64-pc-linux-gnu
-                                                                 | # Thread model: posix
-                                                                 | # InstalledDir: /usr/bin
-                                                                 | # flang-7: note: diagnostic msg: PLEASE submit a bug report t...
-                                                                 | # flang-7: note: diagnostic msg: Error generating preprocesse...
-                                                                 | # make: *** [Makefile:433: prcset.o] Error 254
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 | pool.o
-                                                                 | 
-                                                                 | # flang  -c pool.f
-                                                                 | # flang-7: error: unable to execute command: Segmentation fau...
-                                                                 | # flang-7: error: Fortran frontend to LLVM command failed due...
-                                                                 | # clang version 7.0.1 
-                                                                 | # Target: x86_64-pc-linux-gnu
-                                                                 | # Thread model: posix
-                                                                 | # InstalledDir: /usr/bin
-                                                                 | # flang-7: note: diagnostic msg: PLEASE submit a bug report t...
-                                                                 | # flang-7: note: diagnostic msg: Error generating preprocesse...
-                                                                 | # make: *** [Makefile:2179: pool.o] Error 254
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 | zzdskbsr.o
-                                                                 | 
-                                                                 | # flang  -c zzdskbsr.f
-                                                                 | # /tmp/zzdskbsr-0fa576.ll:2936:12: error: '@_master___zzdskbs...
-                                                                 | #         call void @_master___zzdskbsr__(i32 0, i64* %fname,...
-                                                                 | #                   ^
-                                                                 | # 1 error generated.
-                                                                 | # make: *** [Makefile:3667: zzdskbsr.o] Error 1
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 | zzgfdiu.o
-                                                                 | 
-                                                                 | # flang  -c zzgfdiu.f
-                                                                 | # /tmp/zzgfdiu-739e1b.ll:313:12: error: '@_master___zzgfdiu__...
-                                                                 | #         call void @_master___zzgfdiu__(i32 0, i64* %target,...
-                                                                 | #                   ^
-                                                                 | # 1 error generated.
-                                                                 | # make: *** [Makefile:4297: zzgfdiu.o] Error 1
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 | zzgfcou.o
-                                                                 | 
-                                                                 | # flang  -c zzgfcou.f
-                                                                 | # /tmp/zzgfcou-02d33d.ll:2110:12: error: '@_master___zzgfcou_...
-                                                                 | #         call void @_master___zzgfcou__(i32 0, i64* %vecdef,...
-                                                                 | #                   ^
-                                                                 | # 1 error generated.
-                                                                 | # make: *** [Makefile:4285: zzgfcou.o] Error 1
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 | zzgfilu.o
-                                                                 | 
-                                                                 | # flang  -c zzgfilu.f
-                                                                 | # /tmp/zzgfilu-0c1f3b.ll:788:12: error: '@_master___zzgfilu__...
-                                                                 | #         call void @_master___zzgfilu__(i32 0, i64* %method,...
-                                                                 | #                   ^
-                                                                 | # 1 error generated.
-                                                                 | # make: *** [Makefile:4306: zzgfilu.o] Error 1
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 | zzgfpau.o
-                                                                 | 
-                                                                 | # flang  -c zzgfpau.f
-                                                                 | # /tmp/zzgfpau-22f585.ll:552:12: error: '@_master___zzgfpau__...
-                                                                 | #         call void @_master___zzgfpau__(i32 0, i64* %target,...
-                                                                 | #                   ^
-                                                                 | # 1 error generated.
-                                                                 | # make: *** [Makefile:4318: zzgfpau.o] Error 1
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 | zzgfrru.o
-                                                                 | 
-                                                                 | # flang  -c zzgfrru.f
-                                                                 | # /tmp/zzgfrru-a1f258.ll:447:12: error: '@_master___zzgfrru__...
-                                                                 | #         call void @_master___zzgfrru__(i32 0, i64* %target,...
-                                                                 | #                   ^
-                                                                 | # 1 error generated.
-                                                                 | # make: *** [Makefile:4336: zzgfrru.o] Error 1
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 | zzgfspu.o
-                                                                 | 
-                                                                 | # flang  -c zzgfspu.f
-                                                                 | # /tmp/zzgfspu-f6f7b3.ll:1041:12: error: '@_master___zzgfspu_...
-                                                                 | #         call void @_master___zzgfspu__(i32 0, i64* %of, i64...
-                                                                 | #                   ^
-                                                                 | # 1 error generated.
-                                                                 | # make: *** [Makefile:4348: zzgfspu.o] Error 1
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 | tabrpt.o
-                                                                 | 
-                                                                 | # flang  -c tabrpt.f
-                                                                 | # /tmp/tabrpt-ca1837.ll:1687:12: error: '@_master___tabrpt__'...
-                                                                 | #         call void @_master___tabrpt__(i32 0, i64* %nitems, ...
-                                                                 | #                   ^
-                                                                 | # 1 error generated.
-                                                                 | # make: *** [Makefile:5314: tabrpt.o] Error 1
-                                                                 | 
-                                                                 | ----------------------------------------------------------------
-                                                                 |                                                                 
+$ ./compare.py gfortran flang -v 48
+                                        gfortran | flang                                           
+0 ------------------------------------------ /source/bu ----------------------------------------- 1
+                                                 | real.o
+                                                 | 
+                                                 | # flang  -c real.f90
+                                                 | # F90-S-0081-Illegal selector - KIND paramete...
+                                                 | # F90-S-0034-Syntax error at or near identifi...
+                                                 | #   0 inform,   0 warnings,   2 severes, 0 fa...
+                                                 | # make: *** [Makefile:151: real.o] Error 1
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 |                                                 
+0 --------------------------------------- /source/nasa_f --------------------------------------- 10
+                                                 | prcset.o
+                                                 | 
+                                                 | # flang  -c prcset.f
+                                                 | # flang-7: error: unable to execute command: ...
+                                                 | # flang-7: error: Fortran frontend to LLVM co...
+                                                 | # clang version 7.0.1 
+                                                 | # Target: x86_64-pc-linux-gnu
+                                                 | # Thread model: posix
+                                                 | # InstalledDir: /usr/bin
+                                                 | # flang-7: note: diagnostic msg: PLEASE submi...
+                                                 | # flang-7: note: diagnostic msg: Error genera...
+                                                 | # make: *** [Makefile:433: prcset.o] Error 254
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 | pool.o
+                                                 | 
+                                                 | # flang  -c pool.f
+                                                 | # flang-7: error: unable to execute command: ...
+                                                 | # flang-7: error: Fortran frontend to LLVM co...
+                                                 | # clang version 7.0.1 
+                                                 | # Target: x86_64-pc-linux-gnu
+                                                 | # Thread model: posix
+                                                 | # InstalledDir: /usr/bin
+                                                 | # flang-7: note: diagnostic msg: PLEASE submi...
+                                                 | # flang-7: note: diagnostic msg: Error genera...
+                                                 | # make: *** [Makefile:2179: pool.o] Error 254
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 | zzdskbsr.o
+                                                 | 
+                                                 | # flang  -c zzdskbsr.f
+                                                 | # /tmp/zzdskbsr-0fa576.ll:2936:12: error: '@_...
+                                                 | #         call void @_master___zzdskbsr__(i32...
+                                                 | #                   ^
+                                                 | # 1 error generated.
+                                                 | # make: *** [Makefile:3667: zzdskbsr.o] Error 1
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 | zzgfdiu.o
+                                                 | 
+                                                 | # flang  -c zzgfdiu.f
+                                                 | # /tmp/zzgfdiu-739e1b.ll:313:12: error: '@_ma...
+                                                 | #         call void @_master___zzgfdiu__(i32 ...
+                                                 | #                   ^
+                                                 | # 1 error generated.
+                                                 | # make: *** [Makefile:4297: zzgfdiu.o] Error 1
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 | zzgfcou.o
+                                                 | 
+                                                 | # flang  -c zzgfcou.f
+                                                 | # /tmp/zzgfcou-02d33d.ll:2110:12: error: '@_m...
+                                                 | #         call void @_master___zzgfcou__(i32 ...
+                                                 | #                   ^
+                                                 | # 1 error generated.
+                                                 | # make: *** [Makefile:4285: zzgfcou.o] Error 1
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 | zzgfilu.o
+                                                 | 
+                                                 | # flang  -c zzgfilu.f
+                                                 | # /tmp/zzgfilu-0c1f3b.ll:788:12: error: '@_ma...
+                                                 | #         call void @_master___zzgfilu__(i32 ...
+                                                 | #                   ^
+                                                 | # 1 error generated.
+                                                 | # make: *** [Makefile:4306: zzgfilu.o] Error 1
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 | zzgfpau.o
+                                                 | 
+                                                 | # flang  -c zzgfpau.f
+                                                 | # /tmp/zzgfpau-22f585.ll:552:12: error: '@_ma...
+                                                 | #         call void @_master___zzgfpau__(i32 ...
+                                                 | #                   ^
+                                                 | # 1 error generated.
+                                                 | # make: *** [Makefile:4318: zzgfpau.o] Error 1
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 | zzgfrru.o
+                                                 | 
+                                                 | # flang  -c zzgfrru.f
+                                                 | # /tmp/zzgfrru-a1f258.ll:447:12: error: '@_ma...
+                                                 | #         call void @_master___zzgfrru__(i32 ...
+                                                 | #                   ^
+                                                 | # 1 error generated.
+                                                 | # make: *** [Makefile:4336: zzgfrru.o] Error 1
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 | zzgfspu.o
+                                                 | 
+                                                 | # flang  -c zzgfspu.f
+                                                 | # /tmp/zzgfspu-f6f7b3.ll:1041:12: error: '@_m...
+                                                 | #         call void @_master___zzgfspu__(i32 ...
+                                                 | #                   ^
+                                                 | # 1 error generated.
+                                                 | # make: *** [Makefile:4348: zzgfspu.o] Error 1
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 | tabrpt.o
+                                                 | 
+                                                 | # flang  -c tabrpt.f
+                                                 | # /tmp/tabrpt-ca1837.ll:1687:12: error: '@_ma...
+                                                 | #         call void @_master___tabrpt__(i32 0...
+                                                 | #                   ^
+                                                 | # 1 error generated.
+                                                 | # make: *** [Makefile:5314: tabrpt.o] Error 1
+                                                 | 
+                                                 | ------------------------------------------------
+                                                 |                                                 
+
 ```
