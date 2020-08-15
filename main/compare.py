@@ -189,7 +189,7 @@ def basicOutput(master):
 def conciseTable(master):
     compilers = list(master.keys())
     diffs = []
-    mx, i = 0, 0
+    mx, i = 20, 0
     for dr in master[compilers[0]].keys():
         diffs.append(getDifferences(master, dr))
         mx = max(mx, diffs[-1][2][0])
