@@ -1,0 +1,8 @@
+*.exe
+*.mod
+*.o
+*.log
+*.bats
+logs
+scraping
+!scraping/scraper.py
