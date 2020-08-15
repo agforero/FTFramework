@@ -4,6 +4,10 @@
 *.a
 *.log
 *.bats
+*.cmdx
+*.cmod
+*.ilm
+*.stb
 logs
 scraping
 !scraping/scraper.py
