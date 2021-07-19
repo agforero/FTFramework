@@ -1,4 +1,4 @@
-# Fortran Testing Framework 
+# FORTRAN Testing Framework 
 ### A framework to help test FORTRAN compilers. Written by Agustin Forero for Argonne National Laboratory. 
 
 
