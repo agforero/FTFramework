@@ -1,5 +1,5 @@
-# FORTRAN Testing Framework 
-### A framework to help test FORTRAN compilers. Written by Agustin Forero for Argonne National Laboratory. 
+# Fortran Testing Framework 
+### A framework to help test Fortran compilers. Written by Agustin Forero for Argonne National Laboratory. 
 
 
 #### Click [here](https://youtu.be/iNEwXP_pYqg) to watch my seminar on this project!
@@ -29,9 +29,9 @@ $ ./compare.py gfortran bleedingedgecompiler
 
 
 #### Summary: 
-This is a framework built to help test bleeding-edge FORTRAN compilers. By testing the compilation of a wide variety of FORTRAN programs, and cross-checking results with stable compilers like `gfortran`, one can find where a compiler might be going wrong.
+This is a framework built to help test bleeding-edge Fortran compilers. By testing the compilation of a wide variety of Fortran programs, and cross-checking results with stable compilers like `gfortran`, one can find where a compiler might be going wrong.
 
-To add a directory containing FORTRAN programs to use for testing compilation, `cd` into `/main/`, and use `./addNew.sh <path-to-directory>`.
+To add a directory containing Fortran programs to use for testing compilation, `cd` into `/main/`, and use `./addNew.sh <path-to-directory>`.
 
 Then, use `./run_test.sh (compiler)` to compile all files found in the subdirectories of `/source/`. If no compiler is specified, it will use the current value of `$FC` (which is set to `f77` by default within the Makefile). Each time `./run_test.sh` is executed, the results will be saved to `/logs/` as `<compiler>.log`, where you can view all compilation errors encountered during runtime. 
 
@@ -54,10 +54,10 @@ Additionally, running `./compare.py <compiler1> <compiler2> (-b / -g / -v <col>)
 
 
 #### Scraping: 
-Scrapers can be immensely helpful with gathering huge swathes of data at once. Within the `/scraping/` directory, one can find `scraper.py`, a Python program that can help pull multiple FORTRAN files from a single website. It will then save these files to a directory named from the website, at which point the user can use `./addNew.sh ../scraper/<directory>` in `/main/` to add the files. To use, type:
+Scrapers can be immensely helpful with gathering huge swathes of data at once. Within the `/scraping/` directory, one can find `scraper.py`, a Python program that can help pull multiple Fortran files from a single website. It will then save these files to a directory named from the website, at which point the user can use `./addNew.sh ../scraper/<directory>` in `/main/` to add the files. To use, type:
 
 `./scraper.py <website url> <path to files> <extension>`
-- `<website url>`: the page on which links to each FORTRAN file are found.
+- `<website url>`: the page on which links to each Fortran file are found.
 - `<path to files>`: URL path preceding each file location. Example below.
 - `<extension>`: the desired extension to search for and download, e.g. `.f90`.
 
@@ -65,9 +65,9 @@ Using the example of [Michel Olagnon's ORDERPACK 2.0](http://www.fortran-2000.co
 
 `./scraper.py http://www.fortran-2000.com/rank/index.html http://www.fortran-2000.com/rank/ .f90`
 
-In this example, `http://www.fortran-2000.com/rank/` is used as the second argument because every FORTRAN file on the page is located at `http://www.fortran-2000.com/rank/<FILE.f90>`.
+In this example, `http://www.fortran-2000.com/rank/` is used as the second argument because every Fortran file on the page is located at `http://www.fortran-2000.com/rank/<FILE.f90>`.
 
-Though not all of these need a scraper, other websites one might pull FORTRAN files from include:
+Though not all of these need a scraper, other websites one might pull Fortran files from include:
 - http://jean-pierre.moreau.pagesperso-orange.fr/f_function2.html
 - http://www.fortran-2000.com/rank/index.html
 - https://naif.jpl.nasa.gov/naif/toolkit_FORTRAN.html
